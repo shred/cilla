@@ -1,0 +1,45 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:p="http://primefaces.org/ui" xmlns:composite="http://java.sun.com/jsf/composite" xmlns:ca="http://java.sun.com/jsf/composite/cilla">
+<!--
+
+  cilla - Blog Management System
+
+  Copyright (C) 2012 Richard "Shred" Körber
+    http://cilla.shredzone.org
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published
+  by the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<body>
+  <composite:interface>
+    <composite:attribute name="mapModel" required="true" />
+  </composite:interface>
+  <composite:implementation>
+    <p:toolbar>
+      <p:toolbarGroup>
+        <p:commandButton id="submit" type="submit" ajax="false" value="#{msg['section.gallery.map.commit']}" icon="ui-icon-check" />
+      </p:toolbarGroup>
+    </p:toolbar>
+
+    <p:messages globalOnly="true" />
+
+    <h:outputText value="#{mapModel}" />
+
+    <p:gmap center="#{mapModel.center}" zoom="15" type="HYBRID" model="#{mapModel}" style="width:650px;height:400px" widgetVar="mymap">
+      <p:ajax event="markerDrag" listener="#{mapModel.onMarkerDrag}" />
+      <!-- TODO: update="id" -->
+    </p:gmap>
+
+  </composite:implementation>
+</body>
+</html>

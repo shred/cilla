@@ -1,0 +1,54 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:p="http://primefaces.org/ui" xmlns:composite="http://java.sun.com/jsf/composite" xmlns:ca="http://java.sun.com/jsf/composite/cilla">
+<!--
+
+  cilla - Blog Management System
+
+  Copyright (C) 2012 Richard "Shred" Körber
+    http://cilla.shredzone.org
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published
+  by the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<body>
+  <composite:interface>
+    <composite:attribute name="section" required="true" />
+  </composite:interface>
+  <composite:implementation>
+    <p:panel header="#{msg['section.gallery.header']}" toggleable="true" rendered="#{section.type eq 'gallery'}">
+      <h:panelGrid columns="2">
+        <h:outputLabel value="#{msg['section.gallery.piccount']}:" />
+        <h:outputText value="#{section.pictures.size()}" />
+
+        <h:outputLabel value=" " />
+        <h:commandButton id="edit" actionListener="#{galleryBean.setGallerySection(section)}" action="/admin/section/gallery/edit.xhtml" value="#{msg['section.gallery.editpictures']}" immediate="true" />
+
+        <h:outputLabel for="galleryTimeDefinition" value="#{msg['section.gallery.timedefinition']}:" />
+        <h:panelGroup>
+          <h:selectOneMenu id="galleryTimeDefinition" value="#{section.defaultTimePrecision}" required="true">
+            <f:selectItems value="#{listBean.createTimeDefinitionList()}" />
+          </h:selectOneMenu>
+          <p:message for="galleryTimeDefinition" />
+        </h:panelGroup>
+
+        <h:outputLabel for="galleryTimeZone" value="#{msg['section.gallery.timezone']}:" />
+        <h:panelGroup>
+          <p:autoComplete id="galleryTimeZone" forceSelection="true" value="#{section.defaultTimeZone}" converter="#{timeZoneBean}" completeMethod="#{timeZoneBean.complete}" required="true" />
+          <p:message for="galleryTimeZone" />
+        </h:panelGroup>
+
+      </h:panelGrid>
+    </p:panel>
+  </composite:implementation>
+</body>
+</html>

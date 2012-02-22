@@ -1,0 +1,50 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:p="http://primefaces.org/ui" xmlns:composite="http://java.sun.com/jsf/composite" xmlns:ca="http://java.sun.com/jsf/composite/cilla">
+<!--
+
+  cilla - Blog Management System
+
+  Copyright (C) 2012 Richard "Shred" Körber
+    http://cilla.shredzone.org
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published
+  by the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<body>
+  <ui:composition template="/templates/master.xhtml">
+    <ui:define name="sidebar">
+      <p:layoutUnit position="west" size="180">
+        <h:form id="menu">
+          <p:menu>
+            <p:submenu label="#{msg['side.menu.content']}">
+              <p:menuitem value="#{msg['side.item.page']}" action="/admin/page/list.xhtml" icon="c-menu c-menu-page" ajax="false" />
+              <p:menuitem value="#{msg['side.item.comment']}" action="/admin/comment/list.xhtml" icon="c-menu c-menu-comment" ajax="false" />
+              <p:menuitem value="#{msg['side.item.category']}" action="/admin/category/list.xhtml" icon="c-menu c-menu-category" ajax="false" />
+              <p:menuitem value="#{msg['side.item.tag']}" action="/admin/tag/list.xhtml" icon="c-menu c-menu-tag" ajax="false" />
+            </p:submenu>
+            <p:submenu label="#{msg['side.menu.user']}">
+              <p:menuitem value="#{msg['side.item.user']}" action="/admin/user/list.xhtml" icon="c-menu c-menu-user" ajax="false" />
+              <p:menuitem value="#{msg['side.item.role']}" action="/admin/role/list.xhtml" icon="c-menu c-menu-group" ajax="false" />
+            </p:submenu>
+            <p:submenu label="#{msg['side.menu.system']}">
+              <p:menuitem value="#{msg['side.item.header']}" action="/admin/header/list.xhtml" icon="c-menu c-menu-header" ajax="false" />
+              <p:menuitem value="#{msg['side.item.settings']}" action="/admin/settings/index.xhtml" icon="c-menu c-menu-settings" ajax="false" />
+              <p:menuitem value="#{msg['side.item.logout']}" action="#{loginBean.logout}" icon="c-menu c-menu-logout" ajax="false" />
+            </p:submenu>
+          </p:menu>
+        </h:form>
+      </p:layoutUnit>
+    </ui:define>
+  </ui:composition>
+</body>
+</html>

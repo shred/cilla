@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+  cilla - Blog Management System
+
+  Copyright (C) 2012 Richard "Shred" Körber
+    http://cilla.shredzone.org
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published
+  by the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
+
+    <context:component-scan base-package="org.shredzone.cilla.ws"/>
+
+    <jaxws:client id="loginWs" address="${remoteWsUrl}/LoginWs" serviceClass="org.shredzone.cilla.ws.system.LoginWs">
+        <jaxws:outInterceptors><ref bean="securityOutInterceptor"/></jaxws:outInterceptors>
+    </jaxws:client>
+
+    <jaxws:client id="categoryWs" address="${remoteWsUrl}/CategoryWs" serviceClass="org.shredzone.cilla.ws.category.CategoryWs">
+        <jaxws:outInterceptors><ref bean="securityOutInterceptor"/></jaxws:outInterceptors>
+    </jaxws:client>
+
+    <jaxws:client id="commentWs" address="${remoteWsUrl}/CommentWs" serviceClass="org.shredzone.cilla.ws.comment.CommentWs">
+        <jaxws:outInterceptors><ref bean="securityOutInterceptor"/></jaxws:outInterceptors>
+    </jaxws:client>
+
+    <jaxws:client id="headerWs" address="${remoteWsUrl}/HeaderWs" serviceClass="org.shredzone.cilla.ws.header.HeaderWs">
+        <jaxws:outInterceptors><ref bean="securityOutInterceptor"/></jaxws:outInterceptors>
+        <jaxws:properties><entry key="mtom-enabled" value="true"/></jaxws:properties>
+    </jaxws:client>
+
+    <jaxws:client id="pageWs" address="${remoteWsUrl}/PageWs" serviceClass="org.shredzone.cilla.ws.page.PageWs">
+        <jaxws:outInterceptors><ref bean="securityOutInterceptor"/></jaxws:outInterceptors>
+        <jaxws:properties><entry key="mtom-enabled" value="true"/></jaxws:properties>
+    </jaxws:client>
+
+    <jaxws:client id="systemWs" address="${remoteWsUrl}/SystemWs" serviceClass="org.shredzone.cilla.ws.system.SystemWs">
+        <jaxws:outInterceptors><ref bean="securityOutInterceptor"/></jaxws:outInterceptors>
+    </jaxws:client>
+
+    <jaxws:client id="tagWs" address="${remoteWsUrl}/TagWs" serviceClass="org.shredzone.cilla.ws.tag.TagWs">
+        <jaxws:outInterceptors><ref bean="securityOutInterceptor"/></jaxws:outInterceptors>
+    </jaxws:client>
+
+    <jaxws:client id="userWs" address="${remoteWsUrl}/UserWs" serviceClass="org.shredzone.cilla.ws.user.UserWs">
+        <jaxws:outInterceptors><ref bean="securityOutInterceptor"/></jaxws:outInterceptors>
+    </jaxws:client>
+
+</beans>

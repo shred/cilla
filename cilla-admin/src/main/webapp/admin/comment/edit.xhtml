@@ -1,0 +1,76 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:p="http://primefaces.org/ui" xmlns:composite="http://java.sun.com/jsf/composite" xmlns:ca="http://java.sun.com/jsf/composite/cilla">
+<!--
+
+  cilla - Blog Management System
+
+  Copyright (C) 2012 Richard "Shred" Körber
+    http://cilla.shredzone.org
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published
+  by the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<body>
+  <ui:composition template="/templates/sidebar.xhtml">
+    <ui:define name="content">
+      <h:form>
+
+        <p:toolbar>
+          <p:toolbarGroup>
+            <p:commandButton type="submit" id="submit" ajax="false" action="#{commentBean.commit}" value="#{msg['comment.edit.commit']}" icon="ui-icon-check" />
+            <p:commandButton type="submit" id="cancel" ajax="false" action="/admin/comment/list.xhtml" value="#{msg['comment.edit.cancel']}" immediate="true" icon="ui-icon-cancel" />
+          </p:toolbarGroup>
+        </p:toolbar>
+
+        <p:messages globalOnly="true" />
+
+        <h:panelGrid columns="2">
+          <h:outputLabel for="commentName" value="#{msg['comment.edit.name']}:" />
+          <h:panelGroup>
+            <h:inputText id="commentName" value="#{commentBean.comment.name}" size="60" />
+            <p:message for="commentName" />
+          </h:panelGroup>
+
+          <h:outputLabel for="commentTextFormat" value="#{msg['comment.edit.textformat']}:" />
+          <h:panelGroup>
+            <h:selectOneMenu id="commentTextFormat" value="#{commentBean.comment.textFormat}">
+              <f:selectItems value="#{listBean.createTextFormatList()}" />
+            </h:selectOneMenu>
+            <p:message for="commentTextFormat" />
+          </h:panelGroup>
+
+          <h:outputLabel for="commentText" value="#{msg['comment.edit.text']}:" />
+          <h:panelGroup>
+            <h:inputTextarea id="commentText" value="#{commentBean.comment.text}" rows="20" cols="80" required="true" requiredMessage="#{msg['validator.required']}" />
+            <p:message for="commentText" />
+          </h:panelGroup>
+
+          <h:outputLabel for="commentCreation" value="#{msg['comment.edit.creation']}:" />
+          <h:panelGroup>
+            <ca:datetime id="commentCreation" compositeId="commentCreation" value="#{commentBean.comment.creation}" />
+            <p:message for="commentCreation" />
+          </h:panelGroup>
+
+          <h:outputText />
+          <h:panelGroup>
+            <h:selectBooleanCheckbox id="commentPublished" value="#{commentBean.comment.published}" />
+            <h:outputLabel for="commentPublished" value="#{msg['comment.edit.published']}" />
+            <p:message for="commentPublished" />
+          </h:panelGroup>
+        </h:panelGrid>
+
+      </h:form>
+    </ui:define>
+  </ui:composition>
+</body>
+</html>

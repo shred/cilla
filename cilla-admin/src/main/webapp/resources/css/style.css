@@ -1,0 +1,111 @@
+/*
+ * cilla - Blog Management System
+ *
+ * Copyright (C) 2012 Richard "Shred" Körber
+ *   http://cilla.shredzone.org
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+.ui-widget {
+    font-size: 12px !important;
+}
+
+.ui-toolbar {
+    margin-bottom: 8px;
+}
+
+.ui-datagrid-data {
+    margin: 0px;
+    padding: 0px;
+    border-spacing: 0px;
+}
+
+.ui-datagrid-column {
+    padding: 3px 0px 0px 0px;
+}
+
+.ui-datatable-header {
+    text-align: left !important;
+}
+
+.ui-menu-item-label {
+    padding-left: 23px !important;
+}
+
+.ui-layout-pane {
+    border: none;
+}
+
+a img {
+    border: none;
+}
+
+.img-button {
+    padding: 4px 2px 0px 2px;
+}
+
+.c-menu {
+    display: block;
+    width: 20px;
+    height: 16px;
+}
+
+.c-menu-page {
+    background: url('/javax.faces.resource/page.png.xhtml?ln=icon') no-repeat !important;
+}
+
+.c-menu-comment {
+    background: url('/javax.faces.resource/comment.png.xhtml?ln=icon') no-repeat !important;
+}
+
+.c-menu-category {
+    background: url('/javax.faces.resource/category.png.xhtml?ln=icon') no-repeat !important;
+}
+
+.c-menu-tag {
+    background: url('/javax.faces.resource/tag.png.xhtml?ln=icon') no-repeat !important;
+}
+
+.c-menu-user {
+    background: url('/javax.faces.resource/user.png.xhtml?ln=icon') no-repeat !important;
+}
+
+.c-menu-group {
+    background: url('/javax.faces.resource/group.png.xhtml?ln=icon') no-repeat !important;
+}
+
+.c-menu-header {
+    background: url('/javax.faces.resource/header.png.xhtml?ln=icon') no-repeat !important;
+}
+
+.c-menu-settings {
+    background: url('/javax.faces.resource/settings.png.xhtml?ln=icon') no-repeat !important;
+}
+
+.c-menu-logout {
+    background: url('/javax.faces.resource/logout.png.xhtml?ln=icon') no-repeat !important;
+}
+
+div.ui-layout-bd {
+    border: none;
+}
+
+.previewImage {
+    text-align:center;
+    background-color: #000000;
+    margin-top: 5px;
+    padding: 8px;
+}
+

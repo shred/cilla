@@ -1,0 +1,122 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:p="http://primefaces.org/ui" xmlns:composite="http://java.sun.com/jsf/composite" xmlns:ca="http://java.sun.com/jsf/composite/cilla">
+<!--
+
+  cilla - Blog Management System
+
+  Copyright (C) 2012 Richard "Shred" Körber
+    http://cilla.shredzone.org
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published
+  by the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<body>
+  <ui:composition template="/templates/sidebar.xhtml">
+    <ui:define name="content">
+      <h:form id="editForm">
+
+        <p:toolbar>
+          <p:toolbarGroup>
+            <p:commandButton type="submit" id="submit" ajax="false" action="#{headerBean.commit}" value="#{msg['header.edit.commit']}" icon="ui-icon-check" />
+            <p:commandButton type="submit" id="cancel" ajax="false" action="/admin/header/list.xhtml" value="#{msg['header.edit.cancel']}" immediate="true" icon="ui-icon-cancel" />
+          </p:toolbarGroup>
+        </p:toolbar>
+ 
+        <p:messages globalOnly="true" />
+
+        <h:panelGrid columns="2">
+          <h:outputLabel for="headerName" value="#{msg['header.edit.name']}:" />
+          <h:panelGroup>
+            <h:inputText id="headerName" value="#{headerBean.header.name}" required="true" requiredMessage="#{msg['validator.required']}" size="60" />
+            <p:message for="headerName" />
+          </h:panelGroup>
+
+          <h:outputLabel for="headerPicture" value="#{msg['header.edit.picture']}:" />
+          <h:panelGroup>
+            <p:commandButton id="headerPicture" type="button" value="#{msg['header.edit.choose']}" onclick="uploadDialog.show()" icon="ui-icon-folder-open" />
+            <p:message for="headerPicture" />
+            <div class="previewImage">
+              <p:graphicImage value="#{headerImageBean.headerView}" id="headerPictureImage" cache="false" />
+            </div>
+          </h:panelGroup>
+
+          <h:outputLabel for="headerCaption" value="#{msg['header.edit.caption']}:" />
+          <h:panelGroup>
+            <h:inputText id="headerCaption" value="#{headerBean.header.caption}" required="true" requiredMessage="#{msg['validator.required']}" size="60" />
+            <p:message for="headerCaption" />
+          </h:panelGroup>
+
+          <h:outputLabel for="headerFullPicture" value="#{msg['header.edit.fullpicture']}:" />
+          <h:panelGroup>
+            <p:commandButton id="headerFullPicture" type="button" value="#{msg['header.edit.choose']}" onclick="uploadFullDialog.show()" icon="ui-icon-folder-open" />
+            <p:message for="headerFullPicture" />
+            <div class="previewImage">
+              <p:graphicImage value="#{headerImageBean.fullView}" id="headerFullPictureImage" cache="false" />
+            </div>
+          </h:panelGroup>
+
+          <h:outputLabel for="headerDescriptionFormat" value="#{msg['header.edit.descriptionformat']}:" />
+          <h:panelGroup>
+            <h:selectOneMenu id="headerDescriptionFormat" value="#{headerBean.header.descriptionFormat}">
+              <f:selectItems value="#{listBean.createTextFormatList()}" />
+            </h:selectOneMenu>
+            <p:message for="headerDescriptionFormat" />
+          </h:panelGroup>
+
+          <h:outputLabel for="headerDescription" value="#{msg['header.edit.description']}:" />
+          <h:panelGroup>
+            <h:inputTextarea id="headerDescription" value="#{headerBean.header.description}" rows="20" cols="80" />
+            <p:message for="headerDescription" />
+          </h:panelGroup>
+
+          <h:outputLabel for="headerCreator" value="#{msg['header.edit.creator']}:" />
+          <h:panelGroup>
+            <h:selectOneMenu id="headerCreator" value="#{headerBean.header.creatorId}">
+              <f:selectItems value="#{listBean.createUserList()}" />
+            </h:selectOneMenu>
+            <p:message for="headerCreator" />
+          </h:panelGroup>
+
+          <h:outputLabel for="headerCreation" value="#{msg['header.edit.creation']}:" />
+          <h:panelGroup>
+            <ca:datetime id="headerCreation" compositeId="headerCreation" value="#{headerBean.header.creation}" readonly="true" />
+            <p:message for="headerCreation" />
+          </h:panelGroup>
+
+          <h:outputText />
+          <h:panelGroup>
+            <p:selectBooleanCheckbox id="headerEnabled" value="#{headerBean.header.enabled}" />
+            <h:outputLabel for="headerEnabled" value="#{msg['header.edit.enabled']}" />
+            <p:message for="headerEnabled" />
+          </h:panelGroup>
+
+        </h:panelGrid>
+
+        <p:dialog header="#{msg['header.edit.picture']}" widgetVar="uploadDialog" width="700" height="200" minWidth="400">
+          <h:form>
+            <p:fileUpload fileUploadListener="#{headerBean.handleHeaderFileUpload}" label="#{msg['header.edit.choose']}" oncomplete="uploadDialog.hide()" update="editForm:headerPictureImage" />
+          </h:form>
+        </p:dialog>
+
+        <p:dialog header="#{msg['header.edit.fullpicture']}" widgetVar="uploadFullDialog" width="700" height="200" minWidth="400">
+          <h:form>
+            <p:fileUpload fileUploadListener="#{headerBean.handleFullFileUpload}" label="#{msg['header.edit.choose']}" oncomplete="uploadFullDialog.hide()" update="editForm:headerFullPictureImage" />
+          </h:form>
+        </p:dialog>
+
+      </h:form>
+    </ui:define>
+
+  </ui:composition>
+</body>
+</html>

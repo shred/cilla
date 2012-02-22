@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<f:view contentType="text/html">
+  <h:head>
+    <title>#{msg['title']}</title>
+    <h:outputStylesheet library="css" name="style.css" />
+    <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
+  </h:head>
+  <h:body>
+    <p:layout fullPage="true">
+      <p:layoutUnit position="north" size="75">
+        <ui:insert name="header">
+          <h1>#{msg['title']}</h1>
+        </ui:insert>
+      </p:layoutUnit>
+      <ui:insert name="sidebar" />
+      <p:layoutUnit position="center">
+        <ui:insert name="content" />
+      </p:layoutUnit>
+      <p:layoutUnit position="south" size="25">
+        <ui:insert name="footer">
+          <h:outputFormat value="#{msg['footer']}">
+            <f:param value="#{utilityBean.now}" />
+          </h:outputFormat>
+          <h:outputFormat value=" #{msg['footer.login']}" rendered="#{not empty loginBean.user}">
+            <f:param value="#{loginBean.user.login}" />
+            <f:param value="#{loginBean.timeZone.displayName}" />
+          </h:outputFormat>
+        </ui:insert>
+      </p:layoutUnit>
+    </p:layout>
+    <ui:insert name="dialog" />
+  </h:body>
+</f:view>
+</html>

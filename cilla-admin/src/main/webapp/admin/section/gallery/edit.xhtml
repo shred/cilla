@@ -1,0 +1,118 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:p="http://primefaces.org/ui" xmlns:composite="http://java.sun.com/jsf/composite" xmlns:ca="http://java.sun.com/jsf/composite/cilla">
+<!--
+
+  cilla - Blog Management System
+
+  Copyright (C) 2012 Richard "Shred" Körber
+    http://cilla.shredzone.org
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published
+  by the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<body>
+  <ui:composition template="/templates/sidebar.xhtml">
+    <ui:define name="content">
+      <h:form id="imageForm">
+        <p:toolbar>
+          <p:toolbarGroup>
+            <p:commandButton id="submit" type="submit" ajax="false" action="/admin/page/edit.xhtml" value="#{msg['section.gallery.commit']}" icon="ui-icon-check" />
+            <p:commandButton id="upload" type="button" value="#{msg['section.gallery.upload']}" onclick="uploadDialog.show();" icon="ui-icon-folder-open" />
+          </p:toolbarGroup>
+        </p:toolbar>
+
+        <p:messages globalOnly="true" />
+
+        <p:dataGrid id="imageGrid" var="dto" value="#{galleryBean.pictures}" binding="#{galleryBean.uiGrid}" columns="4" rows="15" paginator="true">
+          <p:column>
+            <p:fieldset>
+              <p:toolbar style="white-space:nowrap">
+                <p:toolbarGroup>
+                  <p:commandButton actionListener="#{galleryBean.moveImage(dto, -1)}" immediate="true" update="imageForm:imageGrid" icon="ui-icon-arrowthick-1-w" />
+                  <p:commandButton actionListener="#{galleryBean.moveImage(dto, 1)}" immediate="true" update="imageForm:imageGrid" icon="ui-icon-arrowthick-1-e" />
+                  <p:commandButton immediate="true" oncomplete="editDialog.show()" update="editForm:editDetail" icon="ui-icon-pencil">
+                    <f:setPropertyActionListener target="#{galleryBean.selectedImage}" value="#{dto}" />
+                  </p:commandButton>
+<!-- TODO:
+                  <p:commandButton immediate="true" oncomplete="mapDialog.show()" update="mapForm:editDetail" icon="ui-icon-pin-s">
+                    <f:setPropertyActionListener target="#{galleryBean.selectedImage}" value="#{dto}" />
+                  </p:commandButton>
+-->
+                  <p:commandButton onclick="deleteConfirmation.show()" update="imageForm:imageGrid" icon="ui-icon-trash">
+                    <f:setPropertyActionListener target="#{galleryBean.selectedImage}" value="#{dto}" />
+                  </p:commandButton>
+                </p:toolbarGroup>
+              </p:toolbar>
+              <div class="previewImage">
+                <p:graphicImage value="#{galleryImageBean.thumbnail}" style="pointer-events:none">
+                  <f:param name="index" value="#{galleryBean.uiGrid.rowIndex}" />
+                </p:graphicImage>
+              </div>
+              <p:inplace editor="true">
+                <h:inputTextarea value="#{dto.caption}" rows="6" cols="20" />
+              </p:inplace>
+            </p:fieldset>
+          </p:column>
+        </p:dataGrid>
+
+        <p:dialog header="#{msg['section.gallery.upload']}" widgetVar="uploadDialog" width="700" height="500" minWidth="400">
+          <h:panelGrid columns="2">
+            <h:outputLabel value="#{msg['section.gallery.timezone']}:" />
+            <p:inplace editor="true" onEditUpdate="imageForm:uploadDialog">
+              <p:autoComplete id="uploadTimeZone" forceSelection="true" value="#{galleryBean.gallerySection.defaultTimeZone}" converter="#{timeZoneBean}" completeMethod="#{timeZoneBean.complete}" required="true" />
+            </p:inplace>
+
+            <h:outputLabel value="#{msg['section.gallery.timedefinition']}:" />
+            <p:inplace editor="true" onEditUpdate="imageForm:uploadDialog">
+              <h:selectOneMenu id="uploadTimeDefinition" value="#{galleryBean.gallerySection.defaultTimePrecision}" required="true">
+                <f:selectItems value="#{listBean.createTimeDefinitionList()}" />
+              </h:selectOneMenu>
+            </p:inplace>
+          </h:panelGrid>
+          <p:fileUpload fileUploadListener="#{galleryBean.handleFileUpload}" multiple="true" label="#{msg['section.gallery.choose']}" oncomplete="uploadDialog.hide()" update="imageGrid" />
+        </p:dialog>
+      </h:form>
+    </ui:define>
+
+    <ui:define name="dialog">
+      <h:form id="editForm">
+        <p:confirmDialog header="#{msg['section.gallery.delete.header']}" widgetVar="deleteConfirmation" message="#{msg['section.gallery.delete.message']}">
+          <p:commandButton value="#{msg['section.gallery.delete.yes']}" actionListener="#{galleryBean.removeImage(galleryBean.selectedImage)}" update="imageForm:imageGrid" oncomplete="deleteConfirmation.hide()" />
+          <p:commandButton value="#{msg['section.gallery.delete.no']}" onclick="deleteConfirmation.hide()" type="button" />
+        </p:confirmDialog>
+
+        <p:dialog header="#{msg['section.gallery.image.edit']}" widgetVar="editDialog" width="700" height="500" minWidth="700">
+          <p:outputPanel id="editDetail">
+            <ui:include src="image.xhtml">
+              <ui:param name="picture" value="#{galleryBean.selectedImage}" />
+            </ui:include>
+          </p:outputPanel>
+        </p:dialog>
+      </h:form>
+
+<!-- TODO:
+      <h:form id="mapForm">
+        <p:dialog header="#{msg['section.gallery.image.map']}" widgetVar="mapDialog" width="700" height="500" minWidth="700" onShow="mymap.checkResize()">
+          <p:outputPanel id="mapDetail">
+            <ui:include src="map.xhtml">
+              <ui:param name="mapModel" value="#{galleryBean.selectedImage}" />
+            </ui:include>
+          </p:outputPanel>
+        </p:dialog>
+      </h:form>
+ -->
+     </ui:define>
+
+  </ui:composition>
+</body>
+</html>

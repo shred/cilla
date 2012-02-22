@@ -1,0 +1,262 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:p="http://primefaces.org/ui" xmlns:composite="http://java.sun.com/jsf/composite" xmlns:ca="http://java.sun.com/jsf/composite/cilla">
+<!--
+
+  cilla - Blog Management System
+
+  Copyright (C) 2012 Richard "Shred" Körber
+    http://cilla.shredzone.org
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published
+  by the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<body>
+  <ui:composition template="/templates/sidebar.xhtml">
+    <ui:define name="content">
+      <h:form id="editForm">
+
+        <p:toolbar>
+          <p:toolbarGroup>
+            <p:commandButton type="submit" id="submit" ajax="false" action="#{pageBean.commit}" value="#{msg['page.edit.commit']}" icon="ui-icon-check" />
+            <p:commandButton type="submit" id="save" ajax="false" action="#{pageBean.save}" value="#{msg['page.edit.save']}" icon="ui-icon-disk" />
+            <p:commandButton type="submit" id="cancel" ajax="false" action="#{pageBean.cancelEdit}" value="#{msg['page.edit.cancel']}" immediate="true" icon="ui-icon-cancel" />
+            <p:button id="preview" onclick="window.open('${pageBean.pageUrl}', 'cilla-preview')" value="#{msg['page.edit.preview']}" rendered="#{pageBean.page.id ne 0}" icon="ui-icon-extlink" />
+          </p:toolbarGroup>
+        </p:toolbar>
+
+        <p:messages globalOnly="true" />
+
+        <p:tabView id="editTab">
+          <p:tab title="#{msg['page.edit.tab.content']}">
+
+            <h:panelGrid columns="2">
+              <h:outputLabel for="pageTitle" value="#{msg['page.edit.title']}:" />
+              <h:panelGroup>
+                <h:inputText id="pageTitle" value="#{pageBean.page.title}" required="true" requiredMessage="#{msg['validator.required']}" size="60" />
+                <p:message for="pageTitle" />
+              </h:panelGroup>
+
+              <h:outputLabel for="pageTeaserFormat" value="#{msg['page.edit.teaserformat']}:" />
+              <h:panelGroup>
+                <h:selectOneMenu id="pageTeaserFormat" value="#{pageBean.page.teaserFormat}">
+                  <f:selectItems value="#{listBean.createTextFormatList()}" />
+                </h:selectOneMenu>
+                <p:message for="pageTeaserFormat" />
+              </h:panelGroup>
+
+              <h:outputLabel for="pageTeaser" value="#{msg['page.edit.teaser']}:" />
+              <h:panelGroup>
+                <h:inputTextarea id="pageTeaser" value="#{pageBean.page.teaser}" rows="20" cols="80" required="true" requiredMessage="#{msg['validator.required']}" />
+                <p:message for="pageTeaser" />
+              </h:panelGroup>
+            </h:panelGrid>
+
+            <p:dataGrid var="section" value="#{pageBean.page.sections}" columns="1" style="">
+              <p:column>
+                <ui:include src="../section/text/index.xhtml" />
+                <ui:include src="../section/gallery/index.xhtml" />
+              </p:column>
+            </p:dataGrid>
+
+            <h:panelGrid columns="2">
+              <h:outputLabel for="pageNewSection" value="#{msg['page.edit.newsection']}:" />
+              <h:panelGroup>
+                <h:selectOneMenu id="pageNewSection" binding="#{pageBean.newSectionBinding}" immediate="true">
+                  <f:selectItems value="#{listBean.sectionList}" />
+                </h:selectOneMenu>
+                <h:commandButton actionListener="#{pageBean.addNewSection()}" immediate="true" value="#{msg['page.edit.newsectionadd']}" />
+                <p:message for="pageNewSection" />
+              </h:panelGroup>
+            </h:panelGrid>
+
+          </p:tab>
+          <p:tab title="#{msg['page.edit.tab.media']}">
+
+            <p:dataTable id="mediaList" var="medium" value="#{mediaDataModel}" selection="#{pageMediaBean.selectedMedia}" paginator="true" rows="15">
+              <f:facet name="header">
+                <p:commandButton id="upload" type="button" value="#{msg['page.edit.media.upload']}" onclick="uploadDialog.show();" icon="ui-icon-folder-open" />
+                <p:commandButton onclick="deleteConfirmation.show()" value="#{msg['page.edit.media.delete']}" icon="ui-icon-trash" />
+              </f:facet>
+              <p:column selectionMode="multiple" />
+              <p:column style="width: 120px; text-align: center">
+                <f:facet name="header">
+                  <h:outputText value="#{msg['page.edit.media.thumbnail']}" />
+                </f:facet>
+                <p:graphicImage value="#{mediaImageBean.thumbnail}" style="pointer-events:none">
+                  <f:param name="index" value="#{mediaDataModel.rowIndex}" />
+                </p:graphicImage>
+              </p:column>
+              <p:column>
+                <f:facet name="header">
+                  <h:outputText value="#{msg['page.edit.media.file']}" />
+                </f:facet>
+                <p:inplace editor="true">
+                  <h:inputText value="#{medium.name}" />
+                </p:inplace>
+              </p:column>
+            </p:dataTable>
+
+            <p:dialog header="#{msg['page.edit.media.upload']}" widgetVar="uploadDialog" width="700" height="500" minWidth="400">
+              <p:fileUpload fileUploadListener="#{pageMediaBean.handleFileUpload}" multiple="true" label="#{msg['section.gallery.choose']}" oncomplete="uploadDialog.hide()" update="mediaList" />
+            </p:dialog>
+
+
+          </p:tab>
+          <p:tab title="#{msg['page.edit.tab.categories']}">
+
+            <h:panelGrid columns="2">
+              <h:outputLabel for="pageCategory" value="#{msg['page.edit.category']}:" />
+              <h:panelGroup>
+                <p:pickList id="pageCategory" value="#{categoryPicklistBean.model}" var="category" itemLabel="#{category.name}" itemValue="#{category}" converter="#{categoryConverter}" />
+                <p:message for="pageCategory" />
+              </h:panelGroup>
+
+              <h:outputLabel for="pageTag" value="#{msg['page.edit.tag']}:" />
+              <h:panelGroup>
+                <p:outputPanel id="pageTagPanel">
+                  <p:panel>
+                    <p:dataGrid value="#{pageBean.page.tags}" var="tag">
+                      <p:column>
+                        <p:commandButton update="editForm:editTab:pageTagPanel" icon="ui-icon-trash" process="@this">
+                          <p:collector value="#{tag}" removeFrom="#{pageBean.page.tags}" />
+                        </p:commandButton>
+                        <h:outputText value="#{tag}" />
+                      </p:column>
+                    </p:dataGrid>
+                  </p:panel>
+                  <h:panelGrid columns="2">
+                    <p:autoComplete id="pageTag" value="#{pageTagBean.tag}" completeMethod="#{pageTagBean.complete}" size="60" />
+                    <p:commandButton value="#{msg['page.edit.tag.add']}" update="pageTagPanel" action="#{pageTagBean.clear}" icon="ui-icon-plus">
+                      <p:collector value="#{pageTagBean.tag}" addTo="#{pageBean.page.tags}" />
+                    </p:commandButton>
+                  </h:panelGrid>
+                </p:outputPanel>
+                <p:message for="pageTag" />
+              </h:panelGroup>
+
+              <h:outputLabel for="pageSubject" value="#{msg['page.edit.subject']}:" />
+              <h:panelGroup>
+                <p:autoComplete id="pageSubject" value="#{pageBean.page.subject}" completeMethod="#{pageBean.proposeSubjects}" size="60" />
+                <p:message for="pageSubject" />
+              </h:panelGroup>
+            </h:panelGrid>
+
+          </p:tab>
+          <p:tab title="#{msg['page.edit.tab.properties']}">
+
+            <h:panelGrid columns="2">
+              <h:outputLabel for="pageName" value="#{msg['page.edit.name']}:" />
+              <h:panelGroup>
+                <p:inputText id="pageName" value="#{pageBean.page.name}" size="60" />
+                <p:message for="pageName" />
+              </h:panelGroup>
+
+              <h:outputLabel for="pageCreator" value="#{msg['page.edit.creator']}:" />
+              <h:panelGroup>
+                <h:selectOneMenu id="pageCreator" value="#{pageBean.page.creatorId}">
+                  <f:selectItems value="#{listBean.createUserList()}" />
+                </h:selectOneMenu>
+                <p:message for="pageCreator" />
+              </h:panelGroup>
+
+              <h:outputLabel for="pageLanguage" value="#{msg['page.edit.language']}:" />
+              <h:panelGroup>
+                <h:selectOneMenu id="pageLanguage" value="#{pageBean.page.languageId}">
+                  <f:selectItems value="#{listBean.createLanguageList()}" />
+                </h:selectOneMenu>
+                <p:message for="pageLanguage" />
+              </h:panelGroup>
+
+              <h:outputLabel for="pageCreation" value="#{msg['page.edit.creation']}:" />
+              <h:panelGroup>
+                <ca:datetime id="pageCreation" compositeId="pageCreation" value="#{pageBean.page.creation}" readonly="true" />
+                <p:message for="pageCreation" />
+              </h:panelGroup>
+
+              <h:outputLabel for="pageModification" value="#{msg['page.edit.modification']}:" />
+              <h:panelGroup>
+                <ca:datetime id="pageModification" compositeId="pageModification" value="#{pageBean.page.modification}" readonly="true" />
+                <p:message for="pageModification" />
+              </h:panelGroup>
+
+              <h:outputLabel for="pagePublication" value="#{msg['page.edit.publication']}:" />
+              <h:panelGroup>
+                <ca:datetime id="pagePublication" compositeId="pagePublication" value="#{pageBean.page.publication}" compositeImmediate="true" />
+                <p:commandButton actionListener="#{pageBean.publishNow()}" value="#{msg['page.edit.publication.now']}" update="editForm" immediate="true" />
+                <p:message for="pagePublication" />
+              </h:panelGroup>
+
+              <h:outputLabel for="pageExpiration" value="#{msg['page.edit.expiration']}:" />
+              <h:panelGroup>
+                <ca:datetime id="pageExpiration" compositeId="pageExpiration" value="#{pageBean.page.expiration}" />
+                <p:message for="pageExpiration" />
+              </h:panelGroup>
+
+              <h:outputText />
+              <h:panelGroup>
+                <p:selectBooleanCheckbox id="pageSticky" value="#{pageBean.page.sticky}" />
+                <h:outputLabel for="pageSticky" value="#{msg['page.edit.sticky']}" />
+                <p:message for="pageSticky" />
+              </h:panelGroup>
+
+              <h:outputText />
+              <h:panelGroup>
+                <p:selectBooleanCheckbox id="pageHidden" value="#{pageBean.page.hidden}" />
+                <h:outputLabel for="pageHidden" value="#{msg['page.edit.hidden']}" />
+                <p:message for="pageHidden" />
+              </h:panelGroup>
+
+              <h:outputText />
+              <h:panelGroup>
+                <p:selectBooleanCheckbox id="pageFlattrable" value="#{pageBean.page.flattrable}" label="Flattrable" />
+                <h:outputLabel for="pageFlattrable" value="#{msg['page.edit.flattrable']}" />
+                <p:message for="pageFlattrable" />
+              </h:panelGroup>
+
+              <h:outputText />
+              <h:panelGroup>
+                <p:selectBooleanCheckbox id="pageCommentable" value="#{pageBean.page.commentable}" label="Commentable" />
+                <h:outputLabel for="pageCommentable" value="#{msg['page.edit.commentable']}" />
+                <p:message for="pageCommentable" />
+              </h:panelGroup>
+
+              <h:outputLabel for="pageChallenge" value="#{msg['page.edit.challenge']}:" />
+              <h:panelGroup>
+                <p:inputText id="pageChallenge" value="#{pageBean.page.challenge}" size="60" />
+                <p:message for="pageChallenge" />
+              </h:panelGroup>
+
+              <h:outputLabel for="pageResponse" value="#{msg['page.edit.response']}:" />
+              <h:panelGroup>
+                <p:inputText id="pageResponse" value="#{pageBean.page.responsePattern}" size="60" />
+                <p:message for="pageResponse" />
+              </h:panelGroup>
+            </h:panelGrid>
+
+          </p:tab>
+        </p:tabView>
+      </h:form>
+    </ui:define>
+
+    <ui:define name="dialog">
+      <h:form id="mediaForm">
+        <p:confirmDialog header="#{msg['page.edit.media.confirm']}" widgetVar="deleteConfirmation" message="#{msg['page.edit.media.message']}">
+          <p:commandButton value="#{msg['page.edit.media.yes']}" action="#{pageMediaBean.delete()}" update="editForm:editTab:mediaList" oncomplete="deleteConfirmation.hide()" />
+          <p:commandButton value="#{msg['page.edit.media.no']}" onclick="deleteConfirmation.hide()" type="button" />
+        </p:confirmDialog>
+      </h:form>
+    </ui:define>
+
+  </ui:composition>
+</body>
+</html>

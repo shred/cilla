@@ -1,0 +1,20 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<body>
+  <composite:interface>
+    <composite:attribute name="value" required="true"/>
+    <composite:attribute name="compositeId"/>
+    <composite:attribute name="required"/>
+    <composite:attribute name="requiredMessage"/>
+    <composite:attribute name="readonly"/>
+    <composite:attribute name="compositeImmediate"/>
+  </composite:interface>
+  <composite:implementation>
+    <p:inputMask id="#{cc.attrs.compositeId}" value="#{cc.attrs.value}" mask="#{msg['tag.datetime.mask']}" required="#{cc.attrs.required}" requiredMessage="#{cc.attrs.requiredMessage}" readonly="#{cc.attrs.readonly}" immediate="#{cc.attrs.compositeImmediate}">
+      <f:convertDateTime pattern="#{msg['tag.datetime.pattern']}" timeZone="#{loginBean.timeZone}"/>
+    </p:inputMask>
+  </composite:implementation>
+</body>
+</html>

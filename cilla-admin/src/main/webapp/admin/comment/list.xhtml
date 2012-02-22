@@ -1,0 +1,64 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:p="http://primefaces.org/ui" xmlns:composite="http://java.sun.com/jsf/composite" xmlns:ca="http://java.sun.com/jsf/composite/cilla">
+<!--
+
+  cilla - Blog Management System
+
+  Copyright (C) 2012 Richard "Shred" Körber
+    http://cilla.shredzone.org
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published
+  by the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<body>
+  <ui:composition template="/templates/sidebar.xhtml">
+    <ui:define name="content">
+      <h:form>
+        <p:dataTable var="comment" value="#{commentDataModel}" selection="#{commentBean.comment}" rowKey="#{comment.id}" paginator="true" rows="20" selectionMode="single">
+          <f:facet name="header">
+            <p:commandButton action="#{commentBean.edit()}" ajax="false" value="#{msg['page.list.edit']}" icon="ui-icon-pencil" />
+            <p:commandButton action="#{commentBean.delete()}" ajax="false" value="#{msg['page.list.delete']}" icon="ui-icon-trash" />
+          </f:facet>
+          <p:column sortBy="#{comment.published}">
+            <f:facet name="header">
+              <h:outputText value="#{msg['comment.list.flags']}" />
+            </f:facet>
+            <p:graphicImage value="#{resource['icon:comment-visible.png']}" title="#{msg['comment.list.tt.published']}" rendered="#{comment.published}" />
+          </p:column>
+          <p:column sortBy="#{comment.text}">
+            <f:facet name="header">
+              <h:outputText value="#{msg['comment.list.content']}" />
+            </f:facet>
+            <h:outputText value="#{comment.text}" rendered="#{fn:length(comment.text) le 80}" />
+            <h:outputText value="#{fn:substring(comment.text,0,80)}..." rendered="#{fn:length(comment.text) gt 80}" />
+          </p:column>
+          <p:column sortBy="#{comment.name}">
+            <f:facet name="header">
+              <h:outputText value="#{msg['comment.list.name']}" />
+            </f:facet>
+            <h:outputText value="#{comment.name}" />
+          </p:column>
+          <p:column sortBy="#{comment.creation}">
+            <f:facet name="header">
+              <h:outputText value="#{msg['comment.list.created']}" />
+            </f:facet>
+            <h:outputText value="#{comment.creation}">
+              <f:convertDateTime type="both" timeZone="#{loginBean.timeZone}" />
+            </h:outputText>
+          </p:column>
+        </p:dataTable>
+      </h:form>
+    </ui:define>
+  </ui:composition>
+</body>
+</html>

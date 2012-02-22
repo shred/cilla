@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<!--
+
+  cilla - Blog Management System
+
+  Copyright (C) 2012 Richard "Shred" Körber
+    http://cilla.shredzone.org
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published
+  by the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<hibernate-configuration>
+    <session-factory>
+        <property name="dialect">org.shredzone.cilla.core.hibernate.TableNameSequencePostgresDialect</property>
+        <mapping class="org.shredzone.cilla.core.model.Authority"/>
+        <mapping class="org.shredzone.cilla.core.model.Category"/>
+        <mapping class="org.shredzone.cilla.core.model.Comment"/>
+        <mapping class="org.shredzone.cilla.core.model.GallerySection"/>
+        <mapping class="org.shredzone.cilla.core.model.Header"/>
+        <mapping class="org.shredzone.cilla.core.model.Language"/>
+        <mapping class="org.shredzone.cilla.core.model.Medium"/>
+        <mapping class="org.shredzone.cilla.core.model.Page"/>
+        <mapping class="org.shredzone.cilla.core.model.Picture"/>
+        <mapping class="org.shredzone.cilla.core.model.Role"/>
+        <mapping class="org.shredzone.cilla.core.model.Section"/>
+        <mapping class="org.shredzone.cilla.core.model.Setting"/>
+        <mapping class="org.shredzone.cilla.core.model.Store"/>
+        <mapping class="org.shredzone.cilla.core.model.Tag"/>
+        <mapping class="org.shredzone.cilla.core.model.TextSection"/>
+        <mapping class="org.shredzone.cilla.core.model.Token"/>
+        <mapping class="org.shredzone.cilla.core.model.User"/>
+    </session-factory>
+</hibernate-configuration>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+  cilla - Blog Management System
+
+  Copyright (C) 2012 Richard "Shred" Körber
+    http://cilla.shredzone.org
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published
+  by the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.shredzone</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <groupId>org.shredzone.cilla</groupId>
+    <artifactId>cilla-parent</artifactId>
+    <version>0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Cilla Parent</name>
+    <description>Cilla Blog Management System</description>
+    <inceptionYear>2009</inceptionYear>
+    <url>http://cilla.shredzone.org</url>
+    <licenses>
+        <license>
+            <name>GNU Affero General Public License Version 3</name>
+            <url>LICENSE-AGPL.txt</url>
+        </license>
+    </licenses>
+    <issueManagement>
+        <system>Redmine</system>
+        <url>http://www.shredzone.org/projects/cilla/issues</url>
+    </issueManagement>
+    <scm>
+        <connection>scm:git:git@github.com:shred/cilla.git</connection>
+        <developerConnection>scm:git:git@github.com:shred/cilla.git</developerConnection>
+        <url>scm:git:git@github.com:shred/cilla.git</url>
+    </scm>
+    <properties>
+        <commonscaptcha.version>0.1-SNAPSHOT</commonscaptcha.version>
+        <commonsgravatar.version>0.1-SNAPSHOT</commonsgravatar.version>
+        <commonstext.version>0.1-SNAPSHOT</commonstext.version>
+        <commonsview.version>0.1-SNAPSHOT</commonsview.version>
+        <flattr4j.version>2.0</flattr4j.version>
+        <jshred.version>18</jshred.version>
+    </properties>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.shredzone</groupId>
+                <artifactId>bom</artifactId>
+                <version>1.0.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <modules>
+        <module>cilla-ws</module>
+        <module>cilla-core</module>
+        <module>cilla-service</module>
+        <module>cilla-web</module>
+        <module>cilla-view</module>
+        <module>cilla-ws-client</module>
+        <module>cilla-admin</module>
+    </modules>
+    <repositories>
+        <repository>
+            <id>shredzone.org</id>
+            <url>http://maven.shredzone.org/release/</url>
+        </repository>
+        <repository>
+            <id>jboss</id>
+            <url>https://repository.jboss.org/nexus/content/groups/public-jboss</url>
+        </repository>
+        <repository>
+            <id>maven2-java-net</id>
+            <url>http://download.java.net/maven/2</url>
+        </repository>
+        <repository>
+            <id>primefaces</id>
+            <url>http://repository.primefaces.org</url>  
+        </repository>
+    </repositories>
+    <dependencies>
+        <dependency>
+            <groupId>org.shredzone.jshred</groupId>
+            <artifactId>jshred-spring</artifactId>
+            <version>${jshred.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jsp-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>

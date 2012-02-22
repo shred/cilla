@@ -1,0 +1,86 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:p="http://primefaces.org/ui" xmlns:composite="http://java.sun.com/jsf/composite" xmlns:ca="http://java.sun.com/jsf/composite/cilla">
+<!--
+
+  cilla - Blog Management System
+
+  Copyright (C) 2012 Richard "Shred" Körber
+    http://cilla.shredzone.org
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published
+  by the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<body>
+  <ui:composition template="/templates/sidebar.xhtml">
+    <ui:define name="content">
+      <h:form id="listForm">
+        <p:dataTable id="pageList" var="page" value="#{pageDataModel}" selection="#{pageBean.pageInfo}" rowKey="#{page.id}" rows="20" paginator="true" selectionMode="single">
+          <f:facet name="header">
+            <p:commandButton action="#{pageBean.add()}" ajax="false" value="#{msg['page.list.new']}" icon="ui-icon-document" />
+            <p:commandButton action="#{pageBean.edit()}" ajax="false" value="#{msg['page.list.edit']}" icon="ui-icon-pencil" />
+            <p:commandButton onclick="deleteConfirmation.show()" value="#{msg['page.list.delete']}" icon="ui-icon-trash" />
+          </f:facet>
+          <p:column>
+            <f:facet name="header">
+              <h:outputText value="#{msg['page.list.flags']}" />
+            </f:facet>
+            <p:graphicImage value="#{resource['icon:page-published.png']}" title="#{msg['page.list.tt.published']}" rendered="#{page.published and not page.visible}" />
+            <p:graphicImage value="#{resource['icon:page-visible.png']}" title="#{msg['page.list.tt.visible']}" rendered="#{page.visible}" />
+            <p:graphicImage value="#{resource['icon:page-sticky.png']}" title="#{msg['page.list.tt.sticky']}" rendered="#{page.sticky}" />
+            <p:graphicImage value="#{resource['icon:page-hidden.png']}" title="#{msg['page.list.tt.hidden']}" rendered="#{page.hidden}" />
+          </p:column>
+          <p:column sortBy="#{page.title}">
+            <f:facet name="header">
+              <h:outputText value="#{msg['page.list.title']}" />
+            </f:facet>
+            <h:outputText value="#{page.title}" />
+          </p:column>
+          <p:column sortBy="#{page.creatorName}">
+            <f:facet name="header">
+              <h:outputText value="#{msg['page.list.author']}" />
+            </f:facet>
+            <h:outputText value="#{page.creatorName}" />
+          </p:column>
+          <p:column sortBy="#{page.creation}">
+            <f:facet name="header">
+              <h:outputText value="#{msg['page.list.created']}" />
+            </f:facet>
+            <h:outputText value="#{page.creation}">
+              <f:convertDateTime type="both" timeZone="#{loginBean.timeZone}" />
+            </h:outputText>
+          </p:column>
+          <p:column sortBy="#{page.publication}">
+            <f:facet name="header">
+              <h:outputText value="#{msg['page.list.published']}" />
+            </f:facet>
+            <h:outputText value="#{page.publication}">
+              <f:convertDateTime type="both" timeZone="#{loginBean.timeZone}" />
+            </h:outputText>
+          </p:column>
+        </p:dataTable>
+
+      </h:form>
+    </ui:define>
+
+    <ui:define name="dialog">
+      <h:form id="editForm">
+        <p:confirmDialog header="#{msg['page.list.delete.header']}" widgetVar="deleteConfirmation" message="#{msg['page.list.delete.message']}">
+          <p:commandButton value="#{msg['page.list.delete.yes']}" actionListener="#{pageListBean.invalidate()}" action="#{pageBean.delete()}" update="listForm:pageList" oncomplete="deleteConfirmation.hide()" />
+          <p:commandButton value="#{msg['page.list.delete.no']}" onclick="deleteConfirmation.hide()" type="button" />
+        </p:confirmDialog>
+      </h:form>
+    </ui:define>
+
+  </ui:composition>
+</body>
+</html>

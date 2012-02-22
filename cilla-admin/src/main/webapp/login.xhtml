@@ -1,0 +1,64 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:p="http://primefaces.org/ui" xmlns:composite="http://java.sun.com/jsf/composite" xmlns:ca="http://java.sun.com/jsf/composite/cilla">
+<!--
+
+  cilla - Blog Management System
+
+  Copyright (C) 2012 Richard "Shred" Körber
+    http://cilla.shredzone.org
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published
+  by the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<body>
+  <ui:composition template="/templates/master.xhtml">
+    <ui:define name="content">
+      <h:form id="login">
+        <p:panel header="#{msg['login.legend']}">
+        
+          <h:panelGrid columns="2">
+
+            <p:graphicImage value="#{resource['image:login.png']}" />
+
+            <h:panelGrid columns="2" cellpadding="5px;">
+              <f:facet name="header">
+                <p:messages globalOnly="true" />
+              </f:facet>
+
+              <h:outputLabel for="userName" value="#{msg['login.username']}:" />
+              <h:panelGroup>
+                <h:inputText id="userName" value="#{loginBean.userName}" required="true" requiredMessage="#{msg['validator.required']}" />
+                <p:message for="userName" />
+              </h:panelGroup>
+
+              <h:outputLabel for="password" value="#{msg['login.password']}:" />
+              <h:panelGroup>
+                <h:inputSecret id="password" value="#{loginBean.password}" required="true" requiredMessage="#{msg['validator.required']}" />
+                <p:message for="password" />
+              </h:panelGroup>
+
+              <f:facet name="footer">
+                <h:panelGroup style="display:block; text-align:center;">
+                  <h:commandButton type="submit" id="login" action="#{loginBean.login}" value="#{msg['login.action']}" />
+                </h:panelGroup>
+              </f:facet>
+            </h:panelGrid>
+
+          </h:panelGrid>
+
+        </p:panel>
+      </h:form>
+    </ui:define>
+  </ui:composition>
+</body>
+</html>

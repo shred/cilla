@@ -1,0 +1,75 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:p="http://primefaces.org/ui" xmlns:composite="http://java.sun.com/jsf/composite" xmlns:ca="http://java.sun.com/jsf/composite/cilla">
+<!--
+
+  cilla - Blog Management System
+
+  Copyright (C) 2012 Richard "Shred" Körber
+    http://cilla.shredzone.org
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published
+  by the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<body>
+  <composite:interface>
+    <composite:attribute name="picture" required="true" />
+  </composite:interface>
+  <composite:implementation>
+    <p:toolbar>
+      <p:toolbarGroup>
+        <p:commandButton id="submit" type="submit" ajax="false" value="#{msg['section.gallery.image.commit']}" icon="ui-icon-check" />
+      </p:toolbarGroup>
+    </p:toolbar>
+
+    <p:messages globalOnly="true" />
+
+    <h:panelGrid columns="2">
+      <h:outputLabel for="imageCaptionFormat" value="#{msg['section.gallery.image.captionformat']}:" />
+      <h:panelGroup>
+        <h:selectOneMenu id="imageCaptionFormat" value="#{picture.captionFormat}">
+          <f:selectItems value="#{listBean.createTextFormatList()}" />
+        </h:selectOneMenu>
+        <p:message for="imageCaptionFormat" />
+      </h:panelGroup>
+
+      <h:outputLabel for="imageCaption" value="#{msg['section.gallery.image.caption']}:" />
+      <h:panelGroup>
+        <h:inputTextarea id="imageCaption" value="#{picture.caption}" rows="15" cols="50" />
+        <p:message for="imageCaption" />
+      </h:panelGroup>
+
+      <h:outputLabel for="imageCreation" value="#{msg['section.gallery.image.creation']}:" />
+      <h:panelGroup>
+        <ca:datetime id="imageCreation" compositeId="imageCreation" value="#{picture.createDate}" />
+        <p:message for="imageCreation" />
+      </h:panelGroup>
+
+      <h:outputLabel for="imageTimeDefinition" value="#{msg['section.gallery.image.timedefinition']}:" />
+      <h:panelGroup>
+        <h:selectOneMenu id="imageTimeDefinition" value="#{picture.createTimeDefinition}">
+          <f:selectItems value="#{listBean.createTimeDefinitionList()}" />
+        </h:selectOneMenu>
+        <p:message for="imageTimeDefinition" />
+      </h:panelGroup>
+
+      <h:outputLabel for="imageTimeZone" value="#{msg['section.gallery.image.timezone']}:" />
+      <h:panelGroup>
+        <p:autoComplete id="imageTimeZone" forceSelection="true" value="#{picture.createTimeZone}" converter="#{timeZoneBean}" completeMethod="#{timeZoneBean.complete}" />
+        <p:message for="imageTimeZone" />
+      </h:panelGroup>
+
+    </h:panelGrid>
+
+  </composite:implementation>
+</body>
+</html>
