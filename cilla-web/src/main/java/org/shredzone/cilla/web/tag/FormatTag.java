@@ -76,14 +76,19 @@ public class FormatTag extends BodyTagSupport {
                 txtFormat = (TextFormat) format;
             } else if (format != null) {
                 txtFormat = TextFormat.valueOf(format.toString());
+            } else if (text == null) {
+                // if no text and no format was set, render the body as HTML
+                txtFormat = TextFormat.HTML;
             } else {
                 throw new IllegalArgumentException("format not set");
             }
 
             if (text != null) {
                 result = text.toString();
-            } else {
+            } else if (bodyContent != null) {
                 result = bodyContent.toString().trim();
+            } else {
+                result = "";
             }
         }
 
