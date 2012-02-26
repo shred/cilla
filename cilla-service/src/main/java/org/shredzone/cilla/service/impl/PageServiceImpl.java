@@ -174,7 +174,7 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
-    @CacheEvict(value = "scaledImages", key = "#medium.image.id")
+    @CacheEvict(value = "processedImages", allEntries = true)
     public void updateMedium(Page page, Medium medium, DataSource source) throws CillaServiceException {
         if (!medium.getPage().equals(page)) {
             throw new IllegalArgumentException("Medium id " + medium.getId() + " does not belong to Page id " + page.getId());
@@ -196,7 +196,7 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
-    @CacheEvict(value = "scaledImages", key = "#medium.image.id")
+    @CacheEvict(value = "processedImages", allEntries = true)
     public void removeMedium(Page page, Medium medium) throws CillaServiceException {
         if (!medium.getPage().equals(page)) {
             throw new IllegalArgumentException("Medium id " + medium.getId() + " does not belong to Page id " + page.getId());

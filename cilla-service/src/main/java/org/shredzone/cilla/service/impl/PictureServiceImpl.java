@@ -112,7 +112,7 @@ public class PictureServiceImpl implements PictureService {
     }
 
     @Override
-    @CacheEvict(value = "scaledImages", key = "#picture.image.id")
+    @CacheEvict(value = "processedImages", allEntries = true)
     public void updatePicture(Picture picture, DataSource source) throws CillaServiceException {
         if (picture.getId() == 0) {
             throw new IllegalArgumentException("picture is not persisted");
@@ -154,7 +154,7 @@ public class PictureServiceImpl implements PictureService {
     }
 
     @Override
-    @CacheEvict(value = "scaledImages", key = "#picture.image.id")
+    @CacheEvict(value = "processedImages", allEntries = true)
     public void removePicture(Picture picture) throws CillaServiceException {
         if (picture.getId() == 0) {
             throw new IllegalArgumentException("picture is not persisted");

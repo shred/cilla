@@ -43,7 +43,6 @@ import org.shredzone.cilla.service.resource.ImageTools;
 import org.shredzone.cilla.ws.ImageProcessing;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
@@ -122,10 +121,7 @@ public class HeaderServiceImpl implements HeaderService {
     }
 
     @Override
-    @Caching(evict = {
-        @CacheEvict(value = "scaledImages", key = "#header.headerImage.id"),
-        @CacheEvict(value = "scaledImages", key = "#header.fullImage.id"),
-    })
+    @CacheEvict(value = "processedImages", allEntries = true)
     public void updateImage(Header header, DataSource headerImg, DataSource fullImg) throws CillaServiceException {
         if (header.getId() == 0) {
             throw new IllegalArgumentException("header is not persisted");
@@ -173,10 +169,7 @@ public class HeaderServiceImpl implements HeaderService {
     }
 
     @Override
-    @Caching(evict = {
-        @CacheEvict(value = "scaledImages", key = "#header.headerImage.id"),
-        @CacheEvict(value = "scaledImages", key = "#header.fullImage.id"),
-    })
+    @CacheEvict(value = "processedImages", allEntries = true)
     public void remove(Header header) throws CillaServiceException {
         try {
             storeDao.access(header.getFullImage()).delete();
