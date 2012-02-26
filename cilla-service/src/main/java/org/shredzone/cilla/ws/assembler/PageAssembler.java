@@ -87,6 +87,7 @@ public class PageAssembler extends AbstractAssembler<Page, PageDto> {
         entity.setSubject(dto.getSubject());
         entity.setLanguage(languageDao.fetch(dto.getLanguageId()));
         entity.setCreator(userDao.fetch(dto.getCreatorId()));
+        entity.setCreation(dto.getCreation());
         entity.setModification(new Date());
         entity.setPublication(dto.getPublication());
         entity.setExpiration(dto.getExpiration());
