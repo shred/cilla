@@ -29,7 +29,7 @@
         <version>1.0.0</version>
     </parent>
     <groupId>org.shredzone.cilla</groupId>
-    <artifactId>cilla-parent</artifactId>
+    <artifactId>cilla</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Cilla Parent</name>
