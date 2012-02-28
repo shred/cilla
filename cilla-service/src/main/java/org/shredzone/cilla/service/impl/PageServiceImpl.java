@@ -161,7 +161,6 @@ public class PageServiceImpl implements PageService {
 
             Store store = medium.getImage();
             store.setContentType(source.getContentType());
-            store.setName(source.getName());
             store.setLastModified(new Date());
 
             mediumDao.persist(medium);
