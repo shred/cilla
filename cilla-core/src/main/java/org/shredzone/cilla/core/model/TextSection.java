@@ -32,7 +32,6 @@ import org.shredzone.cilla.core.model.embed.FormattedText;
  * A section that contains a text.
  *
  * @author Richard "Shred" Körber
- * @version $Revision:$
  */
 @Entity
 public class TextSection extends Section {
