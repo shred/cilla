@@ -34,6 +34,8 @@ public interface Parameterizable {
      * @param value
      *            parameter value
      */
-    void addParam(String name, String value);
+    void addParam(String name, Object value);
 
 }
+
+

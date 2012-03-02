@@ -69,9 +69,9 @@ public class MapTag extends BodyTagSupport implements Parameterizable {
     }
 
     @Override
-    public void addParam(String name, String value) {
-        if ("backgroundColor".equals(name)) {
-            data.setBackgroundColor(value);
+    public void addParam(String name, Object value) {
+        if ("backgroundColor".equals(name) && value != null) {
+            data.setBackgroundColor(value.toString());
         }
     }
 

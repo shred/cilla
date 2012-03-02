@@ -83,11 +83,11 @@ public class LinkTag extends BodyTagSupport implements Parameterizable {
     private LinkBuilder lb;
 
     @Override
-    public void addParam(String key, String value) {
+    public void addParam(String key, Object value) {
         if (key.startsWith("#")) {
             lb.param(key.substring(1), value);
         } else {
-            lb.query(key, value);
+            lb.query(key, value != null ? value.toString() : "");
         }
     }
 

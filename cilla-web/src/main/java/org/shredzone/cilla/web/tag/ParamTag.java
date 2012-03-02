@@ -43,7 +43,7 @@ public class ParamTag extends BodyTagSupport {
     private static final long serialVersionUID = 3127696613728198638L;
 
     private @TagParameter(required = true) String name;
-    private @TagParameter String value;
+    private @TagParameter Object value;
 
     @Override
     public int doStartTag() throws JspException {
