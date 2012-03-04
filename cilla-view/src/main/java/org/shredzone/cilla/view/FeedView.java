@@ -266,11 +266,11 @@ public class FeedView extends AbstractView {
         entry.setPublishedDate(page.getPublication());
         entry.setUpdatedDate(page.getModification());
 
-        // Add a payment link if article is registered with Flattr
-        if (page.getFlattr() != null) {
+        // Add a donation link if set
+        if (page.getDonateUrl() != null) {
             SyndLink link = new SyndLinkImpl();
             link.setRel("payment");
-            link.setHref(page.getFlattr().getFlattrUrl());
+            link.setHref(page.getDonateUrl());
             entry.getLinks().add(link);
         }
 

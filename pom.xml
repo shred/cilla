@@ -56,7 +56,6 @@
         <commonsgravatar.version>0.1-SNAPSHOT</commonsgravatar.version>
         <commonstext.version>0.1-SNAPSHOT</commonstext.version>
         <commonsview.version>0.1-SNAPSHOT</commonsview.version>
-        <flattr4j.version>2.0</flattr4j.version>
         <jshred.version>18</jshred.version>
     </properties>
     <dependencyManagement>

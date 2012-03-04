@@ -50,7 +50,7 @@ public class PageInfoDto extends BaseDto {
     private boolean sticky;
     private boolean hidden;
     private boolean commentable;
-    private boolean flattrable;
+    private boolean donatable;
 
     @Size(min = 0, max = 50)
     public String getName()                         { return name; }
@@ -101,8 +101,8 @@ public class PageInfoDto extends BaseDto {
     public boolean isCommentable()                  { return commentable; }
     public void setCommentable(boolean commentable) { this.commentable = commentable; }
 
-    public boolean isFlattrable()                   { return flattrable; }
-    public void setFlattrable(boolean flattrable)   { this.flattrable = flattrable; }
+    public boolean isDonatable()                    { return donatable; }
+    public void setDonatable(boolean donatable)     { this.donatable = donatable; }
 
     public boolean isPublished() {
         return (publication != null && publication.before(new Date()));

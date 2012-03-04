@@ -21,18 +21,23 @@ package org.shredzone.cilla.core.model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Temporal;
@@ -41,7 +46,6 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.shredzone.cilla.core.model.embed.FlattrThing;
 import org.shredzone.cilla.core.model.embed.FormattedText;
 import org.shredzone.cilla.core.util.DateUtils;
 
@@ -60,6 +64,7 @@ public class Page extends BaseModel {
     private Set<Category> categories = new HashSet<Category>();
     private Set<Tag> tags = new HashSet<Tag>();
     private List<Section> sections = new ArrayList<Section>();
+    private Map<String, String> properties = new HashMap<String, String>();
     private String name;
     private String subject;
     private String title;
@@ -73,11 +78,11 @@ public class Page extends BaseModel {
     private boolean sticky;
     private boolean hidden;
     private boolean commentable;
-    private boolean flattrable;
+    private boolean donatable;
     private boolean publishedState;
     private String challenge;
     private String responsePattern;
-    private FlattrThing flattr;
+    private String donateUrl;
 
     /**
      * All {@link Category} this page belongs to.
@@ -227,20 +232,28 @@ public class Page extends BaseModel {
     public void setResponsePattern(String responsePattern) { this.responsePattern = responsePattern; }
 
     /**
-     * {@code true} if the page can be flattr-ed. The page will automatically be
-     * registered with flattr, and a flattr button is rendered.
+     * {@code true} if the page shall offer a link to a donation site.
      */
     @Column(nullable = false)
-    public boolean isFlattrable()               { return flattrable; }
-    public void setFlattrable(boolean flattrable) { this.flattrable = flattrable; }
+    public boolean isDonatable()                { return donatable; }
+    public void setDonatable(boolean donatable) { this.donatable = donatable; }
 
     /**
-     * Reference to the flattr registration.
+     * URL of a donation site for donating for this page.
      */
-    public FlattrThing getFlattr()              { return flattr; }
-    public void setFlattr(FlattrThing flattr)   { this.flattr = flattr; }
-
-
+    public String getDonateUrl()                { return donateUrl; }
+    public void setDonateUrl(String donateUrl)  { this.donateUrl = donateUrl; }
+    
+    /**
+     * Common page properties.
+     */
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "Page_Properties")
+    @MapKeyColumn(name = "key")
+    @Column(name = "value")
+    public Map<String, String> getProperties()  { return properties; }
+    public void setProperties(Map<String, String> properties) { this.properties = properties; }
+    
     /**
      * {@code true} if the page is currently published. A page is published if a
      * publication date is set and in the past, and an expiration date is either not set

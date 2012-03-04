@@ -218,14 +218,14 @@
 
               <h:outputText />
               <h:panelGroup>
-                <p:selectBooleanCheckbox id="pageFlattrable" value="#{pageBean.page.flattrable}" label="Flattrable" />
-                <h:outputLabel for="pageFlattrable" value="#{msg['page.edit.flattrable']}" />
-                <p:message for="pageFlattrable" />
+                <p:selectBooleanCheckbox id="pageDonatable" value="#{pageBean.page.donatable}" />
+                <h:outputLabel for="pageDonatable" value="#{msg['page.edit.donatable']}" />
+                <p:message for="pageDonatable" />
               </h:panelGroup>
 
               <h:outputText />
               <h:panelGroup>
-                <p:selectBooleanCheckbox id="pageCommentable" value="#{pageBean.page.commentable}" label="Commentable" />
+                <p:selectBooleanCheckbox id="pageCommentable" value="#{pageBean.page.commentable}" />
                 <h:outputLabel for="pageCommentable" value="#{msg['page.edit.commentable']}" />
                 <p:message for="pageCommentable" />
               </h:panelGroup>
