@@ -19,7 +19,6 @@
  */
 package org.shredzone.cilla.service.link;
 
-
 /**
  * This service creates links to views.
  *
@@ -29,6 +28,8 @@ public interface LinkService {
 
     /**
      * Creates a {@link LinkBuilder}.
+     * <p>
+     * This method must only be invoked in a thread handling a Cilla servlet request.
      *
      * @return the created {@link LinkBuilder}
      */

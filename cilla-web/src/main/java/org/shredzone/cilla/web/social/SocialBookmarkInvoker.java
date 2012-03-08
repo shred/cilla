@@ -31,7 +31,7 @@ import org.shredzone.cilla.web.social.annotation.PageLink;
 import org.shredzone.cilla.web.social.annotation.PageTitle;
 import org.shredzone.cilla.web.social.annotation.SocialBookmark;
 import org.shredzone.cilla.web.social.annotation.SocialHandler;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
@@ -42,7 +42,7 @@ import org.springframework.util.ReflectionUtils;
  * @author Richard "Shred" Körber
  */
 @Component
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@Scope(BeanDefinition.SCOPE_PROTOTYPE)
 public class SocialBookmarkInvoker implements Comparable<SocialBookmarkInvoker> {
 
     private @Resource LinkShortener linkShortenerService;
