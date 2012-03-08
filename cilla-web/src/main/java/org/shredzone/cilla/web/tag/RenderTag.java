@@ -51,6 +51,7 @@ public class RenderTag extends BodyTagSupport implements Parameterizable {
     private @TagParameter(required = true) String fragment;
     private @TagParameter Object item;
     private @TagParameter Boolean rendered;
+    private @TagParameter Boolean optional;
 
     private @Resource FragmentService fragmentService;
 
@@ -70,25 +71,34 @@ public class RenderTag extends BodyTagSupport implements Parameterizable {
 
     @Override
     public int doEndTag() throws JspException {
-        if (rendered != null && rendered == Boolean.FALSE) {
-            return EVAL_PAGE;
-        }
-
-        String result;
         try {
-            result = fragmentService.renderFragment(fragment, context);
-            if (result != null) {
-                pageContext.getOut().print(result);
+            if (rendered != null && rendered == Boolean.FALSE) {
+                return EVAL_PAGE;
             }
-        } catch (IOException ex) {
-            throw new JspException("Failed to render fragment " + fragment, ex);
-        } catch (CillaServiceException ex) {
-            throw new JspException("Failed to render fragment " + fragment, ex);
+
+            if (optional != null && optional == Boolean.TRUE) {
+                if (!fragmentService.hasFragment(fragment)) {
+                    // Fragment is optional and does not exist
+                    return EVAL_PAGE;
+                }
+            }
+
+            String result;
+            try {
+                result = fragmentService.renderFragment(fragment, context);
+                if (result != null) {
+                    pageContext.getOut().print(result);
+                }
+            } catch (IOException ex) {
+                throw new JspException("Failed to render fragment " + fragment, ex);
+            } catch (CillaServiceException ex) {
+                throw new JspException("Failed to render fragment " + fragment, ex);
+            }
+
+            return EVAL_PAGE;
+        } finally {
+            context = null;
         }
-
-        context = null;
-
-        return EVAL_PAGE;
     }
 
     @Override

@@ -17,12 +17,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.shredzone.cilla.web.fragment.impl;
+package org.shredzone.cilla.web.fragment;
 
 import javax.annotation.Resource;
 import javax.servlet.jsp.PageContext;
 
-import org.shredzone.cilla.web.fragment.FragmentService;
 import org.shredzone.cilla.web.fragment.manager.FragmentContext;
 import org.shredzone.cilla.web.fragment.manager.FragmentInvoker;
 import org.shredzone.cilla.web.fragment.manager.FragmentManager;
@@ -66,6 +65,11 @@ public class FragmentServiceImpl implements FragmentService {
         }
 
         throw new CillaServiceException("Fragment renderer returned " + result.getClass().getName());
+    }
+
+    @Override
+    public boolean hasFragment(String name) {
+        return fragmentManager.getInvoker(name) != null;
     }
 
 }

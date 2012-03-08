@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -46,6 +47,7 @@ public class FragmentManager {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private @Resource ApplicationContext applicationContext;
+    private @Resource ConversionService conversionService;
 
     private Map<String, FragmentInvoker> fragmentMap = new HashMap<String, FragmentInvoker>();
 
@@ -102,7 +104,7 @@ public class FragmentManager {
             template = anno.template();
         }
 
-        FragmentInvoker invoker = new FragmentInvoker(bean, method, template);
+        FragmentInvoker invoker = new FragmentInvoker(bean, method, template, conversionService);
         fragmentMap.put(name, invoker);
 
         log.info("Found fragment '{}'", name);

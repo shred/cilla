@@ -51,4 +51,13 @@ public interface FragmentService {
      */
     String renderFragment(String name, FragmentContext context) throws CillaServiceException;
 
+    /**
+     * Checks if a fragment is defined.
+     *
+     * @param name
+     *            Fragment name
+     * @return {@code true} if there is a fragment with that name
+     */
+    boolean hasFragment(String name);
+
 }

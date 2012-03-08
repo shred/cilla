@@ -23,17 +23,20 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Locale;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.jsp.JspWriter;
 
 import org.shredzone.cilla.web.fragment.annotation.Fragment;
+import org.shredzone.cilla.web.fragment.annotation.FragmentItem;
 import org.shredzone.cilla.web.fragment.annotation.FragmentRenderer;
 import org.shredzone.cilla.web.fragment.annotation.FragmentValue;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.commons.view.ViewService;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
@@ -50,7 +53,9 @@ import org.springframework.util.ReflectionUtils;
 public final class FragmentInvoker {
     private final Object bean;
     private final Method method;
+    private final ConversionService conversionService;
     private final Expression[] expressions;
+    private final boolean[] items;
     private final String template;
 
     /**
@@ -63,14 +68,18 @@ public final class FragmentInvoker {
      * @param template
      *            JSP template to be used for rendering, or {@code null} if none is
      *            defined
+     * @param conversionService
+     *            {@link ConversionService} to be used for converting
      */
-    public FragmentInvoker(Object bean, Method method, String template) {
+    public FragmentInvoker(Object bean, Method method, String template, ConversionService conversionService) {
         this.bean = bean;
         this.method = method;
         this.template = template;
+        this.conversionService = conversionService;
 
         Annotation[][] annotations = method.getParameterAnnotations();
         expressions = new Expression[annotations.length];
+        items = new boolean[annotations.length];
 
         ExpressionParser parser = new SpelExpressionParser();
 
@@ -78,6 +87,8 @@ public final class FragmentInvoker {
             for (Annotation sub : annotations[ix]) {
                 if (sub instanceof FragmentValue) {
                     expressions[ix] = parser.parseExpression(((FragmentValue) sub).value());
+                } else if (sub instanceof FragmentItem) {
+                    items[ix] = true;
                 }
             }
         }
@@ -107,11 +118,15 @@ public final class FragmentInvoker {
      * @return Fragment string returned by the renderer. May be {@code null}.
      */
     public String invoke(FragmentContext context) throws CillaServiceException {
+        if (context == null) {
+            throw new NullPointerException("context must not be null");
+        }
+
         Class<?>[] types = method.getParameterTypes();
         Object[] values = new Object[types.length];
 
         for (int ix = 0; ix < types.length; ix++) {
-            values[ix] = evaluateParameter(types[ix], expressions[ix], context);
+            values[ix] = evaluateParameter(types[ix], ix, context);
         }
 
         Object html = ReflectionUtils.invokeMethod(method, bean, values);
@@ -135,28 +150,35 @@ public final class FragmentInvoker {
      *
      * @param type
      *            Expected parameter type
-     * @param expression
-     *            expression to be evaluated, may be {@code null}
+     * @param ix
+     *            Parameter index
      * @param context
      *            {@link FragmentContext} containing all necessary data for evaluation
      * @return Parameter value to be passed to the method
      */
-    private Object evaluateParameter(Class<?> type, Expression expression, FragmentContext context)
+    private Object evaluateParameter(Class<?> type, int ix, FragmentContext context)
     throws CillaServiceException {
-        if (expression != null) {
-            return expression.getValue(context, type);
+        if (items[ix]) {
+            return conversionService.convert(context.getRootObject().getValue(), type);
+
+        } else if (expressions[ix] != null) {
+            return expressions[ix].getValue(context, type);
 
         } else if (   context.getRootObject() != null
+                   && context.getRootObject().getTypeDescriptor() != null
                    && context.getRootObject().getTypeDescriptor().getType().isAssignableFrom(type)) {
             return context.getRootObject().getTypeDescriptor().getType().cast(
                 context.getRootObject().getValue()
             );
 
-        } else if (HttpServletRequest.class.isAssignableFrom(type)) {
+        } else if (ServletRequest.class.isAssignableFrom(type)) {
             return context.getPageContext().getRequest();
 
-        } else if (HttpServletResponse.class.isAssignableFrom(type)) {
+        } else if (ServletResponse.class.isAssignableFrom(type)) {
             return context.getPageContext().getResponse();
+
+        } else if (Locale.class.isAssignableFrom(type)) {
+            return context.getPageContext().getRequest().getLocale();
 
         } else if (ServletContext.class.isAssignableFrom(type)) {
             return context.getServletContext();
@@ -178,7 +200,7 @@ public final class FragmentInvoker {
             return context;
 
         } else {
-            throw new IllegalArgumentException("No value for type " + type.getName());
+            throw new IllegalArgumentException("Parameter " + ix + " has no matching value for type " + type.getName());
         }
     }
 
