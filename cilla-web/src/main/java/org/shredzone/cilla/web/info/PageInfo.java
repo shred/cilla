@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.shredzone.cilla.core.model.Page;
 import org.shredzone.cilla.core.model.Tag;
-import org.shredzone.cilla.web.social.SocialLink;
 
 /**
  * Information about a {@link Page}. This class contains mostly page content that is
@@ -39,7 +38,6 @@ public class PageInfo implements Serializable {
 
     private List<PageComment> comments;
     private Collection<Tag> tags;
-    private List<SocialLink> socials;
 
     /**
      * Page comments, sorted as flattened tree.
@@ -52,11 +50,5 @@ public class PageInfo implements Serializable {
      */
     public Collection<Tag> getTags()            { return tags; }
     public void setTags(Collection<Tag> tags)   { this.tags = tags; }
-
-    /**
-     * All social links of this page.
-     */
-    public List<SocialLink> getSocials()        { return socials; }
-    public void setSocials(List<SocialLink> socials) { this.socials = socials; }
 
 }

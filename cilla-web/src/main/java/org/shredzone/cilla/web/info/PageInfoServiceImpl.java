@@ -36,7 +36,6 @@ import org.shredzone.cilla.core.model.Page;
 import org.shredzone.cilla.core.model.User;
 import org.shredzone.cilla.core.repository.CommentDao;
 import org.shredzone.cilla.web.format.TextFormatter;
-import org.shredzone.cilla.web.social.SocialService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +50,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class PageInfoServiceImpl implements PageInfoService {
 
     private @Resource CommentDao commentDao;
-    private @Resource SocialService socialService;
     private @Resource TextFormatter textFormatter;
 
     @Override
@@ -60,7 +58,6 @@ public class PageInfoServiceImpl implements PageInfoService {
         PageInfo content = new PageInfo();
         content.setComments(Collections.unmodifiableList(getFlattenedComments(page)));
         content.setTags(Collections.unmodifiableCollection(page.getTags()));
-        content.setSocials(Collections.unmodifiableList(socialService.createLinksToPage(page)));
         return content;
     }
 
