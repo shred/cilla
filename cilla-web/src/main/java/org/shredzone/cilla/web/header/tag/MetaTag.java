@@ -17,16 +17,22 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.shredzone.cilla.web;
+package org.shredzone.cilla.web.header.tag;
 
 import org.springframework.web.util.HtmlUtils;
 
 /**
- * Contains a meta tag. A meta tag is immutable.
+ * Contains a meta tag.
+ * <p>
+ * {@link MetaTag} are comparable and naturally ordered by their name. Two {@link MetaTag}
+ * are considered equal if they have the same name. This way it is easy to make sure that
+ * a meta tag has not been set yet.
+ * <p>
+ * A meta tag is immutable.
  *
  * @author Richard "Shred" Körber
  */
-public final class Meta implements Comparable<Meta> {
+public class MetaTag implements HeadTag, Comparable<MetaTag> {
 
     private final String name;
     private final String content;
@@ -40,7 +46,7 @@ public final class Meta implements Comparable<Meta> {
      * @param content
      *            content attribute
      */
-    public Meta(String name, String content) {
+    public MetaTag(String name, String content) {
         this(name, content, null);
     }
 
@@ -54,7 +60,7 @@ public final class Meta implements Comparable<Meta> {
      * @param scheme
      *            optional scheme attribute, or {@code null}
      */
-    public Meta(String name, String content, String scheme) {
+    public MetaTag(String name, String content, String scheme) {
         if (name == null || content == null) {
             throw new IllegalArgumentException("name and content must not be null");
         }
@@ -80,16 +86,16 @@ public final class Meta implements Comparable<Meta> {
     public String getScheme()               { return scheme; }
 
     @Override
-    public int compareTo(Meta o) {
+    public int compareTo(MetaTag o) {
         return name.compareTo(o.name);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof Meta)) {
+        if (obj == null || !(obj instanceof MetaTag)) {
             return false;
         }
-        return name.equals(((Meta) obj).name);
+        return name.equals(((MetaTag) obj).name);
     }
 
     @Override
@@ -97,11 +103,6 @@ public final class Meta implements Comparable<Meta> {
         return name.hashCode();
     }
 
-    /**
-     * Returns the meta tag.
-     *
-     * @return the meta tag
-     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

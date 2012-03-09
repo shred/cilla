@@ -17,31 +17,23 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.shredzone.cilla.web.map;
+package org.shredzone.cilla.web.header;
 
 /**
- * A generic service for online maps. The implementation decides which map service
- * provider is actually used.
+ * Beans implementing this interface are notified when a new {@link DocumentHeader}
+ * instance was created. This is used for plugins to add tags to the document header, like
+ * css or JavaScript.
  *
  * @author Richard "Shred" Körber
  */
-public interface MapService {
+public interface DocumentHeaderObserver {
 
     /**
-     * Gets a JavaScript code for initialization. The code must not be wrapped with
-     * &lt;script&gt; tags.
-     */
-    String getInitJs();
-
-    /**
-     * Builds a HTML fragment for rendering the given {@link MapModel}.
+     * A new {@link DocumentHeader} was created.
      *
-     * @param divId
-     *            id of the div container the map is rendered in
-     * @param data
-     *            {@link MapModel} with all details needed for rendering
-     * @return HTML fragment for rendering the map
+     * @param header
+     *            {@link DocumentHeader} that was created
      */
-    String build(String divId, MapModel data);
+    void onNewDocumentHeader(DocumentHeader header);
 
 }

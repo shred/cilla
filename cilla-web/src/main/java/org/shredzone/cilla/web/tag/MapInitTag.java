@@ -19,23 +19,23 @@
  */
 package org.shredzone.cilla.web.tag;
 
-import java.io.IOException;
-
 import javax.annotation.Resource;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTag;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
+import org.shredzone.cilla.web.header.DocumentHeaderManager;
+import org.shredzone.cilla.web.header.tag.JavaScriptTag;
 import org.shredzone.cilla.web.map.MapService;
-import org.shredzone.cilla.web.util.TagUtils;
 import org.shredzone.jshred.spring.taglib.annotation.TagInfo;
-import org.shredzone.jshred.spring.taglib.annotation.TagParameter;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
  * Inserts all necessary init scripts for maps.
+ * <p>
+ * Must be invoked before the header fragment is rendered.
  *
  * @author Richard "Shred" Körber
  */
@@ -46,27 +46,14 @@ import org.springframework.stereotype.Component;
 public class MapInitTag extends BodyTagSupport {
     private static final long serialVersionUID = 8309606103271334513L;
 
-    private @TagParameter String var;
-    private @TagParameter String scope;
-
     private @Resource MapService mapService;
+    private @Resource DocumentHeaderManager documentHeaderManager;
 
     @Override
     public int doEndTag() throws JspException {
-        StringBuilder sb = new StringBuilder();
-        sb.append(mapService.getInitJs());
-
-        if (var != null) {
-            TagUtils.setScopedAttribute(pageContext, var, sb.toString(), scope);
-            return EVAL_PAGE;
-        }
-
-        try {
-            pageContext.getOut().println(sb.toString());
-        } catch (IOException ex) {
-            throw new JspException(ex);
-        }
-
+        JavaScriptTag js = new JavaScriptTag();
+        js.append(mapService.getInitJs());
+        documentHeaderManager.getDocumentHeader().add(js);
         return EVAL_PAGE;
     }
 

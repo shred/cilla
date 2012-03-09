@@ -32,7 +32,6 @@ public class GoogleMapServiceImpl implements MapService {
     public String getInitJs() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("<script type=\"text/javascript\">//<![CDATA[\n");
         sb.append("var maploader = {");
         sb.append("url:'http://maps.google.com/maps/api/js?sensor=false&callback=maploader.start',");
         sb.append("setup:false,");
@@ -47,7 +46,6 @@ public class GoogleMapServiceImpl implements MapService {
         sb.append("this.setup=true;");
         sb.append("}");
         sb.append("}\n");
-        sb.append("//]]></script>\n");
 
         return sb.toString();
     }

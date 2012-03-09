@@ -17,31 +17,35 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.shredzone.cilla.web.map;
+package org.shredzone.cilla.web.header.tag;
 
 /**
- * A generic service for online maps. The implementation decides which map service
- * provider is actually used.
+ * A link to a CSS resource.
  *
  * @author Richard "Shred" Körber
  */
-public interface MapService {
+public class CssLinkTag extends LinkTag {
 
     /**
-     * Gets a JavaScript code for initialization. The code must not be wrapped with
-     * &lt;script&gt; tags.
-     */
-    String getInitJs();
-
-    /**
-     * Builds a HTML fragment for rendering the given {@link MapModel}.
+     * Creates a new {@link CssLinkTag}.
      *
-     * @param divId
-     *            id of the div container the map is rendered in
-     * @param data
-     *            {@link MapModel} with all details needed for rendering
-     * @return HTML fragment for rendering the map
+     * @param url
+     *            URL of the css resource (relative or absolute)
      */
-    String build(String divId, MapModel data);
+    public CssLinkTag(String url) {
+        super("stylesheet", "text/css", url);
+    }
+
+    /**
+     * Creates a new {@link CssLinkTag}.
+     *
+     * @param url
+     *            URL of the css resource (relative or absolute)
+     * @param media
+     *            media this css is applied to
+     */
+    public CssLinkTag(String url, String media) {
+        super("stylesheet", "text/css", url, media);
+    }
 
 }

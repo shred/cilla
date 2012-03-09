@@ -19,15 +19,13 @@
  */
 package org.shredzone.cilla.web.tag;
 
-import java.util.SortedSet;
-import java.util.TreeSet;
-
+import javax.annotation.Resource;
 import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTag;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import org.shredzone.cilla.web.Meta;
+import org.shredzone.cilla.web.header.DocumentHeader;
+import org.shredzone.cilla.web.header.DocumentHeaderManager;
 import org.shredzone.jshred.spring.taglib.annotation.TagInfo;
 import org.shredzone.jshred.spring.taglib.annotation.TagParameter;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -36,6 +34,8 @@ import org.springframework.stereotype.Component;
 
 /**
  * Adds a meta tag.
+ * <p>
+ * Must be invoked before the header's meta fragment is rendered.
  *
  * @author Richard "Shred" Körber
  */
@@ -46,12 +46,12 @@ import org.springframework.stereotype.Component;
 public class MetaTag extends BodyTagSupport {
     private static final long serialVersionUID = 1155264881573999741L;
 
-    public static final String META_ATTRIBUTE_NAME = "meta";
-
     private @TagParameter(required = true) String name;
     private @TagParameter String content;
     private @TagParameter String scheme;
     private @TagParameter boolean replace = false;
+
+    private @Resource DocumentHeaderManager documentHeaderManager;
 
     @Override
     public int doStartTag() throws JspException {
@@ -62,28 +62,21 @@ public class MetaTag extends BodyTagSupport {
         }
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public int doEndTag() throws JspException {
         String value = content;
-
         if (value == null) {
             value = getBodyContent().getString();
         }
 
-        SortedSet<Meta> metaSet = (SortedSet<Meta>) pageContext.getAttribute(META_ATTRIBUTE_NAME, PageContext.REQUEST_SCOPE);
-        if (metaSet == null) {
-            metaSet = new TreeSet<Meta>();
-            pageContext.setAttribute(META_ATTRIBUTE_NAME, metaSet, PageContext.REQUEST_SCOPE);
-        }
+        org.shredzone.cilla.web.header.tag.MetaTag meta =
+                        new org.shredzone.cilla.web.header.tag.MetaTag(name, value, scheme);
 
-        Meta meta = new Meta(name, value, scheme);
-
-        if (!replace && metaSet.contains(meta)) {
+        DocumentHeader header = documentHeaderManager.getDocumentHeader();
+        if (!replace && header.contains(meta)) {
             throw new JspException("Meta " + name + " is already set");
         }
-
-        metaSet.add(meta);
+        header.add(meta);
 
         return EVAL_PAGE;
     }
