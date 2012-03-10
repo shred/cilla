@@ -188,7 +188,15 @@ public class ExifAnalyzer {
     public Date getDateTime(TimeZone tz) {
         Date date = null;
 
-        date = readDate(ExifIFD0Directory.class, ExifIFD0Directory.TAG_DATETIME, tz);
+        date = readDate(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, tz);
+
+        if (date == null) {
+            date = readDate(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_DATETIME_DIGITIZED, tz);
+        }
+
+        if (date == null) {
+            date = readDate(ExifIFD0Directory.class, ExifIFD0Directory.TAG_DATETIME, tz);
+        }
 
         if (date == null) {
             date = readDate(XmpDirectory.class, XmpDirectory.TAG_DATETIME_ORIGINAL, tz);
@@ -218,6 +226,16 @@ public class ExifAnalyzer {
             return model;
         }
 
+        model = readString(XmpDirectory.class, XmpDirectory.TAG_MODEL);
+        if (model != null) {
+            return model;
+        }
+
+        model = readString(XmpDirectory.class, XmpDirectory.TAG_MAKE);
+        if (model != null) {
+            return model;
+        }
+
         return null;
     }
 
@@ -228,6 +246,11 @@ public class ExifAnalyzer {
      */
     public String getAperture() {
         Rational aperture = readRational(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_APERTURE);
+
+        if (aperture == null) {
+            aperture = readRational(XmpDirectory.class, XmpDirectory.TAG_APERTURE_VALUE);
+        }
+
         if (aperture != null) {
             double fstop = PhotographicConversions.apertureToFStop(aperture.doubleValue());
             return String.format(Locale.ENGLISH, "f/%.1f", fstop);
@@ -244,6 +267,11 @@ public class ExifAnalyzer {
      */
     public String getShutter() {
         Rational shutter = readRational(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_SHUTTER_SPEED);
+
+        if (shutter == null) {
+            shutter = readRational(XmpDirectory.class, XmpDirectory.TAG_SHUTTER_SPEED);
+        }
+
         if (shutter != null) {
             double speed = PhotographicConversions.shutterSpeedToExposureTime(shutter.doubleValue());
             if (speed <= .25d) {
@@ -295,6 +323,11 @@ public class ExifAnalyzer {
      */
     public String getFocalLength() {
         Rational focal = readRational(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_FOCAL_LENGTH);
+
+        if (focal == null) {
+            focal = readRational(XmpDirectory.class, XmpDirectory.TAG_FOCAL_LENGTH);
+        }
+
         if (focal != null) {
             String result = String.format(Locale.ENGLISH, "%.0f mm", focal.doubleValue());
 
