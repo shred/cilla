@@ -22,6 +22,7 @@ package org.shredzone.cilla.service.impl;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.util.Date;
+import java.util.TimeZone;
 
 import javax.activation.DataSource;
 import javax.annotation.Resource;
@@ -88,7 +89,11 @@ public class PictureServiceImpl implements PictureService {
 
             ExifAnalyzer exif = imageProcessor.createExifAnalyzer(source);
             if (exif != null) {
-                picture.setCreateDate(exif.getDateTime(picture.getCreateTimeZone()));
+                TimeZone tz = picture.getCreateTimeZone();
+                if (tz == null) {
+                    tz = section.getDefaultTimeZone();
+                }
+                picture.setCreateDate(exif.getDateTime(tz));
                 picture.setExifData(exif.getExifData());
                 picture.setLocation(exif.getGeolocation());
             } else {
