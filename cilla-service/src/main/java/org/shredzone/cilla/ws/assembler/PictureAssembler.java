@@ -47,7 +47,7 @@ public class PictureAssembler extends AbstractAssembler<Picture, PictureDto> {
         dto.setCreateTimeZone(entity.getCreateTimeZone());
         dto.setCreateTimeDefinition(entity.getCreateTimeDefinition());
 
-        if (dto.getCaption() != null) {
+        if (entity.getCaption() != null) {
             dto.setCaption(entity.getCaption().getText());
             dto.setCaptionFormat(entity.getCaption().getFormat());
         }
