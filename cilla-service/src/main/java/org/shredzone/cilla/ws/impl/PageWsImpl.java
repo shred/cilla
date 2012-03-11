@@ -62,7 +62,6 @@ import org.shredzone.cilla.ws.page.PageInfoDto;
 import org.shredzone.cilla.ws.page.PageWs;
 import org.shredzone.cilla.ws.page.PictureDto;
 import org.shredzone.cilla.ws.page.SectionDto;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,8 +78,6 @@ import org.springframework.transaction.annotation.Transactional;
     endpointInterface = "org.shredzone.cilla.ws.page.PageWs",
     targetNamespace = "http://ws.cilla.shredzone.org/")
 public class PageWsImpl extends AbstractWs implements PageWs {
-
-    private @Value("${site.previewUrl}") String previewUrl;
 
     private @Resource PageAssembler pageAssembler;
     private @Resource MediumAssembler mediumAssembler;
@@ -180,7 +177,7 @@ public class PageWsImpl extends AbstractWs implements PageWs {
             throw new CillaNotFoundException("page", pageId);
         }
 
-        return linkService.linkTo().page(pageEntity).anchor("content").base(previewUrl).toString();
+        return linkService.linkTo().page(pageEntity).anchor("content").external().toString();
     }
 
     @Override

@@ -34,6 +34,7 @@ import org.shredzone.cilla.core.model.User;
 import org.shredzone.cilla.service.search.DateRange;
 import org.shredzone.commons.view.PathType;
 import org.shredzone.commons.view.ViewService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -50,6 +51,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class LinkBuilder {
+
+    private @Value("${site.externalBase}") String externalBaseUrl;
 
     private @Resource ViewService viewService;
 
@@ -179,6 +182,14 @@ public class LinkBuilder {
             link.transfer(this);
         }
         return this;
+    }
+
+    /**
+     * Creates an absolute link with a default base URL. Required if the link is
+     * generated outside of a HTTP request.
+     */
+    public LinkBuilder external() {
+        return base(externalBaseUrl);
     }
 
     /**
