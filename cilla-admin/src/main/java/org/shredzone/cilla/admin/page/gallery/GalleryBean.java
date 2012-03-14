@@ -50,6 +50,7 @@ public class GalleryBean implements PageSelectionObserver {
     private GallerySectionDto section;
     private PictureDto selectedImage;
     private UIComponent uiGrid;
+    private boolean timeOverride;
 
     /**
      * {@link GallerySectionDto} to be edited.
@@ -58,13 +59,19 @@ public class GalleryBean implements PageSelectionObserver {
     public void setGallerySection(GallerySectionDto section) {
         this.section = section;
         this.selectedImage = null;
+        this.timeOverride = false;
     }
 
     /**
      * {@link PictureDto} to be edited.
      */
     public PictureDto getSelectedImage()        { return selectedImage; }
-    public void setSelectedImage(PictureDto selectedImage) { this.selectedImage = selectedImage; }
+    public void setSelectedImage(PictureDto selectedImage) {
+        this.selectedImage = selectedImage;
+        this.timeOverride = (
+                   selectedImage.getCreateTimeDefinition() != null
+                || selectedImage.getCreateTimeZone() != null);
+    }
 
     /**
      * Reference to the {@link UIComponent} of the data grid showing the pictures of the
@@ -77,6 +84,22 @@ public class GalleryBean implements PageSelectionObserver {
      * List of all {@link PictureDto} of the selected gallery.
      */
     public List<PictureDto> getPictures()       { return section.getPictures(); }
+
+    /**
+     * Time zone and definition override?
+     */
+    public boolean isTimeOverride()             { return timeOverride; }
+    public void setTimeOverride(boolean timeOverride) { this.timeOverride = timeOverride; }
+
+    /**
+     * Commits the time override flag when the edit dialog is closed.
+     */
+    public void commitTimeOverride() {
+        if (selectedImage != null && !timeOverride) {
+            selectedImage.setCreateTimeDefinition(null);
+            selectedImage.setCreateTimeZone(null);
+        }
+    }
 
     /**
      * Moves a picture within the picture list.
@@ -142,6 +165,7 @@ public class GalleryBean implements PageSelectionObserver {
     public void onPageSelected(PageDto selectedPage) {
         section = null;
         selectedImage = null;
+        timeOverride = false;
     }
 
 }

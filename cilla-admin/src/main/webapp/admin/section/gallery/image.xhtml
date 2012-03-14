@@ -27,7 +27,9 @@
   <composite:implementation>
     <p:toolbar>
       <p:toolbarGroup>
-        <p:commandButton id="submit" type="submit" ajax="false" value="#{msg['section.gallery.image.commit']}" icon="ui-icon-check" />
+        <p:commandButton id="submit" type="submit" ajax="false"
+            actionListener="#{galleryBean.commitTimeOverride()}"
+            value="#{msg['section.gallery.image.commit']}" icon="ui-icon-check" />
       </p:toolbarGroup>
     </p:toolbar>
 
@@ -54,9 +56,19 @@
         <p:message for="imageCreation" />
       </h:panelGroup>
 
+      <h:outputText />
+      <h:panelGroup>
+        <p:selectBooleanCheckbox id="imageTimeOverride" value="#{galleryBean.timeOverride}">
+          <p:ajax update="imageTimeDefinition imageTimeZone"/>
+        </p:selectBooleanCheckbox>
+        <h:outputLabel for="imageTimeOverride" value="#{msg['section.gallery.image.timeoverride']}" />
+        <p:message for="imageTimeOverride" />
+      </h:panelGroup>
+
       <h:outputLabel for="imageTimeDefinition" value="#{msg['section.gallery.image.timedefinition']}:" />
       <h:panelGroup>
-        <h:selectOneMenu id="imageTimeDefinition" value="#{picture.createTimeDefinition}">
+        <h:selectOneMenu id="imageTimeDefinition" value="#{picture.createTimeDefinition}"
+                disabled="#{not galleryBean.timeOverride}">
           <f:selectItems value="#{listBean.createTimeDefinitionList()}" />
         </h:selectOneMenu>
         <p:message for="imageTimeDefinition" />
@@ -64,7 +76,9 @@
 
       <h:outputLabel for="imageTimeZone" value="#{msg['section.gallery.image.timezone']}:" />
       <h:panelGroup>
-        <p:autoComplete id="imageTimeZone" forceSelection="true" value="#{picture.createTimeZone}" converter="#{timeZoneBean}" completeMethod="#{timeZoneBean.complete}" />
+        <p:autoComplete id="imageTimeZone" forceSelection="true" value="#{picture.createTimeZone}"
+                converter="#{timeZoneBean}" completeMethod="#{timeZoneBean.complete}"
+                disabled="#{not galleryBean.timeOverride}" />
         <p:message for="imageTimeZone" />
       </h:panelGroup>
 
