@@ -19,6 +19,7 @@
  */
 package org.shredzone.cilla.admin.page.gallery;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -43,7 +44,8 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 @Scope("session")
-public class GalleryBean implements PageSelectionObserver {
+public class GalleryBean implements PageSelectionObserver, Serializable {
+    private static final long serialVersionUID = -3929497320724267152L;
 
     private @Resource PageWs pageWs;
 

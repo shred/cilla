@@ -19,6 +19,7 @@
  */
 package org.shredzone.cilla.admin.header;
 
+import java.io.Serializable;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -41,7 +42,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("session")
-public class HeaderBean {
+public class HeaderBean implements Serializable {
+    private static final long serialVersionUID = 6288999431849895025L;
 
     private @Resource HeaderWs headerWs;
 

@@ -19,6 +19,7 @@
  */
 package org.shredzone.cilla.admin.page;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -36,7 +37,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("session")
-public class PageTagBean implements PageSelectionObserver {
+public class PageTagBean implements PageSelectionObserver, Serializable {
+    private static final long serialVersionUID = -3041416451833181722L;
 
     private @Value("${maxProposedTags}") int maxProposedTags;
 

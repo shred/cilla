@@ -40,6 +40,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope("session")
 public class MediaImageBean extends AbstractImageBean {
+    private static final long serialVersionUID = -2877063300749565451L;
 
     private @Resource PageWs pageWs;
     private @Resource PageMediaBean pageMediaBean;

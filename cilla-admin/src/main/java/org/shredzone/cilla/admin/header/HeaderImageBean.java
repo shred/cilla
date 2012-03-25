@@ -38,6 +38,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope("session")
 public class HeaderImageBean extends AbstractImageBean {
+    private static final long serialVersionUID = 2122584473681755274L;
 
     private @Resource HeaderBean headerBean;
     private @Resource HeaderWs headerWs;

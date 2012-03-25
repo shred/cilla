@@ -25,6 +25,7 @@ import java.awt.image.ImageObserver;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -49,7 +50,9 @@ import org.springframework.stereotype.Component;
  * @author Richard "Shred" Körber
  */
 @Component
-public abstract class AbstractImageBean {
+public abstract class AbstractImageBean implements Serializable {
+    private static final long serialVersionUID = 3624378631087966758L;
+
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private @Value("${previewImageMaxCache}") int maxCache;

@@ -19,6 +19,8 @@
  */
 package org.shredzone.cilla.admin.role;
 
+import java.io.Serializable;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +31,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("view")
-public class RoleBean {
+public class RoleBean implements Serializable {
+    private static final long serialVersionUID = -165825162090048289L;
 
     public String add() {
         return "/admin/role/add.xhtml";

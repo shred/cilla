@@ -19,6 +19,7 @@
  */
 package org.shredzone.cilla.admin.login;
 
+import java.io.Serializable;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
@@ -45,7 +46,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("request")
-public class LoginBean {
+public class LoginBean implements Serializable {
+    private static final long serialVersionUID = -191823661450034450L;
+
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private @Resource RemoteLoginService remoteLoginService;

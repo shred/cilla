@@ -19,6 +19,8 @@
  */
 package org.shredzone.cilla.admin.comment;
 
+import java.io.Serializable;
+
 import javax.annotation.Resource;
 
 import org.shredzone.cilla.ws.comment.CommentDto;
@@ -34,7 +36,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("session")
-public class CommentBean {
+public class CommentBean implements Serializable {
+    private static final long serialVersionUID = -8895372030013381321L;
 
     private @Resource CommentWs commentWs;
 

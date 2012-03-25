@@ -19,6 +19,7 @@
  */
 package org.shredzone.cilla.admin.page;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -43,7 +44,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("session")
-public class PageBean {
+public class PageBean implements Serializable {
+    private static final long serialVersionUID = -9163614036429183023L;
 
     private @Value("${maxProposedSubjects}") int maxProposedSubjects;
 

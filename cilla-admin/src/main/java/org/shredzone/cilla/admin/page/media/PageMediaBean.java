@@ -19,6 +19,7 @@
  */
 package org.shredzone.cilla.admin.page.media;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -41,7 +42,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("session")
-public class PageMediaBean implements PageSelectionObserver {
+public class PageMediaBean implements PageSelectionObserver, Serializable {
+    private static final long serialVersionUID = -2129654079218797869L;
 
     private @Resource PageWs pageWs;
 

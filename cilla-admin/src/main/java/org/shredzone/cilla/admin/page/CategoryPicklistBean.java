@@ -19,6 +19,7 @@
  */
 package org.shredzone.cilla.admin.page;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +41,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("session")
-public class CategoryPicklistBean implements PageSelectionObserver {
+public class CategoryPicklistBean implements PageSelectionObserver, Serializable {
+    private static final long serialVersionUID = 6950844548268914797L;
 
     private @Resource CategoryWs categoryWs;
 
