@@ -78,6 +78,7 @@ public class GallerySectionAssembler extends AbstractSectionAssembler<GallerySec
         entity.setDefaultTimeZone(dto.getDefaultTimeZone());
 
         Set<Picture> removables = new HashSet<Picture>(entity.getPictures());
+        entity.getPictures().clear();
         for (PictureDto picDto : dto.getPictures()) {
             Picture picture;
 
