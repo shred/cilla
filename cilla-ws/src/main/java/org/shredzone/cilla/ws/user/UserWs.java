@@ -21,6 +21,7 @@ package org.shredzone.cilla.ws.user;
 
 import java.util.List;
 
+import javax.jws.WebParam;
 import javax.jws.WebService;
 
 import org.shredzone.cilla.ws.ListRange;
@@ -41,16 +42,16 @@ public interface UserWs {
      *            Login name
      * @return {@link UserDto}, or {@code null} if there is no such user
      */
-    UserDto fetchByLogin(String login) throws CillaServiceException;
+    UserDto fetchByLogin(@WebParam(name = "login") String login) throws CillaServiceException;
 
     /**
      * Fetches a {@link UserDto} by its ID.
      *
-     * @param id
+     * @param userId
      *            User ID
      * @return {@link UserDto}, or {@code null} if it does not exist
      */
-    UserDto fetch(long id) throws CillaServiceException;
+    UserDto fetch(@WebParam(name = "userId") long userId) throws CillaServiceException;
 
     /**
      * Counts the number of all users.
@@ -64,7 +65,7 @@ public interface UserWs {
      *            {@link ListRange}, or {@code null} for all
      * @return List of matching {@link UserDto}
      */
-    List<UserDto> list(ListRange criteria);
+    List<UserDto> list(@WebParam(name = "criteria") ListRange criteria);
 
     /**
      * Creates a new {@link UserDto}.

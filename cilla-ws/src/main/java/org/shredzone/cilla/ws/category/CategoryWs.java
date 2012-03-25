@@ -21,6 +21,7 @@ package org.shredzone.cilla.ws.category;
 
 import java.util.List;
 
+import javax.jws.WebParam;
 import javax.jws.WebService;
 
 import org.shredzone.cilla.ws.exception.CillaServiceException;
@@ -36,11 +37,11 @@ public interface CategoryWs {
     /**
      * Fetches a {@link CategoryDto} by its ID.
      *
-     * @param id
+     * @param categoryId
      *            Category id
      * @return {@link CategoryDto}, or {@code null} if it does not exist
      */
-    CategoryDto fetch(long id) throws CillaServiceException;
+    CategoryDto fetch(@WebParam(name = "categoryId") long categoryId) throws CillaServiceException;
 
     /**
      * Returns a list of all {@link CategoryDto}, ordered by name.

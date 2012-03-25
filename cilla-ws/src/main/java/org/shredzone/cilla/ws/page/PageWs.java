@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.activation.DataHandler;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 
 import org.shredzone.cilla.ws.ImageProcessing;
@@ -40,11 +41,11 @@ public interface PageWs {
     /**
      * Fetches a {@link PageDto} by its ID.
      *
-     * @param id
+     * @param pageId
      *            Page id
      * @return {@link PageDto}, or {@code null} if it does not exist
      */
-    PageDto fetch(long id) throws CillaServiceException;
+    PageDto fetch(@WebParam(name = "pageId") long pageId) throws CillaServiceException;
 
     /**
      * Returns the number of all pages (including unpublished pages).
@@ -59,7 +60,7 @@ public interface PageWs {
      *            {@link ListRange}, or {@code null} for all
      * @return List of matching {@link PageInfoDto}
      */
-    List<PageInfoDto> list(ListRange criteria);
+    List<PageInfoDto> list(@WebParam(name = "criteria") ListRange criteria);
 
     /**
      * Creates a new, empty {@link PageDto}.
@@ -75,7 +76,7 @@ public interface PageWs {
      *            {@link PageDto} to be committed
      * @return Committed {@link PageDto}, must be used from now on
      */
-    PageDto commit(PageDto page) throws CillaServiceException;
+    PageDto commit(@WebParam(name = "page") PageDto page) throws CillaServiceException;
 
     /**
      * Deletes a Page by its ID. All dependencies are also deleted: comments, sections,
@@ -84,7 +85,7 @@ public interface PageWs {
      * @param pageId
      *            Page ID to be deleted
      */
-    void delete(long pageId) throws CillaServiceException;
+    void delete(@WebParam(name = "pageId") long pageId) throws CillaServiceException;
 
     /**
      * Returns the preview URL of a page.
@@ -94,7 +95,7 @@ public interface PageWs {
      * @return Preview URL, or {@code null} if there is no preview available for some
      *         reasons
      */
-    String previewUrl(long pageId) throws CillaServiceException;
+    String previewUrl(@WebParam(name = "pageId") long pageId) throws CillaServiceException;
 
     /**
      * Gets all available section types.
@@ -108,7 +109,7 @@ public interface PageWs {
      *            Section type
      * @return {@link SectionDto} that was created
      */
-    SectionDto createNewSection(String type) throws CillaServiceException;
+    SectionDto createNewSection(@WebParam(name = "type") String type) throws CillaServiceException;
 
     /**
      * Creates a new {@link MediumDto}.
@@ -133,7 +134,8 @@ public interface PageWs {
      *            {@link ImageProcessing} for post processing, {@code null} for original
      * @return {@link DataHandler} returning the medium
      */
-    DataHandler getMediumImage(long mediumId, ImageProcessing process) throws CillaServiceException;
+    DataHandler getMediumImage(@WebParam(name = "mediumId") long mediumId,
+            @WebParam(name = "process") ImageProcessing process) throws CillaServiceException;
 
     /**
      * Returns the gallery picture.
@@ -144,7 +146,8 @@ public interface PageWs {
      *            {@link ImageProcessing} for post processing, {@code null} for original
      * @return {@link DataHandler} returning the picture
      */
-    DataHandler getGalleryImage(long pictureId, ImageProcessing process) throws CillaServiceException;
+    DataHandler getGalleryImage(@WebParam(name = "pictureId") long pictureId,
+            @WebParam(name = "process") ImageProcessing process) throws CillaServiceException;
 
     /**
      * Proposes a list of subjects for the given text. No more than limit subjects will be
@@ -157,6 +160,7 @@ public interface PageWs {
      * @return List of Subjects for the keyword. May be empty, but never {@code null}.
      *         Never contains more than limit entries.
      */
-    List<String> proposeSubjects(String query, int limit);
+    List<String> proposeSubjects(@WebParam(name = "query") String query,
+            @WebParam(name = "limit") int limit);
 
 }

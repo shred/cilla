@@ -22,6 +22,7 @@ package org.shredzone.cilla.ws.header;
 import java.util.List;
 
 import javax.activation.DataHandler;
+import javax.jws.WebParam;
 import javax.jws.WebService;
 
 import org.shredzone.cilla.ws.ImageProcessing;
@@ -39,11 +40,11 @@ public interface HeaderWs {
     /**
      * Fetches a {@link HeaderDto} by its ID.
      *
-     * @param id
+     * @param headerId
      *            Header ID
      * @return {@link HeaderDto}, or {@code null} if it does not exist
      */
-    HeaderDto fetch(long id) throws CillaServiceException;
+    HeaderDto fetch(@WebParam(name = "headerId") long headerId) throws CillaServiceException;
 
     /**
      * Counts the number of all headers.
@@ -57,7 +58,7 @@ public interface HeaderWs {
      *            {@link ListRange}, or {@code null} for all
      * @return List of matching {@link HeaderDto}
      */
-    List<HeaderDto> list(ListRange criteria);
+    List<HeaderDto> list(@WebParam(name = "criteria") ListRange criteria);
 
     /**
      * Creates a new {@link HeaderDto}.
@@ -73,7 +74,7 @@ public interface HeaderWs {
      *            {@link HeaderDto} to be committed
      * @return Committed {@link HeaderDto}, must be used from now on
      */
-    HeaderDto commit(HeaderDto header) throws CillaServiceException;
+    HeaderDto commit(@WebParam(name = "header") HeaderDto header) throws CillaServiceException;
 
     /**
      * Deletes a Header by its ID.
@@ -81,7 +82,7 @@ public interface HeaderWs {
      * @param headerId
      *            Header ID to be deleted
      */
-    void delete(long headerId) throws CillaServiceException;
+    void delete(@WebParam(name = "headerId") long headerId) throws CillaServiceException;
 
     /**
      * Returns the header image.
@@ -92,7 +93,8 @@ public interface HeaderWs {
      *            {@link ImageProcessing} for post processing, {@code null} for original
      * @return {@link DataHandler} containing the header image
      */
-    DataHandler getHeaderImage(long headerId, ImageProcessing process) throws CillaServiceException;
+    DataHandler getHeaderImage(@WebParam(name = "headerId") long headerId,
+            @WebParam(name = "process") ImageProcessing process) throws CillaServiceException;
 
     /**
      * Returns the full-scaled image shown at the header's detail page.
@@ -103,6 +105,7 @@ public interface HeaderWs {
      *            {@link ImageProcessing} for post processing, {@code null} for original
      * @return {@link DataHandler} containing the header image
      */
-    DataHandler getFullImage(long headerId, ImageProcessing process) throws CillaServiceException;
+    DataHandler getFullImage(@WebParam(name = "headerId") long headerId,
+            @WebParam(name = "process") ImageProcessing process) throws CillaServiceException;
 
 }

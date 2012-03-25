@@ -21,6 +21,7 @@ package org.shredzone.cilla.ws.comment;
 
 import java.util.List;
 
+import javax.jws.WebParam;
 import javax.jws.WebService;
 
 import org.shredzone.cilla.ws.ListRange;
@@ -37,11 +38,11 @@ public interface CommentWs {
     /**
      * Fetches a {@link CommentDto} by its ID.
      *
-     * @param id
+     * @param commentId
      *            Comment ID
      * @return {@link CommentDto}, or {@code null} if it does not exist
      */
-    CommentDto fetch(long id) throws CillaServiceException;
+    CommentDto fetch(@WebParam(name = "commentId") long commentId) throws CillaServiceException;
 
     /**
      * Counts the number of all comments (also unpublished ones).
@@ -55,7 +56,7 @@ public interface CommentWs {
      *            {@link ListRange}, or {@code null} for all
      * @return List of matching {@link CommentDto}
      */
-    List<CommentDto> list(ListRange criteria);
+    List<CommentDto> list(@WebParam(name = "criteria") ListRange criteria);
 
     /**
      * Creates a new {@link CommentDto} for the given page.
@@ -64,7 +65,7 @@ public interface CommentWs {
      *            ID of the Page the comment will be added to
      * @return {@link CommentDto} that was created
      */
-    CommentDto createNew(long pageId) throws CillaServiceException;
+    CommentDto createNew(@WebParam(name = "pageId") long pageId) throws CillaServiceException;
 
     /**
      * Commits a {@link CommentDto}.
@@ -73,7 +74,7 @@ public interface CommentWs {
      *            {@link CommentDto} to be committed
      * @return Committed {@link CommentDto}, must be used from now on
      */
-    CommentDto commit(CommentDto comment) throws CillaServiceException;
+    CommentDto commit(@WebParam(name = "comment") CommentDto comment) throws CillaServiceException;
 
     /**
      * Deletes a Comment by its ID. It will delete the entire thread (this is, also all
@@ -82,6 +83,6 @@ public interface CommentWs {
      * @param commentId
      *            Comment ID to be deleted
      */
-    void delete(long commentId) throws CillaServiceException;
+    void delete(@WebParam(name = "commentId") long commentId) throws CillaServiceException;
 
 }

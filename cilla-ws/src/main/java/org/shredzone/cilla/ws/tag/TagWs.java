@@ -21,6 +21,7 @@ package org.shredzone.cilla.ws.tag;
 
 import java.util.List;
 
+import javax.jws.WebParam;
 import javax.jws.WebService;
 
 /**
@@ -54,6 +55,7 @@ public interface TagWs {
      * @return List of Tags for the keyword. May be empty, but never {@code null}. Never
      *         contains more than limit entries.
      */
-    List<String> proposeTags(String query, int limit);
+    List<String> proposeTags(@WebParam(name = "query") String query,
+            @WebParam(name = "limit") int limit);
 
 }
