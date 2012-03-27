@@ -69,7 +69,7 @@ public class CillaUserDetailsManager implements UserDetailsManager, GroupManager
             throw new UsernameNotFoundException(username);
         }
 
-        log.info("Successfully logged in: {}", user.getLogin());
+        log.debug("Successfully logged in: {}", user.getLogin());
 
         return new CillaUserDetails(user);
     }

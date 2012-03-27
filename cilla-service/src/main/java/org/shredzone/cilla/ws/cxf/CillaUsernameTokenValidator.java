@@ -54,7 +54,7 @@ public class CillaUsernameTokenValidator extends UsernameTokenValidator {
                             usernameToken.getName(), usernameToken.getPassword());
             auth = authenticationManager.authenticate(auth);
             SecurityContextHolder.getContext().setAuthentication(auth);
-            log.info("Successfully authenticated user {}", usernameToken.getName());
+            log.debug("Successfully authenticated user {}", usernameToken.getName());
         } catch (AuthenticationException ex) {
             log.error("Unable to authenticate user {}: {}", usernameToken.getName(), ex.getMessage());
             throw new WSSecurityException(WSSecurityException.FAILED_AUTHENTICATION);
