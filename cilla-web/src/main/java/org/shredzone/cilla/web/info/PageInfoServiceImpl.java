@@ -23,6 +23,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -33,6 +34,7 @@ import javax.annotation.Resource;
 
 import org.shredzone.cilla.core.model.Comment;
 import org.shredzone.cilla.core.model.Page;
+import org.shredzone.cilla.core.model.Tag;
 import org.shredzone.cilla.core.model.User;
 import org.shredzone.cilla.core.repository.CommentDao;
 import org.shredzone.cilla.web.format.TextFormatter;
@@ -55,10 +57,15 @@ public class PageInfoServiceImpl implements PageInfoService {
     @Override
     @Cacheable(value = "pageInfo", key = "#page.id")
     public PageInfo getPageInfo(Page page) {
-        PageInfo content = new PageInfo();
-        content.setComments(Collections.unmodifiableList(getFlattenedComments(page)));
-        content.setTags(Collections.unmodifiableCollection(page.getTags()));
-        return content;
+        PageInfo info = new PageInfo();
+        info.setComments(Collections.unmodifiableList(getFlattenedComments(page)));
+
+        // page.getTags() returns a Hibernate proxy object. What we need is a
+        // copy collection that contains the real objects and is serializable.
+        Collection<Tag> copiedTags = new ArrayList<Tag>(page.getTags());
+        info.setTags(Collections.unmodifiableCollection(copiedTags));
+
+        return info;
     }
 
     /**
