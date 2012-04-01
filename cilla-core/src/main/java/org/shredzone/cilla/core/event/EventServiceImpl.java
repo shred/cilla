@@ -29,8 +29,10 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
-import org.shredzone.cilla.core.event.annotation.EventHandler;
+import org.shredzone.cilla.core.event.annotation.EventListener;
 import org.shredzone.cilla.core.event.annotation.OnEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Service;
@@ -42,6 +44,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class EventServiceImpl implements EventService {
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private @Resource ApplicationContext applicationContext;
 
@@ -50,13 +53,13 @@ public class EventServiceImpl implements EventService {
 
     /**
      * Sets up the {@link EventService}. It scans for all beans annotated with
-     * {@link EventHandler}, and registers the events and handler methods.
+     * {@link EventListener}, and registers the events and handler methods.
      */
     @PostConstruct
     protected void setup() {
-        Collection<Object> beans = applicationContext.getBeansWithAnnotation(EventHandler.class).values();
+        Collection<Object> beans = applicationContext.getBeansWithAnnotation(EventListener.class).values();
         for (Object bean : beans) {
-            EventHandler ehAnno = bean.getClass().getAnnotation(EventHandler.class);
+            EventListener ehAnno = bean.getClass().getAnnotation(EventListener.class);
             if (ehAnno != null) {
                 for (Method method : bean.getClass().getMethods()) {
                     OnEvent evAnno = AnnotationUtils.findAnnotation(method, OnEvent.class);
@@ -83,7 +86,7 @@ public class EventServiceImpl implements EventService {
         invoker.setBean(bean);
         invoker.setMethod(method);
 
-        EventType[] events = anno.event();
+        EventType[] events = anno.value();
         if (events == null || events.length == 0) {
             // Invoke on all events if there was no explicit event type given
             events = EventType.values();
@@ -100,7 +103,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void fireEvent(Event event) {
+    public void fireEvent(Event<?> event) {
+        if (log.isDebugEnabled()) {
+            log.debug("Sending event " + event.getType() + ", source = " + event.getSource());
+        }
+
         List<EventInvoker> listeners = invokerMap.get(event.getType());
         if (listeners != null) {
             for (EventInvoker invoker : listeners) {

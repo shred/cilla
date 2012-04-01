@@ -112,12 +112,12 @@ public class HeaderServiceImpl implements HeaderService {
             throw new CillaServiceException("Could not read medium", ex);
         }
 
-        eventService.fireEvent(new Event(EventType.HEADER_NEW).value(header));
+        eventService.fireEvent(new Event<Header>(EventType.HEADER_NEW, header));
     }
 
     @Override
     public void update(Header header) throws CillaServiceException {
-        eventService.fireEvent(new Event(EventType.HEADER_UPDATE).value(header));
+        eventService.fireEvent(new Event<Header>(EventType.HEADER_UPDATE, header));
     }
 
     @Override
@@ -162,7 +162,7 @@ public class HeaderServiceImpl implements HeaderService {
                 FileCopyUtils.copy(fullImg.getInputStream(), fullDs.getOutputStream());
             }
 
-            eventService.fireEvent(new Event(EventType.HEADER_UPDATE).value(header));
+            eventService.fireEvent(new Event<Header>(EventType.HEADER_UPDATE, header));
         } catch (IOException ex) {
             throw new CillaServiceException("Could not read medium", ex);
         }
@@ -175,7 +175,7 @@ public class HeaderServiceImpl implements HeaderService {
             storeDao.access(header.getFullImage()).delete();
             storeDao.access(header.getHeaderImage()).delete();
             headerDao.delete(header);
-            eventService.fireEvent(new Event(EventType.HEADER_DELETE).value(header));
+            eventService.fireEvent(new Event<Header>(EventType.HEADER_DELETE, header));
         } catch (IOException ex) {
             throw new CillaServiceException("Could not delete header media", ex);
         }

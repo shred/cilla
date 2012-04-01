@@ -55,7 +55,7 @@ public abstract class AbstractSectionAssembler<F extends Section, T extends Sect
         sectionDao.persist(section);
         page.getSections().add(section);
         renumberSectionSequence(section.getPage());
-        eventService.fireEvent(new Event(EventType.SECTION_NEW).value(section));
+        eventService.fireEvent(new Event<Section>(EventType.SECTION_NEW, section));
     }
 
     /**
@@ -66,7 +66,7 @@ public abstract class AbstractSectionAssembler<F extends Section, T extends Sect
      */
     protected void updateSection(F section) throws CillaServiceException {
         renumberSectionSequence(section.getPage());
-        eventService.fireEvent(new Event(EventType.SECTION_UPDATE).value(section));
+        eventService.fireEvent(new Event<Section>(EventType.SECTION_UPDATE, section));
     }
 
     /**
@@ -79,7 +79,7 @@ public abstract class AbstractSectionAssembler<F extends Section, T extends Sect
         section.getPage().getSections().remove(section);
         sectionDao.delete(section);
         renumberSectionSequence(section.getPage());
-        eventService.fireEvent(new Event(EventType.SECTION_DELETE).value(section));
+        eventService.fireEvent(new Event<Section>(EventType.SECTION_DELETE, section));
     }
 
     /**

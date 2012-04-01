@@ -43,6 +43,6 @@ public @interface OnEvent {
      *
      * @return {@link EventType} to listen to
      */
-    EventType[] event() default {};
+    EventType[] value() default {};
 
 }

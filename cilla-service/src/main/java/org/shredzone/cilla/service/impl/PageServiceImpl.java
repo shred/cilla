@@ -91,14 +91,14 @@ public class PageServiceImpl implements PageService {
     @CacheEvict(value = "tagCloud", allEntries = true)
     public void create(Page page) {
         pageDao.persist(page);
-        eventService.fireEvent(new Event(EventType.PAGE_NEW).value(page));
+        eventService.fireEvent(new Event<Page>(EventType.PAGE_NEW, page));
     }
 
     @Override
     @CacheEvict(value = "tagCloud", allEntries = true)
     public void update(Page page) {
         page.setModification(new Date());
-        eventService.fireEvent(new Event(EventType.PAGE_UPDATE).value(page));
+        eventService.fireEvent(new Event<Page>(EventType.PAGE_UPDATE, page));
     }
 
     @Override
@@ -117,7 +117,7 @@ public class PageServiceImpl implements PageService {
         }
 
         pageDao.delete(page);
-        eventService.fireEvent(new Event(EventType.PAGE_DELETE).value(page));
+        eventService.fireEvent(new Event<Page>(EventType.PAGE_DELETE, page));
     }
 
     @Override
@@ -129,7 +129,7 @@ public class PageServiceImpl implements PageService {
 
             if (before != after) {
                 EventType type = (after ? EventType.PAGE_PUBLISH : EventType.PAGE_UNPUBLISH);
-                eventService.fireEvent(new Event(type).value(page));
+                eventService.fireEvent(new Event<Page>(type, page));
                 page.setPublishedState(after);
             }
         }

@@ -19,13 +19,13 @@
  */
 package org.shredzone.cilla.core.event;
 
-import org.shredzone.cilla.core.event.annotation.EventHandler;
+import org.shredzone.cilla.core.event.annotation.EventListener;
 import org.shredzone.cilla.core.event.annotation.OnEvent;
 
 /**
  * Offers services for event handling and processing.
  * <p>
- * Event handler classes are annotated with {@link EventHandler}. Each event handler
+ * Event handler classes are annotated with {@link EventListener}. Each event handler
  * method is annotated with {@link OnEvent}.
  *
  * @author Richard "Shred" Körber
@@ -33,11 +33,11 @@ import org.shredzone.cilla.core.event.annotation.OnEvent;
 public interface EventService {
 
     /**
-     * Fires an event. All {@link EventHandler} listening to that event will be notified.
+     * Fires an event. All {@link EventListener} listening to that event will be notified.
      *
      * @param event
      *            {@link Event} to fire
      */
-    void fireEvent(Event event);
+    void fireEvent(Event<?> event);
 
 }

@@ -26,13 +26,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation marks a Spring bean that is capable of handling events.
+ * This annotation marks a Spring bean that is listening to system events.
  *
  * @author Richard "Shred" Körber
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface EventHandler {
+public @interface EventListener {
 
 }

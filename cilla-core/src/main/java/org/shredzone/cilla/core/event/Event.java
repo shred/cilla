@@ -19,28 +19,27 @@
  */
 package org.shredzone.cilla.core.event;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * Contains a single event.
  *
  * @author Richard "Shred" Körber
  */
-public class Event {
+public class Event<T> {
 
     private final EventType type;
-    private final List<Object> data = new LinkedList<Object>();
+    private final T source;
 
     /**
      * Instantiates a new event.
      *
      * @param type
      *            {@link EventType} of this event
+     * @param source
+     *            source that triggered the event
      */
-    public Event(EventType type) {
+    public Event(EventType type, T source) {
         this.type = type;
+        this.source = source;
     }
 
     /**
@@ -53,24 +52,12 @@ public class Event {
     }
 
     /**
-     * Adds a value to this event's value collection.
+     * Gets the source that triggered the event.
      *
-     * @param value
-     *            value to be added
-     * @return {@code this}
+     * @return the source, may be {@code null}
      */
-    public Event value(Object value) {
-        data.add(value);
-        return this;
-    }
-
-    /**
-     * Gets a collection of all values.
-     *
-     * @return the values
-     */
-    public Collection<Object> getValues() {
-        return data;
+    public T getSource() {
+        return source;
     }
 
 }

@@ -113,7 +113,7 @@ public class PictureServiceImpl implements PictureService {
             throw new CillaServiceException("Could not read medium", ex);
         }
 
-        eventService.fireEvent(new Event(EventType.GALLERY_PICTURE_NEW).value(picture));
+        eventService.fireEvent(new Event<Picture>(EventType.GALLERY_PICTURE_NEW, picture));
     }
 
     @Override
@@ -151,7 +151,7 @@ public class PictureServiceImpl implements PictureService {
                 FileCopyUtils.copy(source.getInputStream(), ds.getOutputStream());
 
                 renumberPictureSequence(picture.getGallery());
-                eventService.fireEvent(new Event(EventType.GALLERY_PICTURE_UPDATE).value(picture));
+                eventService.fireEvent(new Event<Picture>(EventType.GALLERY_PICTURE_UPDATE, picture));
             } catch (IOException ex) {
                 throw new CillaServiceException("Could not read medium", ex);
             }
@@ -179,7 +179,7 @@ public class PictureServiceImpl implements PictureService {
 
         try {
             pictureDao.delete(picture);
-            eventService.fireEvent(new Event(EventType.GALLERY_PICTURE_DELETE).value(picture));
+            eventService.fireEvent(new Event<Picture>(EventType.GALLERY_PICTURE_DELETE, picture));
             renumberPictureSequence(section);
         } catch (RuntimeException ex) {
             log.warn("Rolling back transaction, but medium of picture id {} is already deleted.", picture.getId());

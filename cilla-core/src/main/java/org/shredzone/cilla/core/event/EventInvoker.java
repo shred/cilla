@@ -56,7 +56,7 @@ public class EventInvoker {
      * @param event
      *            {@link Event} that was fired
      */
-    public void invoke(Event event) {
+    public void invoke(Event<?> event) {
         Class<?>[] types = method.getParameterTypes();
         Object[] values = new Object[types.length];
 
@@ -76,11 +76,10 @@ public class EventInvoker {
      *            Event with further data
      * @return Parameter value
      */
-    private Object evaluateParameter(Class<?> type, Event event) {
-        for (Object value : event.getValues()) {
-            if (type.isAssignableFrom(value.getClass())) {
-                return value;
-            }
+    private Object evaluateParameter(Class<?> type, Event<?> event) {
+        Object source = event.getSource();
+        if (source != null && type.isAssignableFrom(source.getClass())) {
+            return type.cast(source);
         }
 
         if (type.isAssignableFrom(EventType.class)) {
