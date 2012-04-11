@@ -22,6 +22,8 @@ package org.shredzone.cilla.service.security;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import org.shredzone.cilla.core.model.Authority;
 import org.shredzone.cilla.core.model.User;
@@ -45,6 +47,8 @@ public class CillaUserDetails implements UserDetails {
     private final String name;
     private final String encryptedPassword;
     private final String role;
+    private final Locale locale;
+    private final TimeZone timeZone;
     private final Collection<GrantedAuthority> rights;
 
     /**
@@ -58,6 +62,8 @@ public class CillaUserDetails implements UserDetails {
         login = user.getLogin();
         name = user.getName();
         encryptedPassword = user.getPassword();
+        locale = user.getLanguage().getLocale();
+        timeZone = user.getTimeZone();
 
         role = user.getRole().getName();
 
@@ -105,5 +111,15 @@ public class CillaUserDetails implements UserDetails {
      * User's role name.
      */
     public String getRole()                     { return role; }
+
+    /**
+     * User's locale.
+     */
+    public Locale getLocale()                   { return locale; }
+
+    /**
+     * User's time zone.
+     */
+    public TimeZone getTimeZone()               { return timeZone; }
 
 }
