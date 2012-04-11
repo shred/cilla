@@ -74,6 +74,9 @@ public class PictureServiceImpl implements PictureService {
         if (picture.getId() != 0) {
             throw new IllegalArgumentException("picture is already persisted, id " + picture.getId());
         }
+        if (section.getId() == 0) {
+            throw new IllegalArgumentException("section is not persisted");
+        }
 
         try {
             Store store = picture.getImage();

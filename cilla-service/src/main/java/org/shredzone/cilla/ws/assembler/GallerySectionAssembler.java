@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.activation.DataHandler;
 import javax.annotation.Resource;
@@ -33,6 +34,9 @@ import org.shredzone.cilla.core.model.Picture;
 import org.shredzone.cilla.core.repository.PictureDao;
 import org.shredzone.cilla.core.repository.SectionDao;
 import org.shredzone.cilla.service.PictureService;
+import org.shredzone.cilla.service.SecurityService;
+import org.shredzone.cilla.service.security.CillaUserDetails;
+import org.shredzone.cilla.ws.TimeDefinition;
 import org.shredzone.cilla.ws.assembler.annotation.SectionAssemblerType;
 import org.shredzone.cilla.ws.exception.CillaParameterException;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
@@ -55,6 +59,7 @@ public class GallerySectionAssembler extends AbstractSectionAssembler<GallerySec
     private @Resource PictureDao pictureDao;
     private @Resource PictureAssembler pictureAssembler;
     private @Resource PictureService pictureService;
+    private @Resource SecurityService securityService;
 
     @Override
     public GallerySectionDto assemble(GallerySection entity) throws CillaServiceException {
@@ -73,12 +78,19 @@ public class GallerySectionAssembler extends AbstractSectionAssembler<GallerySec
     @Override
     public void merge(GallerySectionDto dto, GallerySection entity) throws CillaServiceException {
         super.merge(dto, entity);
+        mergeGallerySection(dto, entity);
+        mergePictures(dto, entity);
+    }
 
+    private void mergeGallerySection(GallerySectionDto dto, GallerySection entity) {
         entity.setDefaultTimePrecision(dto.getDefaultTimePrecision());
         entity.setDefaultTimeZone(dto.getDefaultTimeZone());
+    }
 
+    private void mergePictures(GallerySectionDto dto, GallerySection entity) throws CillaServiceException {
         Set<Picture> removables = new HashSet<Picture>(entity.getPictures());
         entity.getPictures().clear();
+        int cnt = 0;
         for (PictureDto picDto : dto.getPictures()) {
             Picture picture;
 
@@ -107,6 +119,7 @@ public class GallerySectionAssembler extends AbstractSectionAssembler<GallerySec
                 picDto.setId(picture.getId());
             }
 
+            picture.setSequence(cnt++);
             entity.getPictures().add(picture);
         }
 
@@ -122,16 +135,13 @@ public class GallerySectionAssembler extends AbstractSectionAssembler<GallerySec
         if (dto.isPersisted()) {
             sec = (GallerySection) sectionDao.fetch(dto.getId());
             merge(dto, sec);
-            int cnt = 0;
-            for (Picture picture : sec.getPictures()) {
-                picture.setSequence(cnt++);
-            }
             updateSection(sec);
 
         } else {
             sec = new GallerySection();
-            merge(dto, sec);
-            addSection(page, sec);
+            mergeGallerySection(dto, sec);      // 1. set up the GallerySection
+            addSection(page, sec);              // 2. persist GallerySection, create ID
+            mergePictures(dto, sec);            // 3. add pictures to this GallerySection
             dto.setId(sec.getId());
         }
 
@@ -140,7 +150,13 @@ public class GallerySectionAssembler extends AbstractSectionAssembler<GallerySec
 
     @Override
     public GallerySectionDto createSection() throws CillaServiceException {
-        return assemble(new GallerySection());
+        GallerySection sec = new GallerySection();
+        sec.setDefaultTimePrecision(TimeDefinition.NONE);
+
+        CillaUserDetails cud = securityService.getAuthenticatedUser();
+        sec.setDefaultTimeZone(cud != null ? cud.getTimeZone() : TimeZone.getDefault());
+
+        return assemble(sec);
     }
 
     @Override
