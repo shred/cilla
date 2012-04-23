@@ -24,9 +24,9 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTag;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import org.shredzone.cilla.core.model.Page;
-import org.shredzone.cilla.web.info.PageInfo;
-import org.shredzone.cilla.web.info.PageInfoService;
+import org.shredzone.cilla.core.model.is.Commentable;
+import org.shredzone.cilla.web.comment.CommentThreadModel;
+import org.shredzone.cilla.web.comment.CommentThreadService;
 import org.shredzone.cilla.web.util.TagUtils;
 import org.shredzone.jshred.spring.taglib.annotation.TagInfo;
 import org.shredzone.jshred.spring.taglib.annotation.TagParameter;
@@ -35,26 +35,27 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * Fetches a {@link PageInfo} for a {@link Page}.
+ * Fetches a {@link CommentThreadModel} of a {@link Commentable}.
  *
  * @author Richard "Shred" Körber
  */
 @org.shredzone.jshred.spring.taglib.annotation.Tag(type = BodyTag.class)
-@TagInfo("Fetches a PageInfo for a Page")
+@TagInfo("Fetches a CommentThreadModel for a Commentable")
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
-public class PageInfoTag extends BodyTagSupport {
+public class CommentThreadTag extends BodyTagSupport {
     private static final long serialVersionUID = -7835017044001110609L;
 
     private @TagParameter(required = true) String var;
     private @TagParameter String scope;
-    private @TagParameter(required = true) Page page;
+    private @TagParameter(required = true) Commentable item;
 
-    private @Resource PageInfoService pageInfoService;
+    private @Resource CommentThreadService commentThreadService;
 
     @Override
     public int doStartTag() throws JspException {
-        TagUtils.setScopedAttribute(pageContext, var, pageInfoService.getPageInfo(page), scope);
+        CommentThreadModel model = commentThreadService.getCommentThread(item);
+        TagUtils.setScopedAttribute(pageContext, var, model, scope);
         return EVAL_BODY_INCLUDE;
     }
 

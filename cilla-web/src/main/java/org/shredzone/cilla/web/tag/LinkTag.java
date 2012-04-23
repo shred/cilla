@@ -35,6 +35,7 @@ import org.shredzone.cilla.core.model.Picture;
 import org.shredzone.cilla.core.model.Section;
 import org.shredzone.cilla.core.model.Tag;
 import org.shredzone.cilla.core.model.User;
+import org.shredzone.cilla.core.model.is.Commentable;
 import org.shredzone.cilla.service.link.LinkBuilder;
 import org.shredzone.cilla.service.link.LinkService;
 import org.shredzone.cilla.service.link.Linkable;
@@ -70,6 +71,7 @@ public class LinkTag extends BodyTagSupport implements Parameterizable {
     private @TagParameter String view;
     private @TagParameter String qualifier;
     private @TagParameter Linkable ref;
+    private @TagParameter Commentable commentable;
     private @TagParameter Page page;
     private @TagParameter Category category;
     private @TagParameter Tag tag;
@@ -112,6 +114,7 @@ public class LinkTag extends BodyTagSupport implements Parameterizable {
         lb.header(header);
         lb.ref(ref);
         lb.qualifier(qualifier);
+        lb.commentable(commentable);
 
         if (title != null) {
             useTitle = title;

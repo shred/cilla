@@ -28,9 +28,13 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.shredzone.cilla.core.model.Comment;
+import org.shredzone.cilla.core.model.Header;
 import org.shredzone.cilla.core.model.Page;
+import org.shredzone.cilla.core.model.Picture;
 import org.shredzone.cilla.core.repository.CommentDao;
+import org.shredzone.cilla.core.repository.HeaderDao;
 import org.shredzone.cilla.core.repository.PageDao;
+import org.shredzone.cilla.core.repository.PictureDao;
 import org.shredzone.cilla.service.CommentService;
 import org.shredzone.cilla.ws.AbstractWs;
 import org.shredzone.cilla.ws.ListRange;
@@ -60,6 +64,8 @@ public class CommentWsImpl extends AbstractWs implements CommentWs {
     private @Resource CommentService commentService;
     private @Resource CommentDao commentDao;
     private @Resource PageDao pageDao;
+    private @Resource PictureDao pictureDao;
+    private @Resource HeaderDao headerDao;
 
     @Override
     public CommentDto fetch(long id) throws CillaServiceException {
@@ -76,7 +82,7 @@ public class CommentWsImpl extends AbstractWs implements CommentWs {
     @Override
     public List<CommentDto> list(ListRange lr) {
         Criteria crit = commentDao.criteria()
-            .createAlias("page"   , "p")
+            .createAlias("thread", "t")
             .createAlias("creator", "c", CriteriaSpecification.LEFT_JOIN)
             .setProjection(commentAssembler.projection())
             .setResultTransformer(new AliasToBeanResultTransformer(CommentDto.class));
@@ -87,12 +93,30 @@ public class CommentWsImpl extends AbstractWs implements CommentWs {
     }
 
     @Override
-    public CommentDto createNew(long pageId) throws CillaServiceException {
+    public CommentDto createForPage(long pageId) throws CillaServiceException {
         Page page = pageDao.fetch(pageId);
         if (page == null) {
             throw new CillaParameterException("Page not found: " + pageId);
         }
         return commentAssembler.assemble(commentService.createNew(page));
+    }
+
+    @Override
+    public CommentDto createForPicture(long pictureId) throws CillaServiceException {
+        Picture picture = pictureDao.fetch(pictureId);
+        if (picture == null) {
+            throw new CillaParameterException("Picture not found: " + pictureId);
+        }
+        return commentAssembler.assemble(commentService.createNew(picture));
+    }
+
+    @Override
+    public CommentDto createForHeader(long headerId) throws CillaServiceException {
+        Header header = headerDao.fetch(headerId);
+        if (header == null) {
+            throw new CillaParameterException("Header not found: " + headerId);
+        }
+        return commentAssembler.assemble(commentService.createNew(header));
     }
 
     @Override

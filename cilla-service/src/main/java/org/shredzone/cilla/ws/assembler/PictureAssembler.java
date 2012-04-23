@@ -46,6 +46,7 @@ public class PictureAssembler extends AbstractAssembler<Picture, PictureDto> {
         dto.setCreateDate(entity.getCreateDate());
         dto.setCreateTimeZone(entity.getCreateTimeZone());
         dto.setCreateTimeDefinition(entity.getCreateTimeDefinition());
+        dto.setCommentable(entity.getThread().isCommentable());
 
         if (entity.getCaption() != null) {
             dto.setCaption(entity.getCaption().getText());
@@ -69,6 +70,7 @@ public class PictureAssembler extends AbstractAssembler<Picture, PictureDto> {
 
         entity.setCreateTimeZone(dto.getCreateTimeZone());
         entity.setCreateTimeDefinition(dto.getCreateTimeDefinition());
+        entity.getThread().setCommentable(dto.isCommentable());
 
         if (dto.getCaption() != null && dto.getCaptionFormat() != null) {
             entity.setCaption(new FormattedText(dto.getCaption(), dto.getCaptionFormat()));
@@ -99,6 +101,7 @@ public class PictureAssembler extends AbstractAssembler<Picture, PictureDto> {
         projection.add(Property.forName("location.longitude").as("longitude"));
         projection.add(Property.forName("location.latitude").as("latitude"));
         projection.add(Property.forName("location.altitude").as("altitude"));
+        projection.add(Property.forName("thread.commentable").as("commentable"));
         return projection;
     }
 

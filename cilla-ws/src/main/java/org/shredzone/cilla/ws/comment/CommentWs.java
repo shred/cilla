@@ -65,7 +65,25 @@ public interface CommentWs {
      *            ID of the Page the comment will be added to
      * @return {@link CommentDto} that was created
      */
-    CommentDto createNew(@WebParam(name = "pageId") long pageId) throws CillaServiceException;
+    CommentDto createForPage(@WebParam(name = "pageId") long pageId) throws CillaServiceException;
+
+    /**
+     * Creates a new {@link CommentDto} for the given picture.
+     *
+     * @param pictureId
+     *            ID of the Picture the comment will be added to
+     * @return {@link CommentDto} that was created
+     */
+    CommentDto createForPicture(@WebParam(name = "pictureId") long pictureId) throws CillaServiceException;
+
+    /**
+     * Creates a new {@link CommentDto} for the given header.
+     *
+     * @param headerId
+     *            ID of the Header the comment will be added to
+     * @return {@link CommentDto} that was created
+     */
+    CommentDto createForHeader(@WebParam(name = "headerId") long headerId) throws CillaServiceException;
 
     /**
      * Commits a {@link CommentDto}.

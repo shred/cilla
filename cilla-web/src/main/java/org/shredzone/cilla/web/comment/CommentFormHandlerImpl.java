@@ -17,15 +17,17 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.shredzone.cilla.web.page;
+package org.shredzone.cilla.web.comment;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import org.shredzone.cilla.core.model.Comment;
+import org.shredzone.cilla.core.model.CommentThread;
 import org.shredzone.cilla.core.model.Page;
 import org.shredzone.cilla.core.model.User;
 import org.shredzone.cilla.core.model.embed.FormattedText;
+import org.shredzone.cilla.core.model.is.Commentable;
 import org.shredzone.cilla.core.repository.CommentDao;
 import org.shredzone.cilla.core.repository.UserDao;
 import org.shredzone.cilla.service.CommentService;
@@ -57,9 +59,17 @@ public class CommentFormHandlerImpl implements CommentFormHandler {
     private @Resource SecurityService securityService;
 
     @Override
-    @CacheEvict(value = "pageInfo", key = "#page.id")
-    public void handleComment(Page page, HttpServletRequest req) {
-        handleDelete(page, req);
+    @CacheEvict(value = "commentThread", key = "#commentable.thread.id")
+    public void handleComment(Commentable commentable, HttpServletRequest req) {
+        handleComment(commentable, req, true);
+    }
+
+    @Override
+    @CacheEvict(value = "commentThread", key = "#commentable.thread.id")
+    public void handleComment(Commentable commentable, HttpServletRequest req, boolean enabled) {
+        CommentThread thread = commentable.getThread();
+
+        handleDelete(thread, req);
 
         Comment comment = new Comment();
 
@@ -68,9 +78,9 @@ public class CommentFormHandlerImpl implements CommentFormHandler {
             return;
         }
 
-        if (!page.isCommentable()) {
-            // The page does not accept any comments
-            log.info("Trying to comment page ID {} which does not allow comments.", page.getId());
+        if (!(thread.isCommentable() && enabled)) {
+            // The thread does not accept new comments
+            log.info("Trying to comment thread ID {} which does not allow comments.", thread.getId());
             return;
         }
 
@@ -110,24 +120,23 @@ public class CommentFormHandlerImpl implements CommentFormHandler {
         int posY = getReplyToInteger(req.getParameter("y"));
         if (!captchaService.isValidCaptcha(req.getSession(), posX, posY)) {
             // Wrong captcha given, do not accept the comment.
-            log.info("A wrong captcha given for page ID {}", page.getId());
+            log.info("A wrong captcha was given for thread ID {}", thread.getId());
             rejectComment(req, "cilla.comment.error.badcaptcha");
             return;
         }
 
-
         long replyToId = getReplyToId(req.getParameter("cmtReplyTo"));
         Comment replyComment = commentDao.fetch(replyToId);
-        if (replyComment != null && !replyComment.getPage().equals(page)) {
-            // The Comment belongs to another page, so the replyToId was
+        if (replyComment != null && !replyComment.getThread().equals(thread)) {
+            // The Comment belongs to another thread, so the replyToId was
             // probably forged. We will silently ignore the replyTo comment.
-            log.info("Ignored forged replyToId {} for page ID {}", replyToId, page.getId());
+            log.info("Ignored forged replyToId {} for thread ID {}", replyToId, thread.getId());
             replyComment = null;
         }
 
         // Comment looks good...
 
-        comment.setPage(page);
+        comment.setThread(thread);
         comment.setReplyTo(replyComment);
         comment.setText(new FormattedText(commentText, TextFormat.PLAIN));
 
@@ -143,17 +152,17 @@ public class CommentFormHandlerImpl implements CommentFormHandler {
     /**
      * Handles a delete request.
      *
-     * @param page
-     *            {@link Page} the comment belongs to
+     * @param thread
+     *            {@link CommentThread} the comment belongs to
      * @param req
      *            {@link HttpServletRequest} with the form data
      */
-    private void handleDelete(Page page, HttpServletRequest req) {
+    private void handleDelete(CommentThread thread, HttpServletRequest req) {
         String delId = req.getParameter("cmtDelete");
         if (delId != null) {
             long deleteId = getReplyToId(delId);
             Comment deleteComment = commentDao.fetch(deleteId);
-            if (deleteComment != null && deleteComment.getPage().equals(page)) {
+            if (deleteComment != null && deleteComment.getThread().equals(thread)) {
                 commentService.remove(deleteComment);
             }
         }

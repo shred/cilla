@@ -17,20 +17,21 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.shredzone.cilla.web.info;
+package org.shredzone.cilla.web.comment;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import org.shredzone.cilla.core.model.Comment;
 import org.shredzone.cilla.core.util.DateUtils;
 
 /**
- * A flattened {@link PageComment} to be used for displaying.
+ * A flattened {@link Comment} to be used for displaying.
  *
  * @author Richard "Shred" Körber
  */
-public class PageComment implements Serializable {
+public class CommentModel implements Serializable {
     private static final long serialVersionUID = -785593274229823421L;
 
     private long id;
@@ -42,7 +43,7 @@ public class PageComment implements Serializable {
     private String text;
     private int level;
     private Long creatorId;
-    private List<PageComment> children;
+    private List<CommentModel> children;
 
     /**
      * Comment ID.
@@ -100,9 +101,9 @@ public class PageComment implements Serializable {
     public void setCreatorId(Long creatorId)    { this.creatorId = creatorId; }
 
     /**
-     * Children {@link PageComment}. {@code null} if this is a leaf.
+     * Children {@link CommentModel}. {@code null} if this is a leaf.
      */
-    public List<PageComment> getChildren()      { return children; }
-    public void setChildren(List<PageComment> children) { this.children = children; }
+    public List<CommentModel> getChildren()      { return children; }
+    public void setChildren(List<CommentModel> children) { this.children = children; }
 
 }

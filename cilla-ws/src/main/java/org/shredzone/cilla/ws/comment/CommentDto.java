@@ -35,8 +35,7 @@ import org.shredzone.cilla.ws.TextFormat;
 public class CommentDto extends BaseDto {
     private static final long serialVersionUID = 7953129056497110805L;
 
-    private long pageId;
-    private String pageTitle;
+    private long threadId;
     private Long replyToId;
     private boolean published;
     private String name;
@@ -70,11 +69,8 @@ public class CommentDto extends BaseDto {
     public String getName()                 { return name; }
     public void setName(String name)        { this.name = name; }
 
-    public long getPageId()                 { return pageId; }
-    public void setPageId(long pageId)      { this.pageId = pageId; }
-
-    public String getPageTitle()            { return pageTitle; }
-    public void setPageTitle(String pageTitle) { this.pageTitle = pageTitle; }
+    public long getThreadId()               { return threadId; }
+    public void setThreadId(long threadId)  { this.threadId = threadId; }
 
     public boolean isPublished()            { return published; }
     public void setPublished(boolean published) { this.published = published; }

@@ -27,14 +27,19 @@ import java.util.regex.Pattern;
 import javax.annotation.Resource;
 
 import org.shredzone.cilla.core.model.Comment;
+import org.shredzone.cilla.core.model.CommentThread;
+import org.shredzone.cilla.core.model.Header;
 import org.shredzone.cilla.core.model.Page;
+import org.shredzone.cilla.core.model.Picture;
 import org.shredzone.cilla.core.model.User;
 import org.shredzone.cilla.core.model.embed.FormattedText;
+import org.shredzone.cilla.core.model.is.Commentable;
 import org.shredzone.cilla.core.repository.CommentDao;
 import org.shredzone.cilla.core.repository.UserDao;
 import org.shredzone.cilla.service.CommentService;
 import org.shredzone.cilla.service.ConfigurationService;
 import org.shredzone.cilla.service.SecurityService;
+import org.shredzone.cilla.service.link.LinkService;
 import org.shredzone.cilla.service.notification.Notification;
 import org.shredzone.cilla.service.notification.NotificationService;
 import org.shredzone.cilla.service.notification.NotificationTarget;
@@ -59,18 +64,22 @@ public class CommentServiceImpl implements CommentService {
 
     private @Resource UserDao userDao;
     private @Resource CommentDao commentDao;
+    private @Resource LinkService linkService;
     private @Resource SecurityService securityService;
     private @Resource NotificationService notificationService;
     private @Resource ConfigurationService configurationService;
 
     @Override
-    public Comment createNew(Page page) {
+    public Comment createNew(Commentable commentable) {
+        CommentThread thread = commentable.getThread();
+
         Comment comment = new Comment();
         comment.setText(new FormattedText());
         comment.setCreation(new Date());
         comment.setPublished(false);
-        comment.setPage(page);
         comment.setCreator(userDao.fetch(securityService.getAuthenticatedUser().getUserId()));
+        comment.setThread(thread);
+        thread.getComments().add(comment);
         return comment;
     }
 
@@ -105,12 +114,27 @@ public class CommentServiceImpl implements CommentService {
             targets.add(target);
         }
 
+        String title = null;
+
+        Commentable commentable = commentDao.fetchCommentable(comment.getThread());
+        String link = linkService.linkTo().external().commentable(commentable).toString();
+
+        if (commentable instanceof Page) {
+            title = ((Page) commentable).getTitle();
+        } else if (commentable instanceof Picture) {
+            title = ((Picture) commentable).getGallery().getPage().getTitle();
+        } else if (commentable instanceof Header) {
+            title = ((Header) commentable).getCaption();
+        }
+
         try {
             Notification notification = new Notification();
             notification.setType("cillaCommentAdded");
             notification.setRecipients(targets);
             notification.getAttributes().put("comment", comment);
-            notification.getAttributes().put("page", comment.getPage());
+            notification.getAttributes().put("subject", commentable);
+            notification.getAttributes().put("title", title);
+            notification.getAttributes().put("link", link);
             notification.getAttributes().put("request", request);
             notificationService.send(notification);
         } catch (CillaServiceException ex) {
@@ -128,10 +152,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void removeAll(Page page) {
-        for (Comment comment : commentDao.fetchComments(page)) {
-            commentDao.delete(comment);
-        }
+    public void removeAll(Commentable commentable) {
+        commentable.getThread().getComments().clear();
     }
 
     /**

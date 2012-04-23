@@ -29,6 +29,7 @@
         <mapping class="org.shredzone.cilla.core.model.Authority"/>
         <mapping class="org.shredzone.cilla.core.model.Category"/>
         <mapping class="org.shredzone.cilla.core.model.Comment"/>
+        <mapping class="org.shredzone.cilla.core.model.CommentThread"/>
         <mapping class="org.shredzone.cilla.core.model.GallerySection"/>
         <mapping class="org.shredzone.cilla.core.model.Header"/>
         <mapping class="org.shredzone.cilla.core.model.Language"/>

@@ -36,6 +36,7 @@ import org.shredzone.cilla.core.model.Store;
 import org.shredzone.cilla.core.repository.HeaderDao;
 import org.shredzone.cilla.core.repository.StoreDao;
 import org.shredzone.cilla.core.repository.UserDao;
+import org.shredzone.cilla.service.CommentService;
 import org.shredzone.cilla.service.HeaderService;
 import org.shredzone.cilla.service.SecurityService;
 import org.shredzone.cilla.service.resource.ExifAnalyzer;
@@ -62,6 +63,7 @@ public class HeaderServiceImpl implements HeaderService {
     private @Resource ImageTools imageProcessor;
     private @Resource EventService eventService;
     private @Resource SecurityService securityService;
+    private @Resource CommentService commentService;
 
     @Override
     public Header createNew() {
@@ -70,6 +72,7 @@ public class HeaderServiceImpl implements HeaderService {
         Header header = new Header();
         header.setCreator(userDao.fetch(securityService.getAuthenticatedUser().getUserId()));
         header.setCreation(now);
+        header.getThread().setCommentable(true);
         return header;
     }
 
@@ -171,6 +174,8 @@ public class HeaderServiceImpl implements HeaderService {
     @Override
     @CacheEvict(value = "processedImages", allEntries = true)
     public void remove(Header header) throws CillaServiceException {
+        commentService.removeAll(header);
+
         try {
             storeDao.access(header.getFullImage()).delete();
             storeDao.access(header.getHeaderImage()).delete();

@@ -41,6 +41,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.shredzone.cilla.core.model.embed.ExifData;
 import org.shredzone.cilla.core.model.embed.FormattedText;
 import org.shredzone.cilla.core.model.embed.Geolocation;
+import org.shredzone.cilla.core.model.is.Commentable;
 import org.shredzone.cilla.core.util.DateUtils;
 import org.shredzone.cilla.ws.TimeDefinition;
 
@@ -51,7 +52,7 @@ import org.shredzone.cilla.ws.TimeDefinition;
  */
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Picture extends BaseModel {
+public class Picture extends BaseModel implements Commentable {
     private static final long serialVersionUID = 942950890144760003L;
 
     private GallerySection gallery;
@@ -65,6 +66,7 @@ public class Picture extends BaseModel {
     private Geolocation location;
     private ExifData exifData;
     private Store image = new Store();
+    private CommentThread thread = new CommentThread();
 
     /**
      * {@link GallerySection} this picture belongs to.
@@ -148,5 +150,13 @@ public class Picture extends BaseModel {
     @OneToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     public Store getImage()                     { return image; }
     public void setImage(Store image)           { this.image = image; }
+
+    /**
+     * Comment thread.
+     */
+    @Override
+    @OneToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    public CommentThread getThread()            { return thread; }
+    public void setThread(CommentThread thread) { this.thread = thread; }
 
 }

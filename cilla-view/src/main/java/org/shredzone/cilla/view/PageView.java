@@ -36,8 +36,7 @@ import org.shredzone.cilla.service.search.SearchResult;
 import org.shredzone.cilla.service.search.SearchService;
 import org.shredzone.cilla.view.annotation.Framed;
 import org.shredzone.cilla.view.model.PageTurnerModel;
-import org.shredzone.cilla.web.info.PageInfoService;
-import org.shredzone.cilla.web.page.CommentFormHandler;
+import org.shredzone.cilla.web.comment.CommentFormHandler;
 import org.shredzone.cilla.ws.PageOrder;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.commons.view.annotation.PathPart;
@@ -59,7 +58,6 @@ public class PageView extends AbstractView {
 
     private @Value("${page.order}") PageOrder pageOrder;
 
-    private @Resource PageInfoService pageInfoService;
     private @Resource PageService pageService;
     private @Resource PageDao pageDao;
     private @Resource SearchService searchService;
@@ -132,7 +130,6 @@ public class PageView extends AbstractView {
         req.setAttribute("result", result);
 
         req.setAttribute("page", page);
-        req.setAttribute("info", pageInfoService.getPageInfo(page));
         req.setAttribute("turner", new PageTurnerModel(pageDao.fetchPreviousPage(page), pageDao.fetchNextPage(page)));
 
         return "view/page.jsp";

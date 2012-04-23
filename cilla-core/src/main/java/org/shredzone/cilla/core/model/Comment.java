@@ -34,12 +34,12 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Index;
 import org.shredzone.cilla.core.model.embed.FormattedText;
+import org.shredzone.cilla.core.model.is.Commentable;
 import org.shredzone.cilla.core.util.DateUtils;
 
 /**
- * A single comment for a {@link Page} or one of its sections.
+ * A single comment of a {@link CommentThread}.
  *
  * @author Richard "Shred" Körber
  */
@@ -48,11 +48,10 @@ import org.shredzone.cilla.core.util.DateUtils;
     @NamedQuery(name = "countAllComments", query = "SELECT COUNT(*) FROM Comment")
 })
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Comment extends BaseModel {
+public class Comment extends BaseModel implements Commentable {
     private static final long serialVersionUID = -976044775653519085L;
 
-    private Page page;
-    private Long sectionRef;
+    private CommentThread thread;
     private Comment replyTo;
     private boolean published;
     private String name;
@@ -63,20 +62,12 @@ public class Comment extends BaseModel {
     private Date creation;
 
     /**
-     * {@link Page} this comment comments on.
+     * Reference to the {@link CommentThread} this {@link Comment} belongs to.
      */
+    @Override
     @ManyToOne(optional = false)
-    @Index(name = "idx_comment_page")
-    public Page getPage()                       { return page; }
-    public void setPage(Page page)              { this.page = page; }
-
-    /**
-     * A section internal reference id, for comments that are to be shown only on a
-     * certain part of a section. May be {@code null}. If not {@code null}, the comment
-     * will not be shown on the standard page view.
-     */
-    public Long getSectionRef()                 { return sectionRef; }
-    public void setSectionRef(Long sectionRef)  { this.sectionRef = sectionRef; }
+    public CommentThread getThread()            { return thread; }
+    public void setThread(CommentThread thread) { this.thread = thread; }
 
     /**
      * Reference to the {@link Comment} this {@link Comment} replies to.

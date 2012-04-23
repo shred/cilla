@@ -32,6 +32,7 @@ import org.shredzone.cilla.service.PageService;
 import org.shredzone.cilla.service.PictureService;
 import org.shredzone.cilla.view.annotation.Framed;
 import org.shredzone.cilla.view.model.PictureInfoModel;
+import org.shredzone.cilla.web.comment.CommentFormHandler;
 import org.shredzone.cilla.web.page.ResourceLockManager;
 import org.shredzone.cilla.web.plugin.manager.ImageProcessingManager;
 import org.shredzone.cilla.ws.ImageProcessing;
@@ -60,6 +61,7 @@ public class GalleryView extends AbstractView {
     private @Resource PictureService pictureService;
     private @Resource ResourceLockManager unlockService;
     private @Resource ImageProcessingManager imageProcessingManager;
+    private @Resource CommentFormHandler commentFormHandler;
 
     /**
      * Shows a single picture of a gallery.
@@ -78,6 +80,8 @@ public class GalleryView extends AbstractView {
         if (!pageService.isVisible(section.getPage())) {
             throw new ErrorResponseException(HttpServletResponse.SC_FORBIDDEN);
         }
+
+        commentFormHandler.handleComment(picture, req, section.isCommentable());
 
         List<Picture> pictureList = section.getPictures();
         int size = pictureList.size();

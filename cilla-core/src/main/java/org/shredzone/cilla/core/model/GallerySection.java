@@ -46,6 +46,7 @@ public class GallerySection extends Section {
     private List<Picture> pictures = new ArrayList<Picture>();
     private TimeZone defaultTimeZone;
     private TimeDefinition defaultTimePrecision;
+    private boolean commentable;
 
     /**
      * List of {@link Picture} of this gallery.
@@ -71,6 +72,15 @@ public class GallerySection extends Section {
     @Column(nullable = false)
     public TimeDefinition getDefaultTimePrecision() { return defaultTimePrecision; }
     public void setDefaultTimePrecision(TimeDefinition defaultTimePrecision) { this.defaultTimePrecision = defaultTimePrecision; }
+
+    /**
+     * If {@code true}, pictures of this gallery may be commented (depending on the
+     * commentable property of the picture). If {@code false}, all pictures of this
+     * gallery do not accept new comments.
+     */
+    @Column(nullable = false)
+    public boolean isCommentable()              { return commentable; }
+    public void setCommentable(boolean commentable) { this.commentable = commentable; }
 
     @Override
     @Transient

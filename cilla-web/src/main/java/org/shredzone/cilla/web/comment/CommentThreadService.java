@@ -17,24 +17,25 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.shredzone.cilla.web.info;
+package org.shredzone.cilla.web.comment;
 
-import org.shredzone.cilla.core.model.Page;
+import org.shredzone.cilla.core.model.CommentThread;
+import org.shredzone.cilla.core.model.is.Commentable;
 
 /**
- * Service for fetching {@link PageInfo}. Long-term caching is used.
+ * Service for fetching {@link CommentThreadModel}. Long-term caching is used.
  *
  * @author Richard "Shred" Körber
  */
-public interface PageInfoService {
+public interface CommentThreadService {
 
     /**
-     * Creates a {@link PageInfo} object for a {@link Page}.
+     * Creates a {@link CommentThreadModel} list for a {@link CommentThread}.
      *
-     * @param page
-     *            {@link Page} to get the {@link PageInfo} for
-     * @return {@link PageInfo} of that {@link Page}
+     * @param commentable
+     *            {@link Commentable} to get the {@link CommentThreadModel} for
+     * @return {@link CommentThreadModel} of that {@link CommentThread}
      */
-    PageInfo getPageInfo(Page page);
+    CommentThreadModel getCommentThread(Commentable commentable);
 
 }

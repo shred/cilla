@@ -37,6 +37,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.shredzone.cilla.core.model.embed.FormattedText;
 import org.shredzone.cilla.core.model.embed.Geolocation;
+import org.shredzone.cilla.core.model.is.Commentable;
 import org.shredzone.cilla.core.util.DateUtils;
 
 /**
@@ -46,7 +47,7 @@ import org.shredzone.cilla.core.util.DateUtils;
  */
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Header extends BaseModel {
+public class Header extends BaseModel implements Commentable {
     private static final long serialVersionUID = -4930167448389893596L;
 
     private String name;
@@ -59,6 +60,7 @@ public class Header extends BaseModel {
     private Date creation;
     private Store headerImage = new Store();
     private Store fullImage = new Store();
+    private CommentThread thread = new CommentThread();
     private boolean enabled;
 
     /**
@@ -141,5 +143,13 @@ public class Header extends BaseModel {
      */
     public boolean isEnabled()                  { return enabled; }
     public void setEnabled(boolean enabled)     { this.enabled = enabled; }
+
+    /**
+     * Comment thread.
+     */
+    @Override
+    @OneToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    public CommentThread getThread()            { return thread; }
+    public void setThread(CommentThread thread) { this.thread = thread; }
 
 }

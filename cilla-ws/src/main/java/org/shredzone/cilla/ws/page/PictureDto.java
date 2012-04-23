@@ -52,6 +52,7 @@ public class PictureDto extends BaseDto {
     private BigDecimal latitude;
     private BigDecimal altitude;
     private DataHandler uploadFile;
+    private boolean commentable;
 
     public Date getCreateDate()                 { return createDate; }
     public void setCreateDate(Date createDate)  { this.createDate = createDate; }
@@ -78,6 +79,9 @@ public class PictureDto extends BaseDto {
 
     public BigDecimal getAltitude()             { return altitude; }
     public void setAltitude(BigDecimal altitude) { this.altitude = altitude; }
+
+    public boolean isCommentable()                  { return commentable; }
+    public void setCommentable(boolean commentable) { this.commentable = commentable; }
 
     @XmlMimeType("application/octet-stream")
     public DataHandler getUploadFile()          { return uploadFile; }

@@ -17,14 +17,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.shredzone.cilla.web.info;
+package org.shredzone.cilla.web.comment;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,88 +32,83 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.shredzone.cilla.core.model.Comment;
-import org.shredzone.cilla.core.model.Page;
-import org.shredzone.cilla.core.model.Tag;
+import org.shredzone.cilla.core.model.CommentThread;
 import org.shredzone.cilla.core.model.User;
-import org.shredzone.cilla.core.repository.CommentDao;
+import org.shredzone.cilla.core.model.is.Commentable;
 import org.shredzone.cilla.web.format.TextFormatter;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * {@link PageInfoService} implementation.
+ * {@link CommentThreadService} implementation.
  *
  * @author Richard "Shred" Körber
  */
 @Service
 @Transactional
-public class PageInfoServiceImpl implements PageInfoService {
+public class CommentThreadServiceImpl implements CommentThreadService {
 
-    private @Resource CommentDao commentDao;
     private @Resource TextFormatter textFormatter;
 
     @Override
-    @Cacheable(value = "pageInfo", key = "#page.id")
-    public PageInfo getPageInfo(Page page) {
-        PageInfo info = new PageInfo();
-        info.setComments(Collections.unmodifiableList(getFlattenedComments(page)));
+    @Cacheable(value = "commentThread", key = "#commentable.thread.id")
+    public CommentThreadModel getCommentThread(Commentable commentable) {
+        List<CommentModel> roots = getCommentTree(commentable.getThread());
 
-        // page.getTags() returns a Hibernate proxy object. What we need is a
-        // copy collection that contains the real objects and is serializable.
-        Collection<Tag> copiedTags = new ArrayList<Tag>(page.getTags());
-        info.setTags(Collections.unmodifiableCollection(copiedTags));
-
-        return info;
-    }
-
-    /**
-     * Get {@link PageComment} in a threaded sequence.
-     *
-     * @param page
-     *            {@link Page}
-     * @return {@link PageComment} of the Page's comments
-     */
-    private List<PageComment> getFlattenedComments(Page page) {
-        List<PageComment> roots = getCommentTree(page);
-        List<PageComment> result = new ArrayList<PageComment>(roots.size());
-        for (PageComment root : roots) {
-            addNodeRecursive(root, result);
+        List<CommentModel> comments = new ArrayList<CommentModel>(roots.size());
+        for (CommentModel root : roots) {
+            addNodeRecursive(root, comments);
         }
+
+        Date maxDate = null;
+        for (CommentModel comment : comments) {
+            if (maxDate == null || comment.getCreation().after(maxDate)) {
+                maxDate = comment.getCreation();
+            }
+        }
+
+        CommentThreadModel result = new CommentThreadModel();
+        result.setThread(comments);
+        result.setCount(comments.size());
+        result.setLastCommented(maxDate);
         return result;
     }
 
     /**
-     * Adds a {@link PageComment} and its children to the result list.
+     * Adds a {@link CommentModel} and its children to the result list.
      *
      * @param node
-     *            {@link PageComment} to add
+     *            {@link CommentModel} to add
      * @param result
      *            result list to add to
      */
-    private void addNodeRecursive(PageComment node, List<PageComment> result) {
+    private void addNodeRecursive(CommentModel node, List<CommentModel> result) {
         result.add(node);
         if (node.getChildren() != null) {
-            for (PageComment child : node.getChildren()) {
+            for (CommentModel child : node.getChildren()) {
                 addNodeRecursive(child, result);
             }
         }
     }
 
     /**
-     * Get {@link PageComment} as tree. The root comments are returned.
+     * Get {@link CommentModel} as tree. The root comments are returned.
      *
-     * @param page
-     *            {@link Page}
-     * @return {@link PageComment} tree of the Page's comments
+     * @param thread
+     *            {@link CommentThread}
+     * @return {@link CommentModel} tree of the CommentThread's comments
      */
-    private List<PageComment> getCommentTree(Page page) {
-        List<PageComment> result = new LinkedList<PageComment>();
+    private List<CommentModel> getCommentTree(CommentThread thread) {
+        List<CommentModel> result = new LinkedList<CommentModel>();
 
-        Map<Long, PageComment> replyMap = new HashMap<Long, PageComment>();
+        Map<Long, CommentModel> replyMap = new HashMap<Long, CommentModel>();
 
-        for (Comment comment : commentDao.fetchPublishedComments(page)) {
-            PageComment pc = assemblePageComment(page, comment);
+        for (Comment comment : thread.getComments()) {
+            // Skip unpublished comments
+            if (!comment.isPublished()) continue;
+
+            CommentModel pc = assembleThreadedComment(comment);
             replyMap.put(comment.getId(), pc);
 
             // Make sure the comment is at least added as root if the replyTo is not found
@@ -122,12 +116,12 @@ public class PageInfoServiceImpl implements PageInfoService {
 
             if (comment.getReplyTo() != null) {
                 long replyId = comment.getReplyTo().getId();
-                PageComment replyPc = replyMap.get(replyId);
+                CommentModel replyPc = replyMap.get(replyId);
                 if (replyPc != null) {
                     pc.setLevel(replyPc.getLevel() + 1);
-                    List<PageComment> replyList = replyPc.getChildren();
+                    List<CommentModel> replyList = replyPc.getChildren();
                     if (replyList == null) {
-                        replyList = new LinkedList<PageComment>();
+                        replyList = new LinkedList<CommentModel>();
                         replyPc.setChildren(replyList);
                     }
                     replyList.add(pc);
@@ -144,21 +138,19 @@ public class PageInfoServiceImpl implements PageInfoService {
     }
 
     /**
-     * Assembles a {@link PageComment} instance for a {@link Comment}.
+     * Assembles a {@link CommentModel} instance for a {@link Comment}.
      *
-     * @param page
-     *            {@link Page}
      * @param comment
      *            {@link Comment} to assemble
-     * @return Assembled {@link PageComment}
+     * @return Assembled {@link CommentModel}
      */
-    private PageComment assemblePageComment(Page page, Comment comment) {
-        PageComment pc = new PageComment();
+    private CommentModel assembleThreadedComment(Comment comment) {
+        CommentModel pc = new CommentModel();
         pc.setId(comment.getId());
         pc.setName(comment.getName());
         pc.setUrl(comment.getUrl());
         pc.setCreation(comment.getCreation());
-        pc.setText(textFormatter.format(comment.getText(), page).toString());
+        pc.setText(textFormatter.format(comment.getText()).toString());
 
         String mail = comment.getMail();
         User creator = comment.getCreator();

@@ -36,6 +36,7 @@ import org.shredzone.cilla.core.model.Picture;
 import org.shredzone.cilla.core.model.Store;
 import org.shredzone.cilla.core.repository.PictureDao;
 import org.shredzone.cilla.core.repository.StoreDao;
+import org.shredzone.cilla.service.CommentService;
 import org.shredzone.cilla.service.PictureService;
 import org.shredzone.cilla.service.resource.ExifAnalyzer;
 import org.shredzone.cilla.service.resource.ImageTools;
@@ -62,10 +63,12 @@ public class PictureServiceImpl implements PictureService {
     private @Resource EventService eventService;
     private @Resource PictureDao pictureDao;
     private @Resource ImageTools imageProcessor;
+    private @Resource CommentService commentService;
 
     @Override
     public Picture createNew() {
         Picture picture = new Picture();
+        picture.getThread().setCommentable(true);
         return picture;
     }
 
@@ -167,6 +170,8 @@ public class PictureServiceImpl implements PictureService {
         if (picture.getId() == 0) {
             throw new IllegalArgumentException("picture is not persisted");
         }
+
+        commentService.removeAll(picture);
 
         GallerySection section = picture.getGallery();
         boolean removed = section.getPictures().remove(picture);

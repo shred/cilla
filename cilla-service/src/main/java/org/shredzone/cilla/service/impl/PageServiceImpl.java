@@ -83,7 +83,7 @@ public class PageServiceImpl implements PageService {
         page.setCreator(user);
         page.setCreation(now);
         page.setModification(now);
-        page.setCommentable(true);
+        page.getThread().setCommentable(true);
         return page;
     }
 

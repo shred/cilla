@@ -67,6 +67,7 @@ public class GallerySectionAssembler extends AbstractSectionAssembler<GallerySec
         dto.setId(entity.getId());
         dto.setDefaultTimePrecision(entity.getDefaultTimePrecision());
         dto.setDefaultTimeZone(entity.getDefaultTimeZone());
+        dto.setCommentable(entity.isCommentable());
 
         for (Picture picture : entity.getPictures()) {
             dto.getPictures().add(pictureAssembler.assemble(picture));
@@ -85,6 +86,7 @@ public class GallerySectionAssembler extends AbstractSectionAssembler<GallerySec
     private void mergeGallerySection(GallerySectionDto dto, GallerySection entity) {
         entity.setDefaultTimePrecision(dto.getDefaultTimePrecision());
         entity.setDefaultTimeZone(dto.getDefaultTimeZone());
+        entity.setCommentable(dto.isCommentable());
     }
 
     private void mergePictures(GallerySectionDto dto, GallerySection entity) throws CillaServiceException {

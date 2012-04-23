@@ -42,6 +42,7 @@ public class GallerySectionDto extends SectionDto {
     private TimeZone defaultTimeZone;
     private TimeDefinition defaultTimePrecision;
     private List<PictureDto> pictures = new ArrayList<PictureDto>();
+    private boolean commentable;
 
     @Override
     public String getType()                     { return "gallery"; }
@@ -57,5 +58,8 @@ public class GallerySectionDto extends SectionDto {
 
     public List<PictureDto> getPictures()       { return pictures;}
     public void setPictures(List<PictureDto> pictures) { this.pictures = pictures; }
+
+    public boolean isCommentable()              { return commentable; }
+    public void setCommentable(boolean commentable) { this.commentable = commentable; }
 
 }

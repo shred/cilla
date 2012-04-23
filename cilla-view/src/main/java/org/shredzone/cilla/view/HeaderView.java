@@ -27,6 +27,7 @@ import org.shredzone.cilla.core.datasource.ResourceDataSource;
 import org.shredzone.cilla.core.model.Header;
 import org.shredzone.cilla.service.HeaderService;
 import org.shredzone.cilla.view.annotation.Framed;
+import org.shredzone.cilla.web.comment.CommentFormHandler;
 import org.shredzone.cilla.web.plugin.manager.ImageProcessingManager;
 import org.shredzone.cilla.ws.ImageProcessing;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
@@ -50,6 +51,7 @@ public class HeaderView extends AbstractView {
 
     private @Resource HeaderService headerService;
     private @Resource ImageProcessingManager imageProcessingManager;
+    private @Resource CommentFormHandler commentFormHandler;
 
     /**
      * Shows details about a header (like a detailled caption and the location it was
@@ -64,6 +66,8 @@ public class HeaderView extends AbstractView {
         if (!headerService.isVisible(header)) {
             throw new ErrorResponseException(HttpServletResponse.SC_FORBIDDEN);
         }
+
+        commentFormHandler.handleComment(header, req);
 
         req.setAttribute("headerImage", header);
 

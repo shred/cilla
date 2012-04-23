@@ -27,7 +27,6 @@ import org.hibernate.criterion.Property;
 import org.shredzone.cilla.core.model.Comment;
 import org.shredzone.cilla.core.model.embed.FormattedText;
 import org.shredzone.cilla.core.repository.CommentDao;
-import org.shredzone.cilla.core.repository.PageDao;
 import org.shredzone.cilla.core.repository.UserDao;
 import org.shredzone.cilla.ws.comment.CommentDto;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
@@ -44,7 +43,6 @@ import org.springframework.stereotype.Component;
 public class CommentAssembler extends AbstractAssembler<Comment, CommentDto> {
 
     private @Resource CommentDao commentDao;
-    private @Resource PageDao pageDao;
     private @Resource UserDao userDao;
 
     @Override
@@ -58,8 +56,7 @@ public class CommentAssembler extends AbstractAssembler<Comment, CommentDto> {
         dto.setTextFormat(entity.getText().getFormat());
         dto.setCreation(entity.getCreation());
         dto.setPublished(entity.isPublished());
-        dto.setPageId(entity.getPage().getId());
-        dto.setPageTitle(entity.getPage().getTitle());
+        dto.setThreadId(entity.getThread().getId());
 
         if (entity.getReplyTo() != null) {
             dto.setReplyToId(entity.getReplyTo().getId());
@@ -93,7 +90,6 @@ public class CommentAssembler extends AbstractAssembler<Comment, CommentDto> {
         entity.setCreation(dto.getCreation());
         entity.setMail(dto.getMail());
         entity.setName(dto.getName());
-        entity.setPage(pageDao.fetch(dto.getPageId()));
         entity.setPublished(dto.isPublished());
         entity.setText(new FormattedText(dto.getText(), dto.getTextFormat()));
         entity.setUrl(dto.getUrl());
@@ -111,8 +107,7 @@ public class CommentAssembler extends AbstractAssembler<Comment, CommentDto> {
         projection.add(Property.forName("creation")    .as("creation"));
         projection.add(Property.forName("published")   .as("published"));
         projection.add(Property.forName("replyTo.id")  .as("replyToId"));
-        projection.add(Property.forName("p.id")        .as("pageId"));
-        projection.add(Property.forName("p.title")     .as("pageTitle"));
+        projection.add(Property.forName("t.id")        .as("threadId"));
         projection.add(Property.forName("c.id")        .as("creatorId"));
         projection.add(Property.forName("c.login")     .as("creatorLogin"));
         projection.add(Property.forName("c.name")      .as("creatorName"));

@@ -128,6 +128,7 @@ public class PageWsImpl extends AbstractWs implements PageWs {
     public List<PageInfoDto> list(ListRange lr) {
         Criteria crit = pageDao.criteria()
             .createAlias("creator", "c")
+            .createAlias("thread", "t")
             .addOrder(Order.desc("creation"))
             .setProjection(pageAssembler.projection())
             .setResultTransformer(new AliasToBeanResultTransformer(PageInfoDto.class));

@@ -20,7 +20,7 @@
 package org.shredzone.cilla.service;
 
 import org.shredzone.cilla.core.model.Comment;
-import org.shredzone.cilla.core.model.Page;
+import org.shredzone.cilla.core.model.is.Commentable;
 
 /**
  * A service for all kind of {@link Comment} operations.
@@ -33,11 +33,11 @@ public interface CommentService {
      * Creates a new, empty {@link Comment}. If a user is authenticated, the
      * {@link Comment} is created on behalf of this user.
      *
-     * @param page
-     *            {@link Page} the comment will belong to
+     * @param commentable
+     *            {@link Commentable} the comment will belong to
      * @return Created {@link Comment}
      */
-    Comment createNew(Page page);
+    Comment createNew(Commentable commentable);
 
     /**
      * Posts a comment. The comment is changed according to user rights and limitations.
@@ -70,11 +70,11 @@ public interface CommentService {
     void remove(Comment comment);
 
     /**
-     * Removes all comments posted to the given page.
+     * Removes all comments posted to the given thread.
      *
-     * @param page
-     *            {@link Page} to delete all comments of
+     * @param commentable
+     *            {@link Commentable} to delete all comments of
      */
-    void removeAll(Page page);
+    void removeAll(Commentable commentable);
 
 }

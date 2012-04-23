@@ -31,6 +31,7 @@ import org.shredzone.cilla.core.model.Picture;
 import org.shredzone.cilla.core.model.Section;
 import org.shredzone.cilla.core.model.Tag;
 import org.shredzone.cilla.core.model.User;
+import org.shredzone.cilla.core.model.is.Commentable;
 import org.shredzone.cilla.service.search.DateRange;
 import org.shredzone.commons.view.PathType;
 import org.shredzone.commons.view.ViewService;
@@ -128,6 +129,24 @@ public class LinkBuilder {
     }
 
     /**
+     * Target {@link Commentable}.
+     */
+    public LinkBuilder commentable(Commentable commentable) {
+        if (commentable != null) {
+            if (commentable instanceof Page) {
+                page((Page) commentable);
+            } else if (commentable instanceof Picture) {
+                picture((Picture) commentable);
+            } else if (commentable instanceof Header) {
+                header((Header) commentable);
+            } else {
+                throw new IllegalArgumentException("Unknown commentable entity: " + commentable.getClass());
+            }
+        }
+        return this;
+    }
+
+    /**
      * Sets a date range.
      */
     public LinkBuilder date(DateRange date) {
@@ -186,7 +205,8 @@ public class LinkBuilder {
 
     /**
      * Creates an absolute link with a default base URL. Required if the link is
-     * generated outside of a HTTP request.
+     * generated outside of a HTTP request. Implies {@link #absolute()}, do not invoke
+     * separately!
      */
     public LinkBuilder external() {
         return base(externalBaseUrl);

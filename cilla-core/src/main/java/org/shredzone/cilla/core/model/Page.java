@@ -31,6 +31,7 @@ import java.util.TreeSet;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -41,6 +42,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -51,6 +53,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Sort;
 import org.hibernate.annotations.SortType;
 import org.shredzone.cilla.core.model.embed.FormattedText;
+import org.shredzone.cilla.core.model.is.Commentable;
 import org.shredzone.cilla.core.util.DateUtils;
 
 /**
@@ -62,13 +65,14 @@ import org.shredzone.cilla.core.util.DateUtils;
  */
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Page extends BaseModel {
+public class Page extends BaseModel implements Commentable {
     private static final long serialVersionUID = 1887769955448340721L;
 
     private Set<Category> categories = new HashSet<Category>();
     private SortedSet<Tag> tags = new TreeSet<Tag>();
     private List<Section> sections = new ArrayList<Section>();
     private Map<String, String> properties = new HashMap<String, String>();
+    private CommentThread thread = new CommentThread();
     private String name;
     private String subject;
     private String title;
@@ -81,7 +85,6 @@ public class Page extends BaseModel {
     private Language language;
     private boolean sticky;
     private boolean hidden;
-    private boolean commentable;
     private boolean donatable;
     private boolean publishedState;
     private String challenge;
@@ -126,14 +129,6 @@ public class Page extends BaseModel {
     @Column(nullable = false)
     public boolean isHidden()                   { return hidden; }
     public void setHidden(boolean hidden)       { this.hidden = hidden; }
-
-    /**
-     * {@code true} if comments are enabled for this page. If set to {@code false}, the
-     * page does not accept comments, nor shows comments that were previously posted.
-     */
-    @Column(nullable = false)
-    public boolean isCommentable()              { return commentable; }
-    public void setCommentable(boolean commentable) { this.commentable = commentable; }
 
     /**
      * {@code true} if the page is published, {@code false} if not published. This is a
@@ -248,7 +243,7 @@ public class Page extends BaseModel {
      */
     public String getDonateUrl()                { return donateUrl; }
     public void setDonateUrl(String donateUrl)  { this.donateUrl = donateUrl; }
-    
+
     /**
      * Common page properties.
      */
@@ -258,7 +253,15 @@ public class Page extends BaseModel {
     @Column(name = "value")
     public Map<String, String> getProperties()  { return properties; }
     public void setProperties(Map<String, String> properties) { this.properties = properties; }
-    
+
+    /**
+     * Comment thread.
+     */
+    @Override
+    @OneToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    public CommentThread getThread()            { return thread; }
+    public void setThread(CommentThread thread) { this.thread = thread; }
+
     /**
      * {@code true} if the page is currently published. A page is published if a
      * publication date is set and in the past, and an expiration date is either not set
@@ -279,4 +282,5 @@ public class Page extends BaseModel {
     public boolean isRestricted() {
         return (challenge != null && responsePattern != null);
     }
+
 }

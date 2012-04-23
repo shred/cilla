@@ -24,7 +24,9 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.shredzone.cilla.core.model.Comment;
-import org.shredzone.cilla.core.model.Page;
+import org.shredzone.cilla.core.model.CommentThread;
+import org.shredzone.cilla.core.model.Header;
+import org.shredzone.cilla.core.model.is.Commentable;
 import org.shredzone.cilla.core.repository.CommentDao;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,26 +81,47 @@ public class CommentDaoHibImpl extends BaseDaoHibImpl<Comment> implements Commen
                 .list();
     }
 
-    @SuppressWarnings("unchecked")
-    @Transactional(readOnly = true)
     @Override
-    public List<Comment> fetchPublishedComments(Page page) {
-        return getCurrentSession()
-                .createQuery("FROM Comment" +
-                        " WHERE page=:page AND sectionRef IS NULL AND published=true" +
-                        " ORDER BY creation")
-        .setParameter("page", page)
-        .list();
-    }
+    public Commentable fetchCommentable(CommentThread thread) {
+        if (thread.getId() == 0) {
+            throw new IllegalArgumentException("CommentThread has not been persisted yet");
+        }
 
-    @SuppressWarnings("unchecked")
-    @Transactional(readOnly = true)
-    @Override
-    public List<Comment> fetchComments(Page page) {
-        return getCurrentSession()
-                .createQuery("FROM Comment WHERE page=:page ORDER BY creation")
-        .setParameter("page", page)
-        .list();
+        Commentable result;
+
+        result = (Commentable) getCurrentSession()
+                        .createQuery("FROM Page WHERE thread=:thread")
+                        .setParameter("thread", thread)
+                        .uniqueResult();
+        if (result != null) {
+            return result;
+        }
+
+        result = (Commentable) getCurrentSession()
+                        .createQuery("FROM Picture WHERE thread=:thread")
+                        .setParameter("thread", thread)
+                        .uniqueResult();
+        if (result != null) {
+            return result;
+        }
+
+        result = (Header) getCurrentSession()
+                        .createQuery("FROM Header WHERE thread=:thread")
+                        .setParameter("thread", thread)
+                        .uniqueResult();
+        if (result != null) {
+            return result;
+        }
+
+        result = (Commentable) getCurrentSession()
+                        .createQuery("FROM Comment WHERE thread=:thread")
+                        .setParameter("thread", thread)
+                        .uniqueResult();
+        if (result != null) {
+            return result;
+        }
+
+        throw new IllegalArgumentException("No known Commentable for CommentThread ID " + thread.getId());
     }
 
 }

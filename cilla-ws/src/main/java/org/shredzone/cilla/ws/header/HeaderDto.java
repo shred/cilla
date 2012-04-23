@@ -45,6 +45,7 @@ public class HeaderDto extends BaseDto {
     private String description;
     private TextFormat descriptionFormat;
     private Date creation;
+    private boolean commentable;
     private boolean enabled;
     private long creatorId;
     private String creatorLogin;
@@ -70,6 +71,9 @@ public class HeaderDto extends BaseDto {
     @NotNull
     public Date getCreation()                   { return creation; }
     public void setCreation(Date creation)      { this.creation = creation; }
+
+    public boolean isCommentable()              { return commentable; }
+    public void setCommentable(boolean commentable) { this.commentable = commentable; }
 
     public boolean isEnabled()                  { return enabled; }
     public void setEnabled(boolean enabled)     { this.enabled = enabled; }

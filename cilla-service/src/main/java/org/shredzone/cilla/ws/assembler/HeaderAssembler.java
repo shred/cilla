@@ -50,6 +50,7 @@ public class HeaderAssembler extends AbstractAssembler<Header, HeaderDto> {
         dto.setName(entity.getName());
         dto.setCaption(entity.getCaption());
         dto.setCreation(entity.getCreation());
+        dto.setCommentable(entity.getThread().isCommentable());
         dto.setEnabled(entity.isEnabled());
 
         if (entity.getDescription() != null) {
@@ -76,6 +77,8 @@ public class HeaderAssembler extends AbstractAssembler<Header, HeaderDto> {
         header.setCreation(dto.getCreation());
         header.setEnabled(dto.isEnabled());
 
+        header.getThread().setCommentable(dto.isCommentable());
+
         if (dto.getDescription() != null && dto.getDescriptionFormat() != null) {
             header.setDescription(new FormattedText(dto.getDescription(), dto.getDescriptionFormat()));
         } else {
@@ -93,6 +96,7 @@ public class HeaderAssembler extends AbstractAssembler<Header, HeaderDto> {
         projection.add(Property.forName("description.format").as("descriptionFormat"));
         projection.add(Property.forName("creation")    .as("creation"));
         projection.add(Property.forName("enabled")     .as("enabled"));
+        projection.add(Property.forName("t.commentable").as("commentable"));
         projection.add(Property.forName("c.id")        .as("creatorId"));
         projection.add(Property.forName("c.login")     .as("creatorLogin"));
         projection.add(Property.forName("c.name")      .as("creatorName"));

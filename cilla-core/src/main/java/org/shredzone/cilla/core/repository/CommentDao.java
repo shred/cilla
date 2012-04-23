@@ -22,10 +22,13 @@ package org.shredzone.cilla.core.repository;
 import java.util.List;
 
 import org.shredzone.cilla.core.model.Comment;
-import org.shredzone.cilla.core.model.Page;
+import org.shredzone.cilla.core.model.CommentThread;
+import org.shredzone.cilla.core.model.is.Commentable;
 
 /**
- * DAO for {@link Comment} entities.
+ * DAO for {@link Comment} entities and {@link CommentThread} entities. The latter ones
+ * are managed by their reference and thus do not need to be created or deleted
+ * invididually.
  *
  * @author Richard "Shred" Körber
  */
@@ -42,26 +45,12 @@ public interface CommentDao extends BaseDao<Comment> {
     List<Comment> fetchReplies(Comment comment);
 
     /**
-     * Fetches all published {@link Comment} of a {@link Page}. Comments with a sectionRef
-     * are excluded. The comments are sorted chronologically.
+     * Fetches the entry that uses the given {@link CommentThread}.
      *
-     * @param page
-     *            {@link Page} to fetch the {@link Comment} of
-     * @return List of {@link Comment} for the {@link Page}. May be empty but never
-     *         {@code null}.
+     * @param thread
+     *            {@link CommentThread} to fetch the reference entry for
+     * @return Reference to the {@link Commentable} entry
      */
-    List<Comment> fetchPublishedComments(Page page);
-
-    /**
-     * Fetches all {@link Comment} of a {@link Page}. Even unpublished comments and those
-     * with a sectionRef are returned. This is, all {@link Comment} that refer to the
-     * given {@link Page} are returned.
-     *
-     * @param page
-     *            {@link Page} to fetch the {@link Comment} of
-     * @return List of {@link Comment} for the {@link Page}. May be empty but never
-     *         {@code null}.
-     */
-    List<Comment> fetchComments(Page page);
+    Commentable fetchCommentable(CommentThread thread);
 
 }

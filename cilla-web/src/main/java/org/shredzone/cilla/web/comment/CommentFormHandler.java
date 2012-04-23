@@ -17,32 +17,47 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.shredzone.cilla.web.page;
+package org.shredzone.cilla.web.comment;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.shredzone.cilla.core.model.Page;
-import org.shredzone.cilla.core.model.Section;
+import org.shredzone.cilla.core.model.is.Commentable;
 
 /**
- * A service for handling comments related to a {@link Page} or {@link Section}.
+ * A service for handling comments related to a {@link Commentable}.
  *
  * @author Richard "Shred" Körber
  */
 public interface CommentFormHandler {
 
     /**
-     * Handles a comment form for a {@link Page}.
+     * Handles a comment form for a {@link Commentable}.
      * <p>
      * Checks if the user is allowed to post a comment and if the comment is valid and the
      * captcha test was passed. Stores the comment in the database, then sends a
      * notification to the moderators.
      *
-     * @param page
-     *            {@link Page} to add the comment to
+     * @param commentable
+     *            {@link Commentable} to add the comment to
      * @param req
      *            {@link HttpServletRequest} with the comment form data
      */
-    void handleComment(Page page, HttpServletRequest req);
+    void handleComment(Commentable commentable, HttpServletRequest req);
+
+    /**
+     * Handles a comment form for a {@link Commentable}.
+     * <p>
+     * Checks if the user is allowed to post a comment and if the comment is valid and the
+     * captcha test was passed. Stores the comment in the database, then sends a
+     * notification to the moderators.
+     *
+     * @param commentable
+     *            {@link Commentable} to add the comment to
+     * @param req
+     *            {@link HttpServletRequest} with the comment form data
+     * @param enabled
+     *            if {@code false}, do not accept new comments
+     */
+    void handleComment(Commentable commentable, HttpServletRequest req, boolean enabled);
 
 }
