@@ -137,8 +137,12 @@ public final class FragmentInvoker {
         }
 
         if (template != null) {
-            // A JSP template is defined for rendering
-            context.include(template);
+            try {
+                // A JSP template is defined for rendering
+                context.include(template);
+            } catch (IOException ex) {
+                throw new CillaServiceException("Could not invoke template " + template, ex);
+            }
         }
 
         // Renderer returned nothing, it may have written its content itself

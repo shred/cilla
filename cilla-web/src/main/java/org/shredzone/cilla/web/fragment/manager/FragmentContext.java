@@ -27,7 +27,6 @@ import javax.servlet.ServletException;
 import javax.servlet.jsp.PageContext;
 
 import org.shredzone.cilla.web.fragment.annotation.FragmentValue;
-import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.commons.view.ViewService;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
@@ -66,19 +65,30 @@ public class FragmentContext extends StandardEvaluationContext {
     public ViewService getViewService()         { return viewService; }
 
     /**
+     * Sets an attribute in the Request scope. Can be used to pass values to the
+     * {@link #include(String)} template.
+     *
+     * @param name
+     *            Attribute name
+     * @param value
+     *            Attribute value, or {@code null} to remove this attribute
+     */
+    public void setAttribute(String name, Object value) {
+        pageContext.setAttribute(name, value, PageContext.REQUEST_SCOPE);
+    }
+
+    /**
      * Includes a template to the output.
      *
      * @param template
      *            Template name
      */
-    public void include(String template) throws CillaServiceException {
+    public void include(String template) throws IOException {
         try {
             String fullViewPath = viewService.getTemplatePath(template);
             pageContext.include(fullViewPath, false);
-        } catch (IOException ex) {
-            throw new CillaServiceException("Could not include template " + template, ex);
         } catch (ServletException ex) {
-            throw new CillaServiceException("Could not include template " + template, ex);
+            throw new IOException("Could not include template " + template, ex);
         }
     }
 
