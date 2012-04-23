@@ -35,55 +35,65 @@
 
     <p:messages globalOnly="true" />
 
-    <h:panelGrid columns="2">
-      <h:outputLabel for="imageCaptionFormat" value="#{msg['section.gallery.image.captionformat']}:" />
-      <h:panelGroup>
-        <h:selectOneMenu id="imageCaptionFormat" value="#{picture.captionFormat}">
-          <f:selectItems value="#{listBean.createTextFormatList()}" />
-        </h:selectOneMenu>
-        <p:message for="imageCaptionFormat" />
-      </h:panelGroup>
+    <p:outputPanel rendered="#{not empty galleryBean.selectedImage}">
 
-      <h:outputLabel for="imageCaption" value="#{msg['section.gallery.image.caption']}:" />
-      <h:panelGroup>
-        <h:inputTextarea id="imageCaption" value="#{picture.caption}" rows="15" cols="50" />
-        <p:message for="imageCaption" />
-      </h:panelGroup>
+        <h:panelGrid columns="2">
+          <h:outputLabel for="imageCaptionFormat" value="#{msg['section.gallery.image.captionformat']}:" />
+          <h:panelGroup>
+            <h:selectOneMenu id="imageCaptionFormat" value="#{picture.captionFormat}">
+              <f:selectItems value="#{listBean.createTextFormatList()}" />
+            </h:selectOneMenu>
+            <p:message for="imageCaptionFormat" />
+          </h:panelGroup>
 
-      <h:outputLabel for="imageCreation" value="#{msg['section.gallery.image.creation']}:" />
-      <h:panelGroup>
-        <ca:datetime id="imageCreation" compositeId="imageCreation" value="#{picture.createDate}" />
-        <p:message for="imageCreation" />
-      </h:panelGroup>
+          <h:outputLabel for="imageCaption" value="#{msg['section.gallery.image.caption']}:" />
+          <h:panelGroup>
+            <h:inputTextarea id="imageCaption" value="#{picture.caption}" rows="15" cols="50" />
+            <p:message for="imageCaption" />
+          </h:panelGroup>
 
-      <h:outputText />
-      <h:panelGroup>
-        <p:selectBooleanCheckbox id="imageTimeOverride" value="#{galleryBean.timeOverride}">
-          <p:ajax update="imageTimeDefinition imageTimeZone"/>
-        </p:selectBooleanCheckbox>
-        <h:outputLabel for="imageTimeOverride" value="#{msg['section.gallery.image.timeoverride']}" />
-        <p:message for="imageTimeOverride" />
-      </h:panelGroup>
+          <h:outputLabel for="imageCreation" value="#{msg['section.gallery.image.creation']}:" />
+          <h:panelGroup>
+            <ca:datetime id="imageCreation" compositeId="imageCreation" value="#{picture.createDate}" />
+            <p:message for="imageCreation" />
+          </h:panelGroup>
 
-      <h:outputLabel for="imageTimeDefinition" value="#{msg['section.gallery.image.timedefinition']}:" />
-      <h:panelGroup>
-        <h:selectOneMenu id="imageTimeDefinition" value="#{picture.createTimeDefinition}"
-                disabled="#{not galleryBean.timeOverride}">
-          <f:selectItems value="#{listBean.createTimeDefinitionList()}" />
-        </h:selectOneMenu>
-        <p:message for="imageTimeDefinition" />
-      </h:panelGroup>
+          <h:outputText />
+          <h:panelGroup>
+            <p:selectBooleanCheckbox id="imageCommentable" value="#{picture.commentable}" />
+            <h:outputLabel for="imageCommentable" value="#{msg['section.gallery.image.commentable']}" />
+            <p:message for="imageCommentable" />
+          </h:panelGroup>
 
-      <h:outputLabel for="imageTimeZone" value="#{msg['section.gallery.image.timezone']}:" />
-      <h:panelGroup>
-        <p:autoComplete id="imageTimeZone" forceSelection="true" value="#{picture.createTimeZone}"
-                converter="#{timeZoneBean}" completeMethod="#{timeZoneBean.complete}"
-                disabled="#{not galleryBean.timeOverride}" />
-        <p:message for="imageTimeZone" />
-      </h:panelGroup>
+          <h:outputText />
+          <h:panelGroup>
+            <p:selectBooleanCheckbox id="imageTimeOverride" value="#{galleryBean.timeOverride}">
+              <p:ajax update="imageTimeDefinition imageTimeZone"/>
+            </p:selectBooleanCheckbox>
+            <h:outputLabel for="imageTimeOverride" value="#{msg['section.gallery.image.timeoverride']}" />
+            <p:message for="imageTimeOverride" />
+          </h:panelGroup>
 
-    </h:panelGrid>
+          <h:outputLabel for="imageTimeDefinition" value="#{msg['section.gallery.image.timedefinition']}:" />
+          <h:panelGroup>
+            <h:selectOneMenu id="imageTimeDefinition" value="#{picture.createTimeDefinition}"
+                    disabled="#{not galleryBean.timeOverride}">
+              <f:selectItems value="#{listBean.createTimeDefinitionList()}" />
+            </h:selectOneMenu>
+            <p:message for="imageTimeDefinition" />
+          </h:panelGroup>
 
+          <h:outputLabel for="imageTimeZone" value="#{msg['section.gallery.image.timezone']}:" />
+          <h:panelGroup>
+            <p:autoComplete id="imageTimeZone" forceSelection="true" value="#{picture.createTimeZone}"
+                    converter="#{timeZoneBean}" completeMethod="#{timeZoneBean.complete}"
+                    disabled="#{not galleryBean.timeOverride}" />
+            <p:message for="imageTimeZone" />
+          </h:panelGroup>
+
+        </h:panelGrid>
+
+    </p:outputPanel>
   </composite:implementation>
 </body>
 </html>

@@ -47,6 +47,13 @@
           <p:message for="galleryTimeZone" />
         </h:panelGroup>
 
+        <h:outputText />
+        <h:panelGroup>
+          <p:selectBooleanCheckbox id="galleryCommentable" value="#{section.commentable}" />
+          <h:outputLabel for="galleryCommentable" value="#{msg['section.gallery.commentable']}" />
+          <p:message for="galleryCommentable" />
+        </h:panelGroup>
+
       </h:panelGrid>
     </p:panel>
   </composite:implementation>

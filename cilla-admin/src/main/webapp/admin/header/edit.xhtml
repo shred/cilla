@@ -95,6 +95,13 @@
 
           <h:outputText />
           <h:panelGroup>
+            <p:selectBooleanCheckbox id="headerCommentable" value="#{headerBean.header.commentable}" />
+            <h:outputLabel for="headerCommentable" value="#{msg['header.edit.commentable']}" />
+            <p:message for="headerCommentable" />
+          </h:panelGroup>
+
+          <h:outputText />
+          <h:panelGroup>
             <p:selectBooleanCheckbox id="headerEnabled" value="#{headerBean.header.enabled}" />
             <h:outputLabel for="headerEnabled" value="#{msg['header.edit.enabled']}" />
             <p:message for="headerEnabled" />
