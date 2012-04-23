@@ -26,6 +26,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -46,6 +48,8 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
 import org.shredzone.cilla.core.model.embed.FormattedText;
 import org.shredzone.cilla.core.util.DateUtils;
 
@@ -62,7 +66,7 @@ public class Page extends BaseModel {
     private static final long serialVersionUID = 1887769955448340721L;
 
     private Set<Category> categories = new HashSet<Category>();
-    private Set<Tag> tags = new HashSet<Tag>();
+    private SortedSet<Tag> tags = new TreeSet<Tag>();
     private List<Section> sections = new ArrayList<Section>();
     private Map<String, String> properties = new HashMap<String, String>();
     private String name;
@@ -95,8 +99,9 @@ public class Page extends BaseModel {
      * All {@link Tag} this page are tagged with.
      */
     @ManyToMany
-    public Set<Tag> getTags()                   { return tags; }
-    public void setTags(Set<Tag> tags)          { this.tags = tags; }
+    @Sort(type = SortType.NATURAL)
+    public SortedSet<Tag> getTags()             { return tags; }
+    public void setTags(SortedSet<Tag> tags)    { this.tags = tags; }
 
     /**
      * All {@link Section} of this page.

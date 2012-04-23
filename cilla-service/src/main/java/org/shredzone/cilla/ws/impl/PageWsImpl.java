@@ -23,6 +23,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.activation.DataHandler;
 import javax.annotation.Resource;
@@ -303,7 +305,7 @@ public class PageWsImpl extends AbstractWs implements PageWs {
      *            {@link Page} to commit the tags to
      */
     private void commitTags(PageDto dto, Page entity) throws CillaServiceException {
-        Set<Tag> tagSet = new HashSet<Tag>();
+        SortedSet<Tag> tagSet = new TreeSet<Tag>();
         for (String tag : dto.getTags()) {
             tagSet.add(tagDao.fetchOrCreate(tag));
         }

@@ -32,7 +32,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Tag extends BaseModel {
+public class Tag extends BaseModel implements Comparable<Tag> {
     private static final long serialVersionUID = 6244259856286790454L;
 
     private String name;
@@ -43,5 +43,13 @@ public class Tag extends BaseModel {
     @Column(nullable = false, unique = true)
     public String getName()                     { return name; }
     public void setName(String name)            { this.name = name; }
+
+    @Override
+    public int compareTo(Tag o) {
+        // Note: There is no need to override the equals() method. Since the name property
+        // is unique, it is ensured that for all persisted Tags with t1.id == t2.id,
+        // t1.name also == t2.name.
+        return name.compareTo(o.name);
+    }
 
 }
