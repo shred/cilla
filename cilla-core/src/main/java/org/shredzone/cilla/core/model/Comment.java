@@ -26,6 +26,7 @@ import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -65,14 +66,14 @@ public class Comment extends BaseModel implements Commentable {
      * Reference to the {@link CommentThread} this {@link Comment} belongs to.
      */
     @Override
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     public CommentThread getThread()            { return thread; }
     public void setThread(CommentThread thread) { this.thread = thread; }
 
     /**
      * Reference to the {@link Comment} this {@link Comment} replies to.
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     public Comment getReplyTo()                 { return replyTo; }
     public void setReplyTo(Comment replyTo)     { this.replyTo = replyTo; }
 
