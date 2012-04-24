@@ -91,8 +91,6 @@ public class GallerySectionAssembler extends AbstractSectionAssembler<GallerySec
 
     private void mergePictures(GallerySectionDto dto, GallerySection entity) throws CillaServiceException {
         Set<Picture> removables = new HashSet<Picture>(entity.getPictures());
-        entity.getPictures().clear();
-        int cnt = 0;
         for (PictureDto picDto : dto.getPictures()) {
             Picture picture;
 
@@ -120,9 +118,6 @@ public class GallerySectionAssembler extends AbstractSectionAssembler<GallerySec
                 );
                 picDto.setId(picture.getId());
             }
-
-            picture.setSequence(cnt++);
-            entity.getPictures().add(picture);
         }
 
         for (Picture picture : removables) {
