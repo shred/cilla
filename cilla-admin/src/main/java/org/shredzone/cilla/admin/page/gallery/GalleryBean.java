@@ -48,6 +48,7 @@ public class GalleryBean implements PageSelectionObserver, Serializable {
     private static final long serialVersionUID = -3929497320724267152L;
 
     private @Resource PageWs pageWs;
+    private @Resource PictureTagBean pictureTagBean;
 
     private GallerySectionDto section;
     private PictureDto selectedImage;
@@ -73,6 +74,7 @@ public class GalleryBean implements PageSelectionObserver, Serializable {
         this.timeOverride = (
                    selectedImage.getCreateTimeDefinition() != null
                 || selectedImage.getCreateTimeZone() != null);
+        pictureTagBean.clear();
     }
 
     /**

@@ -91,7 +91,7 @@
           <p:commandButton value="#{msg['section.gallery.delete.no']}" onclick="deleteConfirmation.hide()" type="button" />
         </p:confirmDialog>
 
-        <p:dialog header="#{msg['section.gallery.image.edit']}" widgetVar="editDialog" width="700" height="500" minWidth="700">
+        <p:dialog header="#{msg['section.gallery.image.edit']}" widgetVar="editDialog" width="700" height="600" minWidth="700">
           <p:outputPanel id="editDetail">
             <ui:include src="image.xhtml">
               <ui:param name="picture" value="#{galleryBean.selectedImage}" />
