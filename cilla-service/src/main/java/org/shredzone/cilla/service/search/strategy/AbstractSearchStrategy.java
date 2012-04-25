@@ -32,11 +32,14 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
 import org.shredzone.cilla.core.model.Category;
+import org.shredzone.cilla.core.model.GallerySection;
 import org.shredzone.cilla.core.repository.PageDao;
 import org.shredzone.cilla.core.util.DateUtils;
 import org.shredzone.cilla.service.search.DateRange;
@@ -127,7 +130,20 @@ public abstract class AbstractSearchStrategy implements SearchStrategy {
             }
 
             if (filter.getTag() != null) {
-                crit.createCriteria("tags").add(Restrictions.eq("id", filter.getTag().getId()));
+                long tagId = filter.getTag().getId();
+                Disjunction dis = Restrictions.disjunction();
+
+                // All pages with the requested tag
+                crit.createAlias("tags", "tt");
+                dis.add(Restrictions.eq("tt.id", tagId));
+
+                // All pages with pictures in a gallery section having the requested tag
+                DetachedCriteria subcrit = DetachedCriteria.forClass(GallerySection.class);
+                subcrit.createCriteria("pictures").createCriteria("tags").add(Restrictions.idEq(tagId));
+                subcrit.setProjection(Projections.distinct(Projections.property("page.id")));
+                dis.add(Subqueries.propertyIn("id", subcrit));
+
+                crit.add(dis);
             }
 
             if (filter.getCreator() != null) {

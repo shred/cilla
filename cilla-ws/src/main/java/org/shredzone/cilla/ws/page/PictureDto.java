@@ -20,7 +20,9 @@
 package org.shredzone.cilla.ws.page;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import javax.activation.DataHandler;
@@ -52,6 +54,7 @@ public class PictureDto extends BaseDto {
     private BigDecimal latitude;
     private BigDecimal altitude;
     private DataHandler uploadFile;
+    private List<String> tags = new ArrayList<String>();
     private boolean commentable;
 
     public Date getCreateDate()                 { return createDate; }
@@ -79,6 +82,9 @@ public class PictureDto extends BaseDto {
 
     public BigDecimal getAltitude()             { return altitude; }
     public void setAltitude(BigDecimal altitude) { this.altitude = altitude; }
+
+    public List<String> getTags()               { return tags; }
+    public void setTags(List<String> tags)      { this.tags = tags; }
 
     public boolean isCommentable()                  { return commentable; }
     public void setCommentable(boolean commentable) { this.commentable = commentable; }

@@ -19,12 +19,15 @@
  */
 package org.shredzone.cilla.ws.assembler;
 
-import org.hibernate.criterion.ProjectionList;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Property;
+import java.util.SortedSet;
+
+import javax.annotation.Resource;
+
 import org.shredzone.cilla.core.model.Picture;
+import org.shredzone.cilla.core.model.Tag;
 import org.shredzone.cilla.core.model.embed.FormattedText;
 import org.shredzone.cilla.core.model.embed.Geolocation;
+import org.shredzone.cilla.core.repository.TagDao;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.cilla.ws.page.PictureDto;
 import org.springframework.stereotype.Component;
@@ -38,6 +41,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class PictureAssembler extends AbstractAssembler<Picture, PictureDto> {
+
+    private @Resource TagDao tagDao;
 
     @Override
     public PictureDto assemble(Picture entity) throws CillaServiceException {
@@ -58,6 +63,10 @@ public class PictureAssembler extends AbstractAssembler<Picture, PictureDto> {
             dto.setLongitude(gl.getLongitude());
             dto.setLatitude(gl.getLatitude());
             dto.setAltitude(gl.getAltitude());
+        }
+
+        for (Tag tag : entity.getTags()) {
+            dto.getTags().add(tag.getName());
         }
 
         return dto;
@@ -87,22 +96,12 @@ public class PictureAssembler extends AbstractAssembler<Picture, PictureDto> {
         } else {
             entity.setLocation(null);
         }
-    }
 
-    @Override
-    public ProjectionList projection() {
-        ProjectionList projection = Projections.projectionList();
-        projection.add(Projections.id(), "id");
-        projection.add(Property.forName("createDate")  .as("createDate"));
-        projection.add(Property.forName("createTimeZone").as("createTimeZone"));
-        projection.add(Property.forName("createTimeDefinition").as("createTimeDefinition"));
-        projection.add(Property.forName("caption.text") .as("caption"));
-        projection.add(Property.forName("caption.format").as("captionFormat"));
-        projection.add(Property.forName("location.longitude").as("longitude"));
-        projection.add(Property.forName("location.latitude").as("latitude"));
-        projection.add(Property.forName("location.altitude").as("altitude"));
-        projection.add(Property.forName("thread.commentable").as("commentable"));
-        return projection;
+        SortedSet<Tag> tagSet = entity.getTags();
+        tagSet.clear();
+        for (String tag : dto.getTags()) {
+            tagSet.add(tagDao.fetchOrCreate(tag));
+        }
     }
 
 }

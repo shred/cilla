@@ -20,7 +20,9 @@
 package org.shredzone.cilla.core.model;
 
 import java.util.Date;
+import java.util.SortedSet;
 import java.util.TimeZone;
+import java.util.TreeSet;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -31,6 +33,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
@@ -38,6 +41,8 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Sort;
+import org.hibernate.annotations.SortType;
 import org.shredzone.cilla.core.model.embed.ExifData;
 import org.shredzone.cilla.core.model.embed.FormattedText;
 import org.shredzone.cilla.core.model.embed.Geolocation;
@@ -66,6 +71,7 @@ public class Picture extends BaseModel implements Commentable {
     private Geolocation location;
     private ExifData exifData;
     private Store image = new Store();
+    private SortedSet<Tag> tags = new TreeSet<Tag>();
     private CommentThread thread = new CommentThread();
 
     /**
@@ -150,6 +156,14 @@ public class Picture extends BaseModel implements Commentable {
     @OneToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     public Store getImage()                     { return image; }
     public void setImage(Store image)           { this.image = image; }
+
+    /**
+     * All {@link Tag} this page are tagged with.
+     */
+    @ManyToMany
+    @Sort(type = SortType.NATURAL)
+    public SortedSet<Tag> getTags()             { return tags; }
+    public void setTags(SortedSet<Tag> tags)    { this.tags = tags; }
 
     /**
      * Comment thread.

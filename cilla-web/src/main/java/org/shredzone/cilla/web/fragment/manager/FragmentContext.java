@@ -65,6 +65,17 @@ public class FragmentContext extends StandardEvaluationContext {
     public ViewService getViewService()         { return viewService; }
 
     /**
+     * Gets an attribute.
+     *
+     * @param name
+     *            Attribute name
+     * @return Attribute value, or {@code null} if unset
+     */
+    public Object getAttribute(String name) {
+        return pageContext.findAttribute(name);
+    }
+
+    /**
      * Sets an attribute in the Request scope. Can be used to pass values to the
      * {@link #include(String)} template.
      *
