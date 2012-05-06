@@ -61,16 +61,14 @@
           <h:outputLabel for="imageTag" value="#{msg['page.edit.tag']}:" />
           <h:panelGroup>
             <p:outputPanel id="imageTagPanel">
-              <p:panel>
-                <p:dataGrid id="imageTagGrid" value="#{picture.tags}" var="tag">
-                  <p:column>
-                    <p:commandButton update="editForm:imageTagGrid" icon="ui-icon-trash" process="@this">
-                      <p:collector value="#{tag}" removeFrom="#{picture.tags}" />
-                    </p:commandButton>
-                    <h:outputText value="#{tag}" />
-                  </p:column>
-                </p:dataGrid>
-              </p:panel>
+              <p:dataGrid id="imageTagGrid" value="#{picture.tags}" var="tag">
+                <p:column>
+                  <p:commandButton update=":editForm:imageTagPanel" icon="ui-icon-trash" process="@this">
+                    <p:collector value="#{tag}" removeFrom="#{picture.tags}" />
+                  </p:commandButton>
+                  <h:outputText value="#{tag}" />
+                </p:column>
+              </p:dataGrid>
               <h:panelGrid columns="2">
                 <p:autoComplete id="imageTag" value="#{pictureTagBean.tag}" completeMethod="#{pictureTagBean.complete}" size="60" />
                 <p:commandButton value="#{msg['page.edit.tag.add']}" update="imageTagPanel" action="#{pictureTagBean.clear}" icon="ui-icon-plus">

@@ -124,16 +124,14 @@
               <h:outputLabel for="pageTag" value="#{msg['page.edit.tag']}:" />
               <h:panelGroup>
                 <p:outputPanel id="pageTagPanel">
-                  <p:panel>
-                    <p:dataGrid value="#{pageBean.page.tags}" var="tag">
-                      <p:column>
-                        <p:commandButton update="editForm:editTab:pageTagPanel" icon="ui-icon-trash" process="@this">
-                          <p:collector value="#{tag}" removeFrom="#{pageBean.page.tags}" />
-                        </p:commandButton>
-                        <h:outputText value="#{tag}" />
-                      </p:column>
-                    </p:dataGrid>
-                  </p:panel>
+                  <p:dataGrid value="#{pageBean.page.tags}" var="tag">
+                    <p:column>
+                      <p:commandButton update=":editForm:editTab:pageTagPanel" icon="ui-icon-trash" process="@this">
+                        <p:collector value="#{tag}" removeFrom="#{pageBean.page.tags}" />
+                      </p:commandButton>
+                      <h:outputText value="#{tag}" />
+                    </p:column>
+                  </p:dataGrid>
                   <h:panelGrid columns="2">
                     <p:autoComplete id="pageTag" value="#{pageTagBean.tag}" completeMethod="#{pageTagBean.complete}" size="60" />
                     <p:commandButton value="#{msg['page.edit.tag.add']}" update="pageTagPanel" action="#{pageTagBean.clear}" icon="ui-icon-plus">
@@ -192,7 +190,7 @@
               <h:outputLabel for="pagePublication" value="#{msg['page.edit.publication']}:" />
               <h:panelGroup>
                 <ca:datetime id="pagePublication" compositeId="pagePublication" value="#{pageBean.page.publication}" compositeImmediate="true" />
-                <p:commandButton actionListener="#{pageBean.publishNow()}" value="#{msg['page.edit.publication.now']}" update="editForm" immediate="true" />
+                <p:commandButton actionListener="#{pageBean.publishNow()}" value="#{msg['page.edit.publication.now']}" update=":editForm" immediate="true" />
                 <p:message for="pagePublication" />
               </h:panelGroup>
 
@@ -251,7 +249,7 @@
     <ui:define name="dialog">
       <h:form id="mediaForm">
         <p:confirmDialog header="#{msg['page.edit.media.confirm']}" widgetVar="deleteConfirmation" message="#{msg['page.edit.media.message']}">
-          <p:commandButton value="#{msg['page.edit.media.yes']}" action="#{pageMediaBean.delete()}" update="editForm:editTab:mediaList" oncomplete="deleteConfirmation.hide()" />
+          <p:commandButton value="#{msg['page.edit.media.yes']}" action="#{pageMediaBean.delete()}" update=":editForm:editTab:mediaList" oncomplete="deleteConfirmation.hide()" />
           <p:commandButton value="#{msg['page.edit.media.no']}" onclick="deleteConfirmation.hide()" type="button" />
         </p:confirmDialog>
       </h:form>

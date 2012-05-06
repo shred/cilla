@@ -71,7 +71,7 @@
     <ui:define name="dialog">
       <h:form id="editForm">
         <p:confirmDialog header="#{msg['header.list.confirm']}" widgetVar="headerDeleteConfirmation" message="#{msg['header.list.message']}">
-          <p:commandButton value="#{msg['header.list.yes']}" actionListener="#{headerListBean.invalidate()}" action="#{headerBean.delete()}" update="listForm:headerList" oncomplete="headerDeleteConfirmation.hide()" />
+          <p:commandButton value="#{msg['header.list.yes']}" actionListener="#{headerListBean.invalidate()}" action="#{headerBean.delete()}" update=":listForm:headerList" oncomplete="headerDeleteConfirmation.hide()" />
           <p:commandButton value="#{msg['header.list.no']}" onclick="headerDeleteConfirmation.hide()" type="button" />
         </p:confirmDialog>
       </h:form>
