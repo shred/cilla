@@ -49,6 +49,7 @@
 
         <p:gmap id="mapView" center="#{mapModel.center}" zoom="#{mapModel.zoom}" type="HYBRID" model="#{mapModel}" style="width:650px;height:500px" widgetVar="mapWidget">
           <p:ajax event="markerDrag" update="mapCoords"/>
+          <p:ajax event="pointSelect" listener="#{mapModelFactory.onPointSelect}" update="mapCoords mapView"/>
         </p:gmap>
 
       </p:outputPanel>

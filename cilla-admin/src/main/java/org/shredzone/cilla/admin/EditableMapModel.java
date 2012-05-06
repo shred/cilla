@@ -26,6 +26,7 @@ import java.util.ResourceBundle;
 
 import javax.faces.context.FacesContext;
 
+import org.primefaces.event.map.PointSelectEvent;
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.Marker;
@@ -130,6 +131,24 @@ public class EditableMapModel extends DefaultMapModel {
      */
     public int getZoom() {
         return initZoom;
+    }
+
+    /**
+     * Invoked when an empty point was selected in the map. The marker is placed to the
+     * position of the click, and the map is zoomed in.
+     *
+     * @param event
+     *            {@link PointSelectEvent} containing the click coordinate
+     */
+    public void onPointSelect(PointSelectEvent event) {
+        marker.setLatlng(event.getLatLng());
+
+        // Zoom in...
+        if (initZoom < 5) {
+            initZoom = 5;
+        } else if (initZoom < 17) {
+            initZoom += 3;
+        }
     }
 
     /**

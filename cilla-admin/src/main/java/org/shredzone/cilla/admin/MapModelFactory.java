@@ -21,6 +21,9 @@ package org.shredzone.cilla.admin;
 
 import java.math.BigDecimal;
 
+import org.primefaces.component.gmap.GMap;
+import org.primefaces.event.map.PointSelectEvent;
+import org.primefaces.model.map.MapModel;
 import org.shredzone.cilla.admin.page.PageSelectionObserver;
 import org.shredzone.cilla.ws.Geolocated;
 import org.shredzone.cilla.ws.page.PageDto;
@@ -81,6 +84,27 @@ public class MapModelFactory implements PageSelectionObserver {
         // On page change, reset the last coordinates
         lastLatitude = null;
         lastLongitude = null;
+    }
+
+    /**
+     * Handles {@code pointSelect} events of a PrimeFaces gmap component.
+     * <p>
+     * This is a workaround for what seems to be a PrimeFaces bug. The MapModel itself
+     * cannot be target of a p:ajax listener, as it cannot be resolved there and leads to
+     * an NPE. This method tries to find out the target {@link EditableMapModel}, and
+     * delegates the event handling to the onPointSelect method there.
+     *
+     * @param event
+     *            {@link PointSelectEvent} of the point select event
+     */
+    public void onPointSelect(PointSelectEvent event) {
+        Object src = event.getSource();
+        if (src instanceof GMap) {
+            MapModel model = ((GMap) src).getModel();
+            if (model instanceof EditableMapModel) {
+                ((EditableMapModel) model).onPointSelect(event);
+            }
+        }
     }
 
 }
