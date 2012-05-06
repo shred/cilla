@@ -26,6 +26,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
 import org.shredzone.cilla.core.model.Header;
 import org.shredzone.cilla.core.model.embed.FormattedText;
+import org.shredzone.cilla.core.model.embed.Geolocation;
 import org.shredzone.cilla.core.repository.UserDao;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.cilla.ws.header.HeaderDto;
@@ -64,6 +65,13 @@ public class HeaderAssembler extends AbstractAssembler<Header, HeaderDto> {
             dto.setCreatorName(entity.getCreator().getName());
         }
 
+        Geolocation gl = entity.getLocation();
+        if (gl != null) {
+            dto.setLongitude(gl.getLongitude());
+            dto.setLatitude(gl.getLatitude());
+            dto.setAltitude(gl.getAltitude());
+        }
+
         return dto;
     }
 
@@ -78,6 +86,16 @@ public class HeaderAssembler extends AbstractAssembler<Header, HeaderDto> {
         header.setEnabled(dto.isEnabled());
 
         header.getThread().setCommentable(dto.isCommentable());
+
+        if (dto.getLongitude() != null && dto.getLatitude() != null) {
+            Geolocation gl = new Geolocation();
+            gl.setLongitude(dto.getLongitude());
+            gl.setLatitude(dto.getLatitude());
+            gl.setAltitude(dto.getAltitude());
+            header.setLocation(gl);
+        } else {
+            header.setLocation(null);
+        }
 
         if (dto.getDescription() != null && dto.getDescriptionFormat() != null) {
             header.setDescription(new FormattedText(dto.getDescription(), dto.getDescriptionFormat()));
@@ -96,6 +114,9 @@ public class HeaderAssembler extends AbstractAssembler<Header, HeaderDto> {
         projection.add(Property.forName("description.format").as("descriptionFormat"));
         projection.add(Property.forName("creation")    .as("creation"));
         projection.add(Property.forName("enabled")     .as("enabled"));
+        projection.add(Property.forName("location.longitude").as("longitude"));
+        projection.add(Property.forName("location.latitude").as("latitude"));
+        projection.add(Property.forName("location.altitude").as("altitude"));
         projection.add(Property.forName("t.commentable").as("commentable"));
         projection.add(Property.forName("c.id")        .as("creatorId"));
         projection.add(Property.forName("c.login")     .as("creatorLogin"));

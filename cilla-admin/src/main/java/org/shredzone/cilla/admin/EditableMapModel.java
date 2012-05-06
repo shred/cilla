@@ -20,13 +20,16 @@
 package org.shredzone.cilla.admin;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
-import org.primefaces.event.map.MarkerDragEvent;
+import javax.faces.context.FacesContext;
+
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.Marker;
-
-// TODO: incomplete
+import org.shredzone.cilla.ws.Geolocated;
 
 /**
  * A model providing a map where a position can be marked upon.
@@ -36,51 +39,107 @@ import org.primefaces.model.map.Marker;
 public class EditableMapModel extends DefaultMapModel {
     private static final long serialVersionUID = 8478083672796714573L;
 
-    private Marker marker;
+    private static final MathContext CONTEXT = new MathContext(9);
 
-    public EditableMapModel() {
-        this(0d, 0d);
-    }
+    private final MapModelFactory factory;
+    private final Geolocated model;
+    private final Marker marker;
+    private int initZoom = 15;
 
-    public EditableMapModel(BigDecimal lat, BigDecimal lng) {
-        this(
-            (lat != null ? lat.doubleValue() : 0d),
-            (lng != null ? lng.doubleValue() : 0d)
-        );
-    }
+    /**
+     * Creates a new {@link EditableMapModel}.
+     *
+     * @param factory
+     *            {@link MapModelFactory} that created this model. It is used for getting
+     *            and setting the last position.
+     * @param model
+     *            {@link Geolocated} object to be edited
+     */
+    public EditableMapModel(MapModelFactory factory, Geolocated model) {
+        this.factory = factory;
+        this.model = model;
 
-    public EditableMapModel(double lat, double lng) {
-        marker = new Marker(new LatLng(lat, lng), "here"); // TODO: i18n
+        double lat, lng;
+
+        if (model.getLatitude() != null && model.getLongitude() != null) {
+            lat = model.getLatitude().doubleValue();
+            lng = model.getLongitude().doubleValue();
+        } else if (factory.getLastLatitude() != null && factory.getLastLongitude() != null) {
+            lat = factory.getLastLatitude().doubleValue();
+            lng = factory.getLastLongitude().doubleValue();
+        } else {
+            lat = 0d;
+            lng = 0d;
+            initZoom = 1;
+        }
+
+        String label = getResourceBundle().getString("mapedit.marker");
+
+        marker = new Marker(new LatLng(lat, lng), label);
         marker.setDraggable(true);
         addOverlay(marker);
     }
 
-    public void onMarkerDrag(MarkerDragEvent event) {
-        if (event.getMarker() == marker) {
-            // TODO: Store the new marker position
-        }
+    /**
+     * Commits the position, writing it to the {@link Geolocated}.
+     */
+    public void commit() {
+        BigDecimal lat = new BigDecimal(marker.getLatlng().getLat(), CONTEXT);
+        BigDecimal lng = new BigDecimal(marker.getLatlng().getLng(), CONTEXT);
+
+        model.setLatitude(lat);
+        model.setLongitude(lng);
+        model.setAltitude(null);
+
+        factory.setLastLocation(lat, lng);
     }
 
-    public void setLatitude(double lat) {
-        LatLng newPos = new LatLng(lat, marker.getLatlng().getLng());
-        marker.setLatlng(newPos);
+    /**
+     * Clears the position at the {@link Geolocated}.
+     */
+    public void clear() {
+        model.setLatitude(null);
+        model.setLongitude(null);
+        model.setAltitude(null);
     }
 
-    public void setLongitude(double lng) {
-        LatLng newPos = new LatLng(marker.getLatlng().getLat(), lng);
-        marker.setLatlng(newPos);
-    }
-
+    /**
+     * Gets the current latitude of the marker.
+     */
     public double getLatitude() {
         return marker.getLatlng().getLat();
     }
 
+    /**
+     * Gets the current longitude of the marker.
+     */
     public double getLongitude() {
         return marker.getLatlng().getLng();
     }
 
+    /**
+     * Gets the center position of the map to be used. This is usually the marker's
+     * position, or the last known marker position.
+     */
     public String getCenter() {
-        return marker.getLatlng().toString();
+        return getLatitude() + ", " + getLongitude();
+    }
+
+    /**
+     * Gets the initial zoom level of the map.
+     */
+    public int getZoom() {
+        return initZoom;
+    }
+
+    /**
+     * Returns a {@link ResourceBundle} to be used for i18n. The locale used depends on
+     * the locale settings of the visiting user.
+     */
+    private ResourceBundle getResourceBundle() {
+        FacesContext ctx = FacesContext.getCurrentInstance();
+        Locale loc = ctx.getViewRoot().getLocale();
+        return ResourceBundle.getBundle(ctx.getApplication().getMessageBundle(), loc);
     }
 
 }

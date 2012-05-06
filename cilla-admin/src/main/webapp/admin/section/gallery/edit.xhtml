@@ -43,11 +43,9 @@
                   <p:commandButton immediate="true" oncomplete="editDialog.show()" update=":editForm:editDetail" icon="ui-icon-pencil">
                     <f:setPropertyActionListener target="#{galleryBean.selectedImage}" value="#{dto}" />
                   </p:commandButton>
-<!-- TODO:
-                  <p:commandButton immediate="true" oncomplete="mapDialog.show()" update=":mapForm:mapDetail" icon="ui-icon-pin-s">
+                  <p:commandButton immediate="true" oncomplete="mapDialog.show()" update=":mapForm:mapDetail" icon="#{(empty dto.longitude or empty dto.latitude) ? 'ui-icon-pin-w' : 'ui-icon-pin-s'}">
                     <f:setPropertyActionListener target="#{galleryBean.selectedImage}" value="#{dto}" />
                   </p:commandButton>
--->
                   <p:commandButton onclick="deleteConfirmation.show()" update=":imageForm:imageGrid" icon="ui-icon-trash">
                     <f:setPropertyActionListener target="#{galleryBean.selectedImage}" value="#{dto}" />
                   </p:commandButton>
@@ -100,18 +98,12 @@
         </p:dialog>
       </h:form>
 
-<!-- TODO:
-      <h:form id="mapForm">
-        <p:dialog header="#{msg['section.gallery.image.map']}" widgetVar="mapDialog" width="700" height="500" minWidth="700" onShow="mymap.checkResize()">
-          <p:outputPanel id="mapDetail">
-            <ui:include src="map.xhtml">
-              <ui:param name="mapModel" value="#{galleryBean.selectedImage}" />
-            </ui:include>
-          </p:outputPanel>
-        </p:dialog>
-      </h:form>
- -->
-     </ui:define>
+      <p:dialog header="#{msg['section.gallery.image.map']}" widgetVar="mapDialog" width="700" height="600" minWidth="700" onShow="mapWidget.checkResize()">
+        <ui:include src="../../common/map.xhtml">
+          <ui:param name="mapModel" value="#{galleryBean.selectedMapModel}" />
+        </ui:include>
+      </p:dialog>
+    </ui:define>
 
   </ui:composition>
 </body>

@@ -26,6 +26,8 @@ import javax.annotation.Resource;
 import javax.faces.component.UIComponent;
 
 import org.primefaces.event.FileUploadEvent;
+import org.shredzone.cilla.admin.EditableMapModel;
+import org.shredzone.cilla.admin.MapModelFactory;
 import org.shredzone.cilla.admin.UploadedFileDataSource;
 import org.shredzone.cilla.admin.WrappedCillaException;
 import org.shredzone.cilla.admin.page.PageSelectionObserver;
@@ -49,9 +51,11 @@ public class GalleryBean implements PageSelectionObserver, Serializable {
 
     private @Resource PageWs pageWs;
     private @Resource PictureTagBean pictureTagBean;
+    private @Resource MapModelFactory mapModelFactory;
 
     private GallerySectionDto section;
     private PictureDto selectedImage;
+    private EditableMapModel selectedMapModel;
     private UIComponent uiGrid;
     private boolean timeOverride;
 
@@ -63,6 +67,7 @@ public class GalleryBean implements PageSelectionObserver, Serializable {
         this.section = section;
         this.selectedImage = null;
         this.timeOverride = false;
+        this.selectedMapModel = null;
     }
 
     /**
@@ -75,7 +80,13 @@ public class GalleryBean implements PageSelectionObserver, Serializable {
                    selectedImage.getCreateTimeDefinition() != null
                 || selectedImage.getCreateTimeZone() != null);
         pictureTagBean.clear();
+        this.selectedMapModel = mapModelFactory.createMapModel(selectedImage);
     }
+
+    /**
+     * {@link EditableMapModel} of the currently selected image.
+     */
+    public EditableMapModel getSelectedMapModel() { return selectedMapModel; }
 
     /**
      * Reference to the {@link UIComponent} of the data grid showing the pictures of the
@@ -169,6 +180,7 @@ public class GalleryBean implements PageSelectionObserver, Serializable {
     public void onPageSelected(PageDto selectedPage) {
         section = null;
         selectedImage = null;
+        selectedMapModel = null;
         timeOverride = false;
     }
 

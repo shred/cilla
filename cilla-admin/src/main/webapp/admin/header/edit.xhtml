@@ -65,6 +65,9 @@
             </div>
           </h:panelGroup>
 
+          <h:outputText />
+          <p:commandButton type="button" id="geolocate" onclick="mapDialog.show()" value="#{msg['header.edit.geolocate']}" icon="#{(empty headerBean.header.longitude or empty headerBean.header.latitude) ? 'ui-icon-pin-w' : 'ui-icon-pin-s'}" />
+
           <h:outputLabel for="headerDescriptionFormat" value="#{msg['header.edit.descriptionformat']}:" />
           <h:panelGroup>
             <h:selectOneMenu id="headerDescriptionFormat" value="#{headerBean.header.descriptionFormat}">
@@ -92,7 +95,7 @@
             <ca:datetime id="headerCreation" compositeId="headerCreation" value="#{headerBean.header.creation}" readonly="true" />
             <p:message for="headerCreation" />
           </h:panelGroup>
-
+          
           <h:outputText />
           <h:panelGroup>
             <p:selectBooleanCheckbox id="headerCommentable" value="#{headerBean.header.commentable}" />
@@ -109,19 +112,27 @@
 
         </h:panelGrid>
 
-        <p:dialog header="#{msg['header.edit.picture']}" widgetVar="uploadDialog" width="700" height="200" minWidth="400">
-          <h:form>
-            <p:fileUpload fileUploadListener="#{headerBean.handleHeaderFileUpload}" label="#{msg['header.edit.choose']}" oncomplete="uploadDialog.hide()" update=":editForm:headerPictureImage" />
-          </h:form>
-        </p:dialog>
-
-        <p:dialog header="#{msg['header.edit.fullpicture']}" widgetVar="uploadFullDialog" width="700" height="200" minWidth="400">
-          <h:form>
-            <p:fileUpload fileUploadListener="#{headerBean.handleFullFileUpload}" label="#{msg['header.edit.choose']}" oncomplete="uploadFullDialog.hide()" update=":editForm:headerFullPictureImage" />
-          </h:form>
-        </p:dialog>
-
       </h:form>
+    </ui:define>
+
+    <ui:define name="dialog">
+      <p:dialog header="#{msg['header.edit.picture']}" widgetVar="uploadDialog" width="700" height="200" minWidth="400">
+        <h:form>
+          <p:fileUpload fileUploadListener="#{headerBean.handleHeaderFileUpload}" label="#{msg['header.edit.choose']}" oncomplete="uploadDialog.hide()" update=":editForm:headerPictureImage" />
+        </h:form>
+      </p:dialog>
+
+      <p:dialog header="#{msg['header.edit.fullpicture']}" widgetVar="uploadFullDialog" width="700" height="200" minWidth="400">
+        <h:form>
+          <p:fileUpload fileUploadListener="#{headerBean.handleFullFileUpload}" label="#{msg['header.edit.choose']}" oncomplete="uploadFullDialog.hide()" update=":editForm:headerFullPictureImage" />
+        </h:form>
+      </p:dialog>
+
+      <p:dialog header="#{msg['section.gallery.image.map']}" widgetVar="mapDialog" width="700" height="600" minWidth="700" onShow="mapWidget.checkResize()">
+        <ui:include src="../common/map.xhtml">
+          <ui:param name="mapModel" value="#{headerBean.headerMapModel}" />
+        </ui:include>
+      </p:dialog>
     </ui:define>
 
   </ui:composition>

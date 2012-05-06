@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.shredzone.cilla.ws.BaseDto;
+import org.shredzone.cilla.ws.Geolocated;
 import org.shredzone.cilla.ws.TextFormat;
 import org.shredzone.cilla.ws.TimeDefinition;
 import org.shredzone.cilla.ws.adapter.TimeZoneAdapter;
@@ -42,7 +43,7 @@ import org.shredzone.cilla.ws.adapter.TimeZoneAdapter;
  * @author Richard "Shred" Körber
  */
 @XmlType
-public class PictureDto extends BaseDto {
+public class PictureDto extends BaseDto implements Geolocated {
     private static final long serialVersionUID = -3277725908745526672L;
 
     private Date createDate;
@@ -74,13 +75,19 @@ public class PictureDto extends BaseDto {
     public TextFormat getCaptionFormat()        { return captionFormat; }
     public void setCaptionFormat(TextFormat captionFormat) { this.captionFormat = captionFormat; }
 
+    @Override
     public BigDecimal getLongitude()            { return longitude; }
+    @Override
     public void setLongitude(BigDecimal longitude) { this.longitude = longitude; }
 
+    @Override
     public BigDecimal getLatitude()             { return latitude; }
+    @Override
     public void setLatitude(BigDecimal latitude) { this.latitude = latitude; }
 
+    @Override
     public BigDecimal getAltitude()             { return altitude; }
+    @Override
     public void setAltitude(BigDecimal altitude) { this.altitude = altitude; }
 
     public List<String> getTags()               { return tags; }

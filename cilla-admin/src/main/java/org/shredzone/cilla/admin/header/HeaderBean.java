@@ -28,6 +28,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.event.FileUploadEvent;
+import org.shredzone.cilla.admin.EditableMapModel;
+import org.shredzone.cilla.admin.MapModelFactory;
 import org.shredzone.cilla.admin.UploadedFileDataSource;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.cilla.ws.header.HeaderDto;
@@ -46,14 +48,24 @@ public class HeaderBean implements Serializable {
     private static final long serialVersionUID = 6288999431849895025L;
 
     private @Resource HeaderWs headerWs;
+    private @Resource MapModelFactory mapModelFactory;
 
     private HeaderDto header;
+    private EditableMapModel headerMapModel;
 
     /**
      * Currently selected {@link HeaderDto}.
      */
     public HeaderDto getHeader()                { return header;  }
-    public void setHeader(HeaderDto header)     { this.header = header; }
+    public void setHeader(HeaderDto header)     {
+        this.header = header;
+        this.headerMapModel = mapModelFactory.createMapModel(header);
+    }
+
+    /**
+     * {@link EditableMapModel} of the current header.
+     */
+    public EditableMapModel getHeaderMapModel() { return headerMapModel; }
 
     /**
      * Creates a new {@link HeaderDto}.
@@ -84,6 +96,7 @@ public class HeaderBean implements Serializable {
 
         headerWs.delete(header.getId());
         header = null;
+        headerMapModel = null;
     }
 
     /**
@@ -124,7 +137,7 @@ public class HeaderBean implements Serializable {
             }
         }
 
-        header = headerWs.commit(header);
+        setHeader(headerWs.commit(header));
 
         return "/admin/header/list.xhtml";
     }

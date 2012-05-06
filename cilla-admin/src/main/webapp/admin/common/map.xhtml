@@ -1,0 +1,58 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:p="http://primefaces.org/ui" xmlns:composite="http://java.sun.com/jsf/composite" xmlns:ca="http://java.sun.com/jsf/composite/cilla">
+<!--
+
+  cilla - Blog Management System
+
+  Copyright (C) 2012 Richard "Shred" Körber
+    http://cilla.shredzone.org
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published
+  by the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<body>
+  <composite:interface>
+    <composite:attribute name="mapModel" required="true" />
+  </composite:interface>
+  <composite:implementation>
+    <h:form id="mapForm">
+      <p:outputPanel id="mapDetail">
+
+        <p:toolbar>
+          <p:toolbarGroup>
+            <p:commandButton id="submit" type="submit" actionListener="#{mapModel.commit()}" ajax="false" value="#{msg['mapedit.commit']}" icon="ui-icon-check" />
+            <p:commandButton id="cancel" type="submit" immediate="true" ajax="false" value="#{msg['mapedit.cancel']}" icon="ui-icon-cancel" />
+            <p:commandButton id="remove" type="submit" actionListener="#{mapModel.clear()}" immediate="true" ajax="false" value="#{msg['mapedit.remove']}" icon="ui-icon-trash" />
+          </p:toolbarGroup>
+        </p:toolbar>
+
+        <p:messages globalOnly="true" />
+
+        <h:panelGrid id="mapCoords" columns="2">
+          <p:inputText value="#{mapModel.latitude}" readonly="true">
+            <f:convertNumber pattern="#{msg['mapedit.lat.pattern']}"/>
+          </p:inputText>
+          <p:inputText value="#{mapModel.longitude}" readonly="true">
+            <f:convertNumber pattern="#{msg['mapedit.lng.pattern']}"/>
+          </p:inputText>
+        </h:panelGrid>
+
+        <p:gmap id="mapView" center="#{mapModel.center}" zoom="#{mapModel.zoom}" type="HYBRID" model="#{mapModel}" style="width:650px;height:500px" widgetVar="mapWidget">
+          <p:ajax event="markerDrag" update="mapCoords"/>
+        </p:gmap>
+
+      </p:outputPanel>
+    </h:form>
+  </composite:implementation>
+</body>
+</html>

@@ -20,6 +20,7 @@
 
 package org.shredzone.cilla.ws.header;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.activation.DataHandler;
@@ -29,6 +30,7 @@ import javax.xml.bind.annotation.XmlMimeType;
 import javax.xml.bind.annotation.XmlType;
 
 import org.shredzone.cilla.ws.BaseDto;
+import org.shredzone.cilla.ws.Geolocated;
 import org.shredzone.cilla.ws.TextFormat;
 
 /**
@@ -37,7 +39,7 @@ import org.shredzone.cilla.ws.TextFormat;
  * @author Richard "Shred" Körber
  */
 @XmlType
-public class HeaderDto extends BaseDto {
+public class HeaderDto extends BaseDto implements Geolocated {
     private static final long serialVersionUID = 5983186325362814767L;
 
     private String name;
@@ -45,6 +47,9 @@ public class HeaderDto extends BaseDto {
     private String description;
     private TextFormat descriptionFormat;
     private Date creation;
+    private BigDecimal longitude;
+    private BigDecimal latitude;
+    private BigDecimal altitude;
     private boolean commentable;
     private boolean enabled;
     private long creatorId;
@@ -71,6 +76,21 @@ public class HeaderDto extends BaseDto {
     @NotNull
     public Date getCreation()                   { return creation; }
     public void setCreation(Date creation)      { this.creation = creation; }
+
+    @Override
+    public BigDecimal getLongitude()            { return longitude; }
+    @Override
+    public void setLongitude(BigDecimal longitude) { this.longitude = longitude; }
+
+    @Override
+    public BigDecimal getLatitude()             { return latitude; }
+    @Override
+    public void setLatitude(BigDecimal latitude) { this.latitude = latitude; }
+
+    @Override
+    public BigDecimal getAltitude()             { return altitude; }
+    @Override
+    public void setAltitude(BigDecimal altitude) { this.altitude = altitude; }
 
     public boolean isCommentable()              { return commentable; }
     public void setCommentable(boolean commentable) { this.commentable = commentable; }
