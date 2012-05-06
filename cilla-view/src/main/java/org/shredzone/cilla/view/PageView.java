@@ -105,6 +105,8 @@ public class PageView extends AbstractView {
         }
 
         if (handleRestricted(page, req)) {
+            req.setAttribute("page", page);
+            req.setAttribute("turner", new PageTurnerModel(pageDao.fetchPreviousPage(page), pageDao.fetchNextPage(page)));
             return "view/pageUnlock.jsp";
         }
 
