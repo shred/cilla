@@ -19,6 +19,7 @@
  */
 package org.shredzone.cilla.admin;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import org.primefaces.component.gmap.GMap;
@@ -41,7 +42,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope("session")
-public class MapModelFactory implements PageSelectionObserver {
+public class MapModelFactory implements PageSelectionObserver, Serializable {
+    private static final long serialVersionUID = 9036345680844576575L;
 
     private BigDecimal lastLatitude = null;
     private BigDecimal lastLongitude = null;
