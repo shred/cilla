@@ -82,7 +82,7 @@
           </p:tab>
           <p:tab title="#{msg['page.edit.tab.media']}">
 
-            <p:dataTable id="mediaList" var="medium" value="#{mediaDataModel}" selection="#{pageMediaBean.selectedMedia}" paginator="true" rows="15">
+            <p:dataTable id="mediaList" var="medium" value="#{mediaDataModel}" selection="#{pageMediaBean.selectedMedia}" lazy="true" paginator="true" rows="15">
               <f:facet name="header">
                 <p:commandButton id="upload" type="button" value="#{msg['page.edit.media.upload']}" onclick="uploadDialog.show();" icon="ui-icon-folder-open" />
                 <p:commandButton onclick="deleteConfirmation.show()" value="#{msg['page.edit.media.delete']}" icon="ui-icon-trash" />

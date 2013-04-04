@@ -38,7 +38,7 @@
         <property name="hibernateProperties" ref="dataSourceProperties"/>
     </bean>
 
-    <bean id="cacheRegionFactory" class="net.sf.ehcache.hibernate.EhCacheRegionFactory">
+    <bean id="cacheRegionFactory" class="org.hibernate.cache.EhCacheRegionFactory">
         <constructor-arg><props/></constructor-arg>
     </bean>
 

@@ -24,7 +24,7 @@
   <ui:composition template="/templates/sidebar.xhtml">
     <ui:define name="content">
       <h:form id="listForm">
-        <p:dataTable id="headerList" var="hdr" value="#{headerDataModel}" selection="#{headerBean.header}" rowKey="#{hdr.id}" rows="20" paginator="true" selectionMode="single">
+        <p:dataTable id="headerList" var="hdr" value="#{headerDataModel}" selection="#{headerBean.header}" rowKey="#{hdr.id}" rows="20" lazy="true" paginator="true" selectionMode="single">
           <f:facet name="header">
             <p:commandButton action="#{headerBean.add()}" ajax="false" value="#{msg['header.list.new']}" icon="ui-icon-document" />
             <p:commandButton action="#{headerBean.edit()}" ajax="false" value="#{msg['header.list.edit']}" icon="ui-icon-pencil" />

@@ -24,7 +24,7 @@
   <ui:composition template="/templates/sidebar.xhtml">
     <ui:define name="content">
       <h:form>
-        <p:dataTable var="comment" value="#{commentDataModel}" selection="#{commentBean.comment}" rowKey="#{comment.id}" paginator="true" rows="20" selectionMode="single">
+        <p:dataTable var="comment" value="#{commentDataModel}" selection="#{commentBean.comment}" rowKey="#{comment.id}" lazy="true" paginator="true" rows="20" selectionMode="single">
           <f:facet name="header">
             <p:commandButton action="#{commentBean.edit()}" ajax="false" value="#{msg['page.list.edit']}" icon="ui-icon-pencil" />
             <p:commandButton action="#{commentBean.delete()}" ajax="false" value="#{msg['page.list.delete']}" icon="ui-icon-trash" />
