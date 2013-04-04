@@ -33,7 +33,7 @@
 
         <p:messages globalOnly="true" />
 
-        <p:dataGrid id="imageGrid" var="dto" value="#{galleryBean.pictures}" binding="#{galleryBean.uiGrid}" columns="4" rows="15" paginator="true">
+        <p:dataGrid id="imageGrid" var="dto" value="#{galleryBean.pictures}" binding="#{galleryBean.uiGrid}" columns="4" rows="16" paginator="true">
           <p:column>
             <p:fieldset>
               <p:toolbar style="white-space:nowrap">
@@ -56,9 +56,7 @@
                   <f:param name="index" value="#{galleryBean.uiGrid.rowIndex}" />
                 </p:graphicImage>
               </div>
-              <p:inplace editor="true">
-                <h:inputTextarea value="#{dto.caption}" rows="6" cols="20" />
-              </p:inplace>
+              <h:outputText value="#{dto.caption}" style="font-size:80%" />
             </p:fieldset>
           </p:column>
         </p:dataGrid>
