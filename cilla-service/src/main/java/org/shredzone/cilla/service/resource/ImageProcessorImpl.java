@@ -23,13 +23,14 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 import javax.activation.DataSource;
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
+import javax.imageio.stream.MemoryCacheImageOutputStream;
 
 import net.coobird.thumbnailator.Thumbnails;
 
@@ -75,7 +76,7 @@ public class ImageProcessorImpl implements ImageProcessor {
         BufferedImage scaled = builder.asBufferedImage();
 
         if (type == ImageType.JPEG_LOW) {
-            jpegQualityWriter(scaled, out, type.getCompression());
+            jpegQualityWriter(scaled, new MemoryCacheImageOutputStream(out), type.getCompression());
         } else {
             ImageIO.write(scaled, type.getFormatName(), out);
         }
@@ -92,11 +93,11 @@ public class ImageProcessorImpl implements ImageProcessor {
      * @param image
      *            {@link BufferedImage} to write
      * @param out
-     *            {@link OutputStream} to write to
+     *            {@link ImageOutputStream} to write to
      * @param quality
      *            Compression quality between 0.0f (worst) and 1.0f (best)
      */
-    private void jpegQualityWriter(BufferedImage image, OutputStream out, float quality)
+    private void jpegQualityWriter(BufferedImage image, ImageOutputStream out, float quality)
     throws IOException {
         ImageWriter writer = ImageIO.getImageWritersByFormatName("jpeg").next();
 

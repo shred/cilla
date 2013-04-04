@@ -33,6 +33,16 @@ public class ImageProcessing implements Serializable {
     private int height;
     private ImageType type;
 
+    public ImageProcessing() {
+        // Default constructor
+    }
+
+    public ImageProcessing(int width, int height, ImageType type) {
+        this.width = width;
+        this.height = height;
+        this.type = type;
+    }
+
     /**
      * Maximum image width. The image's aspect ratio is kept. 0 means original size.
      */
