@@ -38,7 +38,6 @@ import org.shredzone.commons.captcha.CaptchaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Component;
 
 /**
@@ -57,21 +56,18 @@ public class CommentFormHandlerImpl implements CommentFormHandler {
     private @Resource CaptchaService captchaService;
     private @Resource CommentService commentService;
     private @Resource SecurityService securityService;
+    private @Resource CommentThreadService commentThreadService;
 
     @Override
-    @CacheEvict(value = "commentThread", key = "#commentable.thread.id")
     public void handleComment(Commentable commentable, HttpServletRequest req) {
         handleComment(commentable, req, true);
     }
 
     @Override
-    @CacheEvict(value = "commentThread", key = "#commentable.thread.id")
     public void handleComment(Commentable commentable, HttpServletRequest req, boolean enabled) {
+        handleDelete(commentable, req);
+
         CommentThread thread = commentable.getThread();
-
-        handleDelete(thread, req);
-
-        Comment comment = new Comment();
 
         if (req.getParameter("cmtPosted") == null) {
             // There is no comment posting to be handled
@@ -94,6 +90,8 @@ public class CommentFormHandlerImpl implements CommentFormHandler {
             rejectComment(req, "cilla.comment.error.toolong");
             return;
         }
+
+        Comment comment = new Comment();
 
         CillaUserDetails cud = securityService.getAuthenticatedUser();
         if (cud != null) {
@@ -142,6 +140,8 @@ public class CommentFormHandlerImpl implements CommentFormHandler {
 
         commentService.postComment(comment, req);
 
+        commentThreadService.evict(commentable);
+
         if (comment.isPublished()) {
             setMessage(req, "cilla.comment.ispublished");
         } else {
@@ -152,18 +152,20 @@ public class CommentFormHandlerImpl implements CommentFormHandler {
     /**
      * Handles a delete request.
      *
-     * @param thread
-     *            {@link CommentThread} the comment belongs to
+     * @param commentable
+     *            {@link Commentable} the comment belongs to
      * @param req
      *            {@link HttpServletRequest} with the form data
      */
-    private void handleDelete(CommentThread thread, HttpServletRequest req) {
+    private void handleDelete(Commentable commentable, HttpServletRequest req) {
         String delId = req.getParameter("cmtDelete");
         if (delId != null) {
             long deleteId = getReplyToId(delId);
             Comment deleteComment = commentDao.fetch(deleteId);
+            CommentThread thread = commentable.getThread();
             if (deleteComment != null && deleteComment.getThread().equals(thread)) {
                 commentService.remove(deleteComment);
+                commentThreadService.evict(commentable);
             }
         }
     }

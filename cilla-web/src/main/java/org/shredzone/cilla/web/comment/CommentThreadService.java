@@ -38,4 +38,12 @@ public interface CommentThreadService {
      */
     CommentThreadModel getCommentThread(Commentable commentable);
 
+    /**
+     * Purges all cached information about the {@link Commentable}.
+     *
+     * @param commentable
+     *            {@link Commentable} to purge all cached information from
+     */
+    void evict(Commentable commentable);
+
 }

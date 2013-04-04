@@ -36,6 +36,7 @@ import org.shredzone.cilla.core.model.CommentThread;
 import org.shredzone.cilla.core.model.User;
 import org.shredzone.cilla.core.model.is.Commentable;
 import org.shredzone.cilla.web.format.TextFormatter;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,6 +74,12 @@ public class CommentThreadServiceImpl implements CommentThreadService {
         result.setCount(comments.size());
         result.setLastCommented(maxDate);
         return result;
+    }
+
+    @Override
+    @CacheEvict(value = "commentThread", key = "#commentable.thread.id")
+    public void evict(Commentable commentable) {
+        // TODO: Remove and use an event handler instead
     }
 
     /**
