@@ -80,6 +80,9 @@ public class PictureServiceImpl implements PictureService {
         if (section.getId() == 0) {
             throw new IllegalArgumentException("section is not persisted");
         }
+        if (source == null) {
+            throw new IllegalArgumentException("DataSource is not set");
+        }
 
         try {
             Store store = picture.getImage();
@@ -110,7 +113,6 @@ public class PictureServiceImpl implements PictureService {
 
             picture.setGallery(section);
             section.getPictures().add(picture);
-            renumberPictureSequence(section);
             pictureDao.persist(picture);
 
             ResourceDataSource ds = storeDao.access(store);
@@ -155,13 +157,12 @@ public class PictureServiceImpl implements PictureService {
 
                 ResourceDataSource ds = storeDao.access(store);
                 FileCopyUtils.copy(source.getInputStream(), ds.getOutputStream());
-
-                renumberPictureSequence(picture.getGallery());
-                eventService.fireEvent(new Event<Picture>(EventType.GALLERY_PICTURE_UPDATE, picture));
             } catch (IOException ex) {
                 throw new CillaServiceException("Could not read medium", ex);
             }
         }
+
+        eventService.fireEvent(new Event<Picture>(EventType.GALLERY_PICTURE_UPDATE, picture));
     }
 
     @Override
@@ -188,7 +189,6 @@ public class PictureServiceImpl implements PictureService {
         try {
             pictureDao.delete(picture);
             eventService.fireEvent(new Event<Picture>(EventType.GALLERY_PICTURE_DELETE, picture));
-            renumberPictureSequence(section);
         } catch (RuntimeException ex) {
             log.warn("Rolling back transaction, but medium of picture id {} is already deleted.", picture.getId());
             throw ex;
@@ -208,15 +208,10 @@ public class PictureServiceImpl implements PictureService {
         }
     }
 
-    /**
-     * Renumber the picture sequence.
-     *
-     * @param section
-     *            {@link GallerySection} to be renumbered
-     */
-    private void renumberPictureSequence(GallerySection section) {
+    @Override
+    public void renumberPictures(GallerySection gallery) throws CillaServiceException {
         int cnt = 0;
-        for (Picture picture : section.getPictures()) {
+        for (Picture picture : gallery.getPictures()) {
             picture.setSequence(cnt++);
         }
     }

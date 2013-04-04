@@ -44,6 +44,8 @@ public interface PictureService {
      * <p>
      * The image passed in is analyzed and it's EXIF data, geolocation data, creation
      * date, dimensions and type are written into the Picture entity.
+     * <p>
+     * Picture's sequence numbers needs to be set separately.
      *
      * @param section
      *            {@link GallerySection} to add the picture to. The picture will be the
@@ -61,9 +63,9 @@ public interface PictureService {
      * <p>
      * The image passed in is analyzed and it's EXIF data, geolocation data, creation
      * date, dimensions and type are written into the Picture entity.
+     * <p>
+     * Picture's sequence numbers needs to be set separately.
      *
-     * @param section
-     *            {@link GallerySection} the picture belongs to
      * @param picture
      *            {@link Picture} to be updated
      * @param source
@@ -75,13 +77,21 @@ public interface PictureService {
 
     /**
      * Removes a picture. It is removed from the {@link GallerySection}.
+     * <p>
+     * Picture's sequence numbers needs to be set separately.
      *
-     * @param section
-     *            {@link GallerySection} to remove the {@link Picture} from
      * @param picture
      *            {@link Picture} to remove
      */
     void removePicture(Picture picture) throws CillaServiceException;
+
+    /**
+     * Renumbers all pictures of a gallery.
+     *
+     * @param gallery
+     *            {@link GallerySection} to renumber pictures of
+     */
+    void renumberPictures(GallerySection gallery) throws CillaServiceException;
 
     /**
      * Gets a picture of a gallery.
