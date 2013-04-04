@@ -37,7 +37,7 @@ public class MapModel implements Serializable {
     private Geolocation location;
     private int zoom = 17;
     private String backgroundColor = null;
-    private List<Marker> markers = new ArrayList<Marker>();
+    private List<Marker> markers = new ArrayList<>();
 
     /**
      * The desired {@link MapType}. If the service does not support this type, it should

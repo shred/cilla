@@ -41,7 +41,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 public class CommentThread extends BaseModel {
     private static final long serialVersionUID = 2266998031115838916L;
 
-    private List<Comment> comments = new ArrayList<Comment>();
+    private List<Comment> comments = new ArrayList<>();
     private boolean commentable;
 
     /**

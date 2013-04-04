@@ -95,12 +95,9 @@ public class NotificationServiceImpl implements NotificationService {
             msg.setText(out.toString());
             mailSender.send(msg);
 
-        } catch (IOException ex) {
-            log.error("Failed to open template " , ex);
-            throw new CillaServiceException("Could not open template", ex);
-        } catch (TemplateException ex) {
-            log.error("Failed to parse template " , ex);
-            throw new CillaServiceException("Error in notification template", ex);
+        } catch (IOException | TemplateException ex) {
+            log.error("Failed to process template " , ex);
+            throw new CillaServiceException("Could not process template", ex);
         }
     }
 

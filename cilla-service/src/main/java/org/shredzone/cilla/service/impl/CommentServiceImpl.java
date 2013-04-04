@@ -105,7 +105,7 @@ public class CommentServiceImpl implements CommentService {
 
         commentDao.persist(comment);
 
-        List<NotificationTarget> targets = new ArrayList<NotificationTarget>();
+        List<NotificationTarget> targets = new ArrayList<>();
         for (User user : userDao.fetchAllWithAuthority("MODERATOR")) {
             NotificationTarget target = new NotificationTarget();
             target.setLocale(user.getLanguage().getLocale());

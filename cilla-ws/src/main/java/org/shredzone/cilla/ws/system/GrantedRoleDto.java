@@ -30,7 +30,7 @@ import java.util.HashSet;
 public class GrantedRoleDto {
 
     private String name;
-    private Collection<String> rights = new HashSet<String>();
+    private Collection<String> rights = new HashSet<>();
 
     /**
      * Role name.

@@ -81,7 +81,7 @@ public abstract class AbstractSearchStrategy implements SearchStrategy {
 
         Calendar cal = Calendar.getInstance(calendar.getTimeZone());
 
-        Set<Integer> daysResult = new HashSet<Integer>();
+        Set<Integer> daysResult = new HashSet<>();
         for (Date day : (List<Date>) crit.list()) {
             cal.setTime(day);
             daysResult.add(cal.get(Calendar.DAY_OF_MONTH));

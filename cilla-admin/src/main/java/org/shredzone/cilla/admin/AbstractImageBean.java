@@ -57,7 +57,7 @@ public abstract class AbstractImageBean implements Serializable {
 
     private @Value("${previewImageMaxCache}") int maxCache;
 
-    private final Map<DataHandler, byte[]> weakScaleCache = new WeakHashMap<DataHandler, byte[]>();
+    private final Map<DataHandler, byte[]> weakScaleCache = new WeakHashMap<>();
 
     /**
      * Gets the "renderId" request parameter used for rendering images by their ID.
@@ -132,10 +132,10 @@ public abstract class AbstractImageBean implements Serializable {
                     BufferedImage image = ImageIO.read(dh.getInputStream());
                     if (image != null) {
                         BufferedImage scaled = scale(image, process.getWidth(), process.getHeight());
-                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                        ImageIO.write(scaled, process.getType().getFormatName(), bos);
-                        bos.close();
-                        scaledData = bos.toByteArray();
+                        try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+                            ImageIO.write(scaled, process.getType().getFormatName(), bos);
+                            scaledData = bos.toByteArray();
+                        }
                         if (weakScaleCache.size() < maxCache) {
                             weakScaleCache.put(dh, scaledData);
                         }

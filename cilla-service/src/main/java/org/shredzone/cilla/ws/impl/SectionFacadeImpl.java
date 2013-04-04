@@ -51,11 +51,9 @@ public class SectionFacadeImpl implements SectionFacade {
 
     private @Resource List<SectionAssembler> assemblerList;
 
-    private Map<Class<? extends Section>, SectionAssembler> sourceMap
-                = new HashMap<Class<? extends Section>, SectionAssembler>();
-    private Map<Class<? extends SectionDto>, SectionAssembler> targetMap
-                = new HashMap<Class<? extends SectionDto>, SectionAssembler>();
-    private SortedMap<String, SectionAssembler> typeMap = new TreeMap<String, SectionAssembler>();
+    private Map<Class<? extends Section>, SectionAssembler> sourceMap = new HashMap<>();
+    private Map<Class<? extends SectionDto>, SectionAssembler> targetMap = new HashMap<>();
+    private SortedMap<String, SectionAssembler> typeMap = new TreeMap<>();
 
     @PostConstruct
     public void setup() {
@@ -71,7 +69,7 @@ public class SectionFacadeImpl implements SectionFacade {
 
     @Override
     public List<SectionDto> assembleSections(List<Section> sections) throws CillaServiceException {
-        List<SectionDto> result = new ArrayList<SectionDto>(sections.size());
+        List<SectionDto> result = new ArrayList<>(sections.size());
         for (Section sec : sections) {
             SectionAssembler assembler = sourceMap.get(sec.getClass());
             result.add((SectionDto) assembler.assemble(sec));

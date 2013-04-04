@@ -71,7 +71,7 @@ public class Picture extends BaseModel implements Commentable {
     private Geolocation location;
     private ExifData exifData;
     private Store image = new Store();
-    private SortedSet<Tag> tags = new TreeSet<Tag>();
+    private SortedSet<Tag> tags = new TreeSet<>();
     private CommentThread thread = new CommentThread();
 
     /**

@@ -58,10 +58,10 @@ public class SecurityInInterceptor extends AbstractSoapInterceptor {
 
     @PostConstruct
     protected void setup() {
-        Map<QName, Object> validator = new HashMap<QName, Object>();
+        Map<QName, Object> validator = new HashMap<>();
         validator.put(WSSecurityEngine.USERNAME_TOKEN, cillaUsernameTokenValidator);
 
-        Map<String, Object> properties = new HashMap<String, Object>();
+        Map<String, Object> properties = new HashMap<>();
         properties.put(WSHandlerConstants.ACTION, WSConstants.USERNAME_TOKEN_LN);
         properties.put(WSHandlerConstants.PASSWORD_TYPE, WSConstants.PW_TEXT);
         properties.put(WSS4JInInterceptor.VALIDATOR_MAP, validator);

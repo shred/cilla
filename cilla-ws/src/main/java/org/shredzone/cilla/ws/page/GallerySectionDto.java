@@ -41,7 +41,7 @@ public class GallerySectionDto extends SectionDto {
 
     private TimeZone defaultTimeZone;
     private TimeDefinition defaultTimePrecision;
-    private List<PictureDto> pictures = new ArrayList<PictureDto>();
+    private List<PictureDto> pictures = new ArrayList<>();
     private boolean commentable;
 
     @Override

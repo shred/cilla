@@ -89,9 +89,7 @@ public class RenderTag extends BodyTagSupport implements Parameterizable {
                 if (result != null) {
                     pageContext.getOut().print(result);
                 }
-            } catch (IOException ex) {
-                throw new JspException("Failed to render fragment " + fragment, ex);
-            } catch (CillaServiceException ex) {
+            } catch (CillaServiceException | IOException ex) {
                 throw new JspException("Failed to render fragment " + fragment, ex);
             }
 

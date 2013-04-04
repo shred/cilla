@@ -62,29 +62,29 @@ public class ImageProcessorImpl implements ImageProcessor {
             }
         }
 
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            Thumbnails.Builder<? extends InputStream> builder = Thumbnails.of(ds.getInputStream());
+            if (width > 0 && height > 0) {
+                builder.size(width, height);
+            } else if (width > 0) {
+                builder.width(width);
+            } else if (height > 0) {
+                builder.height(height);
+            }
 
-        Thumbnails.Builder<? extends InputStream> builder = Thumbnails.of(ds.getInputStream());
-        if (width > 0 && height > 0) {
-            builder.size(width, height);
-        } else if (width > 0) {
-            builder.width(width);
-        } else if (height > 0) {
-            builder.height(height);
+            BufferedImage scaled = builder.asBufferedImage();
+
+            if (type == ImageType.JPEG_LOW) {
+                jpegQualityWriter(scaled, new MemoryCacheImageOutputStream(out), type.getCompression());
+            } else {
+                ImageIO.write(scaled, type.getFormatName(), out);
+            }
+
+            ImageProcessorResult result = new ImageProcessorResult();
+            result.setData(out.toByteArray());
+            result.setContentType(type.getContentType());
+            return result;
         }
-
-        BufferedImage scaled = builder.asBufferedImage();
-
-        if (type == ImageType.JPEG_LOW) {
-            jpegQualityWriter(scaled, new MemoryCacheImageOutputStream(out), type.getCompression());
-        } else {
-            ImageIO.write(scaled, type.getFormatName(), out);
-        }
-
-        ImageProcessorResult result = new ImageProcessorResult();
-        result.setData(out.toByteArray());
-        result.setContentType(type.getContentType());
-        return result;
     }
 
     /**

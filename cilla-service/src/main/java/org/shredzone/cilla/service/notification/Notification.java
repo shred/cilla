@@ -32,8 +32,8 @@ import java.util.Map;
 public class Notification {
 
     private String type;
-    private List<NotificationTarget> recipients = new ArrayList<NotificationTarget>();
-    private Map<String, Object> attributes = new HashMap<String, Object>();
+    private List<NotificationTarget> recipients = new ArrayList<>();
+    private Map<String, Object> attributes = new HashMap<>();
 
     /**
      * Notification type. This is the template name to be used.

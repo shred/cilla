@@ -42,8 +42,8 @@ import org.springframework.stereotype.Component;
 @Scope("request")
 public class DocumentHeader {
 
-    private SortedSet<MetaTag> metaTags = new TreeSet<MetaTag>();
-    private List<HeadTag> headTags = new ArrayList<HeadTag>();
+    private SortedSet<MetaTag> metaTags = new TreeSet<>();
+    private List<HeadTag> headTags = new ArrayList<>();
     private boolean setup = false;
 
     /**

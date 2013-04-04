@@ -38,9 +38,7 @@ public class StringToGallerySection implements Converter<String, GallerySection>
     public GallerySection convert(String string) {
         try {
             return (GallerySection) sectionDao.fetch(Long.parseLong(string));
-        } catch (NumberFormatException ex) {
-            return null;
-        } catch (ClassCastException ex) {
+        } catch (NumberFormatException | ClassCastException ex) {
             return null;
         }
     }

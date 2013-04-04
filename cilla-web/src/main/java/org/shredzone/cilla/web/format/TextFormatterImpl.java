@@ -61,11 +61,11 @@ public class TextFormatterImpl implements TextFormatter {
      */
     @PostConstruct
     protected void setup() {
-        List<TextFilter> filterList = new ArrayList<TextFilter>();
+        List<TextFilter> filterList = new ArrayList<>();
         for (PostProcessingTextFilter filter : applicationContext.getBeansOfType(PostProcessingTextFilter.class).values()) {
             filterList.add(filter);
         }
-        Collections.sort(filterList, new PriorityComparator<TextFilter>(TextFilter.class));
+        Collections.sort(filterList, new PriorityComparator<>(TextFilter.class));
         postFilters = Collections.unmodifiableList(filterList);
     }
 

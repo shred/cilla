@@ -58,7 +58,7 @@ public class SecurityOutInterceptor extends AbstractSoapInterceptor {
 
     @PostConstruct
     public void setup() {
-        Map<String, Object> properties = new HashMap<String, Object>();
+        Map<String, Object> properties = new HashMap<>();
         properties.put(WSHandlerConstants.ACTION, WSConstants.USERNAME_TOKEN_LN);
         properties.put(WSHandlerConstants.PASSWORD_TYPE, WSConstants.PW_TEXT);
         // User will be replaced by the real user in the callback

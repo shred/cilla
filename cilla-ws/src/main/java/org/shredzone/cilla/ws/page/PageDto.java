@@ -42,10 +42,10 @@ public class PageDto extends PageInfoDto {
     private TextFormat teaserFormat;
     private String challenge;
     private String responsePattern;
-    private List<SectionDto> sections = new ArrayList<SectionDto>();
-    private List<MediumDto> media = new ArrayList<MediumDto>();
-    private List<CategoryDto> categories = new ArrayList<CategoryDto>();
-    private List<String> tags = new ArrayList<String>();
+    private List<SectionDto> sections = new ArrayList<>();
+    private List<MediumDto> media = new ArrayList<>();
+    private List<CategoryDto> categories = new ArrayList<>();
+    private List<String> tags = new ArrayList<>();
 
     @NotNull
     public String getTeaser()                       { return teaser; }

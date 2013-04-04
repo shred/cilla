@@ -49,7 +49,7 @@ public class FragmentManager {
     private @Resource ApplicationContext applicationContext;
     private @Resource ConversionService conversionService;
 
-    private Map<String, FragmentInvoker> fragmentMap = new HashMap<String, FragmentInvoker>();
+    private Map<String, FragmentInvoker> fragmentMap = new HashMap<>();
 
     /**
      * Gets a {@link FragmentInvoker} for the given fragment name.

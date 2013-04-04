@@ -44,7 +44,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TimeZoneBean implements Converter {
 
-    private final SortedMap<String, TimeZone> timeZoneMap = new TreeMap<String, TimeZone>();
+    private final SortedMap<String, TimeZone> timeZoneMap = new TreeMap<>();
     private int maxResults = 10;
 
     @PostConstruct
@@ -65,7 +65,7 @@ public class TimeZoneBean implements Converter {
      */
     public List<String> complete(String query) {
         String qstr = query.trim().toLowerCase();
-        List<String> result = new ArrayList<String>(maxResults);
+        List<String> result = new ArrayList<>(maxResults);
 
         for (String entry : timeZoneMap.keySet()) {
             if (entry.toLowerCase().contains(qstr)) {

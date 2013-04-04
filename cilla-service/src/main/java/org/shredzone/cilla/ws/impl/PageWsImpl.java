@@ -237,7 +237,7 @@ public class PageWsImpl extends AbstractWs implements PageWs {
      *            {@link Page} to commit the sections to
      */
     private void commitSections(PageDto dto, Page entity) throws CillaServiceException {
-        Set<Section> deletableSec = new HashSet<Section>(entity.getSections());
+        Set<Section> deletableSec = new HashSet<>(entity.getSections());
         for (SectionDto sec : dto.getSections()) {
             Section persistedSec = sectionFacade.persistSection(sec, entity);
             deletableSec.remove(persistedSec);
@@ -256,7 +256,7 @@ public class PageWsImpl extends AbstractWs implements PageWs {
      *            {@link Page} to commit the media to
      */
     private void commitMedium(PageDto dto, Page entity) throws CillaServiceException {
-        Set<Medium> deletableMedia = new HashSet<Medium>(mediumDao.fetchAll(entity));
+        Set<Medium> deletableMedia = new HashSet<>(mediumDao.fetchAll(entity));
         for (MediumDto mediumDto : dto.getMedia()) {
             if (mediumDto.isPersisted()) {
                 Medium medium = mediumDao.fetch(mediumDto.getId());
@@ -287,7 +287,7 @@ public class PageWsImpl extends AbstractWs implements PageWs {
      *            {@link Page} to commit the categories to
      */
     private void commitCategories(PageDto dto, Page entity) throws CillaServiceException {
-        Set<Category> catSet = new HashSet<Category>();
+        Set<Category> catSet = new HashSet<>();
         for (CategoryDto catDto : dto.getCategories()) {
             Category cat = categoryDao.fetch(catDto.getId());
             if (cat != null) {
@@ -306,7 +306,7 @@ public class PageWsImpl extends AbstractWs implements PageWs {
      *            {@link Page} to commit the tags to
      */
     private void commitTags(PageDto dto, Page entity) throws CillaServiceException {
-        SortedSet<Tag> tagSet = new TreeSet<Tag>();
+        SortedSet<Tag> tagSet = new TreeSet<>();
         for (String tag : dto.getTags()) {
             tagSet.add(tagDao.fetchOrCreate(tag));
         }

@@ -47,18 +47,18 @@ public class LinkResolverManager {
 
     @PostConstruct
     protected void setup() {
-        List<LinkTypeMatcher> matcherList = new ArrayList<LinkTypeMatcher>();
+        List<LinkTypeMatcher> matcherList = new ArrayList<>();
         for (LinkTypeMatcher m : applicationContext.getBeansOfType(LinkTypeMatcher.class).values()) {
             matcherList.add(m);
         }
-        Collections.sort(matcherList, new PriorityComparator<LinkTypeMatcher>(LinkTypeMatcher.class));
+        Collections.sort(matcherList, new PriorityComparator<>(LinkTypeMatcher.class));
         linkTypeMatchers = Collections.unmodifiableList(matcherList);
 
-        List<LocalLinkResolver> resolverList = new ArrayList<LocalLinkResolver>();
+        List<LocalLinkResolver> resolverList = new ArrayList<>();
         for (LocalLinkResolver m : applicationContext.getBeansOfType(LocalLinkResolver.class).values()) {
             resolverList.add(m);
         }
-        Collections.sort(resolverList, new PriorityComparator<LocalLinkResolver>(LocalLinkResolver.class));
+        Collections.sort(resolverList, new PriorityComparator<>(LocalLinkResolver.class));
         localLinkResolvers = Collections.unmodifiableList(resolverList);
     }
 

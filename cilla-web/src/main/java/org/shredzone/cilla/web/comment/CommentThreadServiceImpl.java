@@ -57,7 +57,7 @@ public class CommentThreadServiceImpl implements CommentThreadService {
     public CommentThreadModel getCommentThread(Commentable commentable) {
         List<CommentModel> roots = getCommentTree(commentable.getThread());
 
-        List<CommentModel> comments = new ArrayList<CommentModel>(roots.size());
+        List<CommentModel> comments = new ArrayList<>(roots.size());
         for (CommentModel root : roots) {
             addNodeRecursive(root, comments);
         }
@@ -107,9 +107,9 @@ public class CommentThreadServiceImpl implements CommentThreadService {
      * @return {@link CommentModel} tree of the CommentThread's comments
      */
     private List<CommentModel> getCommentTree(CommentThread thread) {
-        List<CommentModel> result = new LinkedList<CommentModel>();
+        List<CommentModel> result = new LinkedList<>();
 
-        Map<Long, CommentModel> replyMap = new HashMap<Long, CommentModel>();
+        Map<Long, CommentModel> replyMap = new HashMap<>();
 
         for (Comment comment : thread.getComments()) {
             // Skip unpublished comments
@@ -128,7 +128,7 @@ public class CommentThreadServiceImpl implements CommentThreadService {
                     pc.setLevel(replyPc.getLevel() + 1);
                     List<CommentModel> replyList = replyPc.getChildren();
                     if (replyList == null) {
-                        replyList = new LinkedList<CommentModel>();
+                        replyList = new LinkedList<>();
                         replyPc.setChildren(replyList);
                     }
                     replyList.add(pc);
@@ -194,11 +194,8 @@ public class CommentThreadServiceImpl implements CommentThreadService {
             }
 
             return digest.toString();
-        } catch (NoSuchAlgorithmException ex) {
-            // we expect no exception, since MD5 is a standard digester
-            throw new InternalError(ex.getMessage());
-        } catch (UnsupportedEncodingException ex) {
-            // we expect no exception, since UTF-8 is a standard encoding
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
+            // we expect no exception, since MD5 and UTF-8 are standards
             throw new InternalError(ex.getMessage());
         }
     }

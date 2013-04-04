@@ -72,7 +72,7 @@ public class CategoryPicklistBean implements PageSelectionObserver, Serializable
      * Returns a new {@link DualListModel} to be used for category selection.
      */
     public DualListModel<CategoryDto> getModel() {
-        return new DualListModel<CategoryDto>(allCategories, selectedCategories);
+        return new DualListModel<>(allCategories, selectedCategories);
     }
 
     /**

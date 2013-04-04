@@ -63,7 +63,7 @@ public class TagServiceImpl implements TagService {
     @Cacheable("tagCloud")
     @Override
     public Map<Tag, Float> createTagCloud(long limit) {
-        Map<Tag, Float> result = new HashMap<Tag, Float>();
+        Map<Tag, Float> result = new HashMap<>();
         Date now = new Date();
         Date limitDate = new Date(now.getTime() - limit);
 

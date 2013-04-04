@@ -108,12 +108,10 @@ public class LuceneSearchStrategy extends AbstractSearchStrategy {
         hilighter.setTextFragmenter(fragmenter);
         PageBridge bridge = new PageBridge();
 
-        List<String> highlighted = new ArrayList<String>(result.size());
+        List<String> highlighted = new ArrayList<>(result.size());
         for (Page page : result) {
             String plain = bridge.objectToString(page);
-            SimpleAnalyzer analyzer = new SimpleAnalyzer(Version.LUCENE_31);
-
-            try {
+            try (SimpleAnalyzer analyzer = new SimpleAnalyzer(Version.LUCENE_31)) {
                 TokenStream tokenStream = analyzer.tokenStream("text", new StringReader(plain));
 
                 StringBuilder sb = new StringBuilder();
@@ -128,8 +126,6 @@ public class LuceneSearchStrategy extends AbstractSearchStrategy {
                 highlighted.add(sb.toString());
             } catch (Exception ex) {
                 highlighted.add(plain);
-            } finally {
-                analyzer.close();
             }
         }
 

@@ -55,7 +55,7 @@ public class PictureDto extends BaseDto implements Geolocated {
     private BigDecimal latitude;
     private BigDecimal altitude;
     private DataHandler uploadFile;
-    private List<String> tags = new ArrayList<String>();
+    private List<String> tags = new ArrayList<>();
     private boolean commentable;
 
     public Date getCreateDate()                 { return createDate; }

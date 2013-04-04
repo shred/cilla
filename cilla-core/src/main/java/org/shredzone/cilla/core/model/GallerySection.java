@@ -43,7 +43,7 @@ import org.shredzone.cilla.ws.TimeDefinition;
 public class GallerySection extends Section {
     private static final long serialVersionUID = 5071579692034235164L;
 
-    private List<Picture> pictures = new ArrayList<Picture>();
+    private List<Picture> pictures = new ArrayList<>();
     private TimeZone defaultTimeZone;
     private TimeDefinition defaultTimePrecision;
     private boolean commentable;

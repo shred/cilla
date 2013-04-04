@@ -38,9 +38,7 @@ public class StringToTextSection implements Converter<String, TextSection> {
     public TextSection convert(String string) {
         try {
             return (TextSection) sectionDao.fetch(Long.parseLong(string));
-        } catch (NumberFormatException ex) {
-            return null;
-        } catch (ClassCastException ex) {
+        } catch (NumberFormatException | ClassCastException ex) {
             return null;
         }
     }

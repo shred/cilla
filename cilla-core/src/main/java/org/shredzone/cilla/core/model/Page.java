@@ -68,10 +68,10 @@ import org.shredzone.cilla.core.util.DateUtils;
 public class Page extends BaseModel implements Commentable {
     private static final long serialVersionUID = 1887769955448340721L;
 
-    private Set<Category> categories = new HashSet<Category>();
-    private SortedSet<Tag> tags = new TreeSet<Tag>();
-    private List<Section> sections = new ArrayList<Section>();
-    private Map<String, String> properties = new HashMap<String, String>();
+    private Set<Category> categories = new HashSet<>();
+    private SortedSet<Tag> tags = new TreeSet<>();
+    private List<Section> sections = new ArrayList<>();
+    private Map<String, String> properties = new HashMap<>();
     private CommentThread thread = new CommentThread();
     private String name;
     private String subject;

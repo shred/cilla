@@ -62,7 +62,7 @@ public class CillaRemoteAuthenticationProvider implements AuthenticationProvider
             RemoteUserDetails userDetails = (RemoteUserDetails) authentication.getPrincipal();
 
             GrantedRoleDto granted = loginWs.authenticate();
-            List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>(granted.getRights().size());
+            List<GrantedAuthority> authorities = new ArrayList<>(granted.getRights().size());
             for (String role : granted.getRights()) {
                 authorities.add(new SimpleGrantedAuthority(role));
             }

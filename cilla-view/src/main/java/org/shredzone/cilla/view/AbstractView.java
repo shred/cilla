@@ -177,11 +177,8 @@ public abstract class AbstractView {
             resp.setContentType(ds.getContentType());
             resp.setDateHeader("Last-Modified", ds.getLastModified().getTime());
 
-            InputStream in = ds.getInputStream();
-            try {
+            try (InputStream in = ds.getInputStream()) {
                 FileCopyUtils.copy(in, resp.getOutputStream());
-            } finally {
-                in.close();
             }
         } catch (IOException ex) {
             throw new ViewException(ex);

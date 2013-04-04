@@ -51,16 +51,12 @@ public final class TagUtils {
     throws JspException {
         int scopeId = PageContext.PAGE_SCOPE;
         if (scope != null) {
-            if ("page".equals(scope)) {
-                scopeId = PageContext.PAGE_SCOPE;
-            } else if ("request".equals(scope)) {
-                scopeId = PageContext.REQUEST_SCOPE;
-            } else if ("session".equals(scope)) {
-                scopeId = PageContext.SESSION_SCOPE;
-            } else if ("application".equals(scope)) {
-                scopeId = PageContext.APPLICATION_SCOPE;
-            } else {
-                throw new JspException("Unknown scope: " + scope);
+            switch (scope) {
+                case "page":        scopeId = PageContext.PAGE_SCOPE;        break;
+                case "request":     scopeId = PageContext.REQUEST_SCOPE;     break;
+                case "session":     scopeId = PageContext.SESSION_SCOPE;     break;
+                case "application": scopeId = PageContext.APPLICATION_SCOPE; break;
+                default: throw new JspException("Unknown scope: " + scope);
             }
         }
         pageContext.setAttribute(attribute, value, scopeId);

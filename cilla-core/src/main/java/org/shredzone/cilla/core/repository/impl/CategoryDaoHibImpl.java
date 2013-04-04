@@ -86,7 +86,7 @@ public class CategoryDaoHibImpl extends BaseDaoHibImpl<Category> implements Cate
     @Transactional(readOnly = true)
     @Override
     public Collection<Category> fetchRootCategoriesOfPage(Page page) {
-        Set<Category> result = new HashSet<Category>();
+        Set<Category> result = new HashSet<>();
         for (Category cat : page.getCategories()) {
             result.add(fetchRootCategory(cat));
         }
@@ -96,7 +96,7 @@ public class CategoryDaoHibImpl extends BaseDaoHibImpl<Category> implements Cate
     @Transactional(readOnly = true)
     @Override
     public Collection<Category> fetchCategoryTree(Category root) {
-        Set<Category> result = new HashSet<Category>();
+        Set<Category> result = new HashSet<>();
         fetchCategoryTreeRecursive(root, result);
         return result;
     }

@@ -57,7 +57,7 @@ public class LoginWsImpl implements LoginWs {
         GrantedRoleDto dto = new GrantedRoleDto();
         dto.setName(cud.getRole());
 
-        Set<String> rights = new HashSet<String>();
+        Set<String> rights = new HashSet<>();
         for (GrantedAuthority authority : cud.getAuthorities()) {
             rights.add(authority.getAuthority());
         }

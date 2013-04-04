@@ -244,9 +244,7 @@ public class FeedView extends AbstractView {
         try {
             SyndFeedOutput output = new SyndFeedOutput();
             output.output(feed, resp.getWriter());
-        } catch (IOException ex) {
-            throw new ViewException("Could not create feed", ex);
-        } catch (FeedException ex) {
+        } catch (FeedException | IOException ex) {
             throw new ViewException("Could not create feed", ex);
         }
     }
@@ -303,7 +301,7 @@ public class FeedView extends AbstractView {
             entry.getCategories().add(category);
         }
 
-        List<SyndPerson> authorList = new ArrayList<SyndPerson>();
+        List<SyndPerson> authorList = new ArrayList<>();
         User creator = page.getCreator();
         SyndPerson author = new SyndPersonImpl();
         author.setName(creator.getName());

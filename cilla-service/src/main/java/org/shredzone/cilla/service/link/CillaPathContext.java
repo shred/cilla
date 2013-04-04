@@ -51,7 +51,7 @@ public class CillaPathContext implements PathContext {
     private DateRange date;
     private Picture picture;
     private Header header;
-    private Map<String, Object> param = new HashMap<String, Object>();
+    private Map<String, Object> param = new HashMap<>();
 
     /**
      * {@link User}.

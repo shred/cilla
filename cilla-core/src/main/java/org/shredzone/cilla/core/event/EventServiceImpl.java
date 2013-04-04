@@ -48,8 +48,7 @@ public class EventServiceImpl implements EventService {
 
     private @Resource ApplicationContext applicationContext;
 
-    private final Map<EventType, List<EventInvoker>> invokerMap
-            = new EnumMap<EventType, List<EventInvoker>>(EventType.class);
+    private final Map<EventType, List<EventInvoker>> invokerMap = new EnumMap<>(EventType.class);
 
     /**
      * Sets up the {@link EventService}. It scans for all beans annotated with
@@ -95,7 +94,7 @@ public class EventServiceImpl implements EventService {
         for (EventType type : events) {
             List<EventInvoker> list = invokerMap.get(type);
             if (list == null) {
-                list = new LinkedList<EventInvoker>();
+                list = new LinkedList<>();
                 invokerMap.put(type, list);
             }
             list.add(invoker);

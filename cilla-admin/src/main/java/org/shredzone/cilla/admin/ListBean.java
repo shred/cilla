@@ -73,7 +73,7 @@ public class ListBean {
      * Returns a list of available users.
      */
     public List<SelectItem> createUserList() {
-        List<SelectItem> result = new ArrayList<SelectItem>();
+        List<SelectItem> result = new ArrayList<>();
         for (UserDto user : userWs.list(null)) {
             result.add(new SelectItem(user.getId(), user.getLogin(), user.getName()));
         }
@@ -84,7 +84,7 @@ public class ListBean {
      * Returns a list of available languages.
      */
     public List<SelectItem> createLanguageList() {
-        List<SelectItem> result = new ArrayList<SelectItem>();
+        List<SelectItem> result = new ArrayList<>();
         for (LanguageDto lang : systemWs.listLanguages()) {
             result.add(new SelectItem(lang.getId(), lang.getName()));
         }
@@ -114,7 +114,7 @@ public class ListBean {
     public List<SelectItem> getSectionList() {
         ResourceBundle msg = getResourceBundle();
 
-        List<SelectItem> result = new ArrayList<SelectItem>();
+        List<SelectItem> result = new ArrayList<>();
         for (String type : pageWs.getSectionTypes()) {
             String label = msg.getString("select.sectiontype." + type);
             String description = msg.getString("select.sectiontype.tt." + type);

@@ -41,18 +41,18 @@ public class ImageProcessingManager {
 
     private @Resource ApplicationContext applicationContext;
 
-    private List<ImageProcessingFactory> factories = new ArrayList<ImageProcessingFactory>();
+    private List<ImageProcessingFactory> factories = new ArrayList<>();
 
     /**
      * Sets up the manager.
      */
     @PostConstruct
     protected void setup() {
-        List<ImageProcessingFactory> collect = new ArrayList<ImageProcessingFactory>();
+        List<ImageProcessingFactory> collect = new ArrayList<>();
         for (ImageProcessingFactory ipf : applicationContext.getBeansOfType(ImageProcessingFactory.class).values()) {
             collect.add(ipf);
         }
-        Collections.sort(collect, new PriorityComparator<ImageProcessingFactory>(ImageProcessingFactory.class));
+        Collections.sort(collect, new PriorityComparator<>(ImageProcessingFactory.class));
         factories = Collections.unmodifiableList(collect);
     }
 

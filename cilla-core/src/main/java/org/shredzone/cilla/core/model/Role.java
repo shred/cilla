@@ -40,7 +40,7 @@ public class Role extends BaseModel {
     private static final long serialVersionUID = 8687576118285221859L;
 
     private String name;
-    private Collection<Authority> authorities = new HashSet<Authority>();
+    private Collection<Authority> authorities = new HashSet<>();
 
     /**
      * Descriptive name.

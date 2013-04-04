@@ -90,7 +90,7 @@ public class GallerySectionAssembler extends AbstractSectionAssembler<GallerySec
     }
 
     private void mergePictures(GallerySectionDto dto, GallerySection entity) throws CillaServiceException {
-        Set<Picture> removables = new HashSet<Picture>(entity.getPictures());
+        Set<Picture> removables = new HashSet<>(entity.getPictures());
         for (PictureDto picDto : dto.getPictures()) {
             Picture picture;
 
@@ -158,7 +158,7 @@ public class GallerySectionAssembler extends AbstractSectionAssembler<GallerySec
 
     @Override
     public void delete(GallerySection entity) throws CillaServiceException {
-        List<Picture> copied = new ArrayList<Picture>(entity.getPictures());
+        List<Picture> copied = new ArrayList<>(entity.getPictures());
         for (Picture picture : copied) {
             pictureService.removePicture(picture);
         }
