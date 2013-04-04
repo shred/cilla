@@ -31,10 +31,6 @@
             http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="session"><ref bean="mailSession"/></property>
-    </bean>
-
     <context:component-scan base-package="org.shredzone.cilla.service"/>
 
     <task:annotation-driven/>
