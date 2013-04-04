@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.shredzone.cilla.core.model.Category;
@@ -47,6 +48,7 @@ import org.shredzone.commons.view.annotation.PathPart;
 import org.shredzone.commons.view.annotation.View;
 import org.shredzone.commons.view.annotation.ViewGroup;
 import org.shredzone.commons.view.annotation.ViewHandler;
+import org.shredzone.commons.view.exception.ErrorResponseException;
 import org.shredzone.commons.view.exception.PageNotFoundException;
 import org.shredzone.commons.view.exception.ViewException;
 import org.springframework.beans.factory.annotation.Value;
@@ -94,11 +96,11 @@ public class FeedView extends AbstractView {
     })
     public void feedListView(
             @PathPart("#feed") String suffix,
-            HttpServletResponse resp, ViewContext context)
+            HttpServletRequest req, HttpServletResponse resp, ViewContext context)
     throws ViewException, CillaServiceException {
         String selfUrl = linkService.linkTo().param("feed", suffix).absolute().toString();
         FilterModel filter = new FilterModel();
-        fetchPages(filter, context, resp, selfUrl, "list", convertFeedType(suffix));
+        fetchPages(filter, context, req, resp, selfUrl, "list", convertFeedType(suffix));
     }
 
     /**
@@ -111,12 +113,12 @@ public class FeedView extends AbstractView {
     public void feedCategoryView(
             @PathPart("category.id") Category category,
             @PathPart("#feed") String suffix,
-            HttpServletResponse resp, ViewContext context)
+            HttpServletRequest req, HttpServletResponse resp, ViewContext context)
     throws ViewException, CillaServiceException {
         String selfUrl = linkService.linkTo().category(category).param("feed", suffix).absolute().toString();
         FilterModel filter = new FilterModel();
         filter.setCategory(category);
-        fetchPages(filter, context, resp, selfUrl, "category-" + category.getId(), convertFeedType(suffix));
+        fetchPages(filter, context, req, resp, selfUrl, "category-" + category.getId(), convertFeedType(suffix));
     }
 
     /**
@@ -129,12 +131,12 @@ public class FeedView extends AbstractView {
     public void feedTagView(
             @PathPart("#encode(tag.name)") Tag tag,
             @PathPart("#feed") String suffix,
-            HttpServletResponse resp, ViewContext context)
+            HttpServletRequest req, HttpServletResponse resp, ViewContext context)
     throws ViewException, CillaServiceException {
         String selfUrl = linkService.linkTo().tag(tag).param("feed", suffix).absolute().toString();
         FilterModel filter = new FilterModel();
         filter.setTag(tag);
-        fetchPages(filter, context, resp, selfUrl, "tag-" + tag.getName(), convertFeedType(suffix));
+        fetchPages(filter, context, req, resp, selfUrl, "tag-" + tag.getName(), convertFeedType(suffix));
     }
 
     /**
@@ -147,12 +149,12 @@ public class FeedView extends AbstractView {
     public void feedAuthorView(
             @PathPart("author.id") User user,
             @PathPart("#feed") String suffix,
-            HttpServletResponse resp, ViewContext context)
+            HttpServletRequest req, HttpServletResponse resp, ViewContext context)
     throws ViewException, CillaServiceException {
         String selfUrl = linkService.linkTo().author(user).param("feed", suffix).absolute().toString();
         FilterModel filter = new FilterModel();
         filter.setCreator(user);
-        fetchPages(filter, context, resp, selfUrl, "author-" + user.getId(), convertFeedType(suffix));
+        fetchPages(filter, context, req, resp, selfUrl, "author-" + user.getId(), convertFeedType(suffix));
     }
 
     /**
@@ -180,6 +182,8 @@ public class FeedView extends AbstractView {
      *            {@link FilterModel} with the query parameters
      * @param context
      *            {@link ViewContext} with the view context
+     * @param req
+     *            the {@link HttpServletRequest}
      * @param resp
      *            the {@link HttpServletResponse}
      * @param selfUrl
@@ -190,8 +194,16 @@ public class FeedView extends AbstractView {
      *            feed type, any type supported by ROME.
      */
     @SuppressWarnings("unchecked")
-    private void fetchPages(FilterModel filter, ViewContext context, HttpServletResponse resp, String selfUrl, String feedId, String type)
+    private void fetchPages(FilterModel filter, ViewContext context,
+        HttpServletRequest req, HttpServletResponse resp,
+        String selfUrl, String feedId, String type)
     throws ViewException, CillaServiceException {
+        Date lastModified = pageDao.fetchMinMaxModification()[1];
+
+        if (isNotModifiedSince(req, lastModified)) {
+            throw new ErrorResponseException(HttpServletResponse.SC_NOT_MODIFIED);
+        }
+
         SearchResult result = searchService.search(filter);
         result.setPaginator(new PaginatorModel(maxEntries));
 
@@ -201,8 +213,6 @@ public class FeedView extends AbstractView {
         } else if (type.startsWith("rss_")) {
             contentType = "application/rss+xml";
         }
-
-        Date lastModified = pageDao.fetchMinMaxModification()[1];
 
         String uriPrefix = context.getRequestServerUrl() + '/';
 
