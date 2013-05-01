@@ -34,6 +34,18 @@ public class LinkTag implements HeadTag {
     private final String media;
 
     /**
+     * Creates a new Link tag with unknown type.
+     *
+     * @param rel
+     *            link relationship
+     * @param href
+     *            url of the linked resource (relative or absolute)
+     */
+    public LinkTag(String rel, String href) {
+        this(rel, null, href, null);
+    }
+
+    /**
      * Creates a new Link tag.
      *
      * @param rel
