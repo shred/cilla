@@ -96,6 +96,7 @@ public class GalleryView extends AbstractView {
             return null;
         }
 
+        req.setAttribute("page", section.getPage());
         req.setAttribute("section", section);
         req.setAttribute("picture", picture);
         req.setAttribute("info", new PictureInfoModel(pictureList, current));
@@ -130,6 +131,7 @@ public class GalleryView extends AbstractView {
             return null;
         }
 
+        req.setAttribute("page", section.getPage());
         req.setAttribute("section", section);
         req.setAttribute("picture", picture);
 
