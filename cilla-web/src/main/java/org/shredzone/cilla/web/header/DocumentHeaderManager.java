@@ -42,14 +42,7 @@ public class DocumentHeaderManager {
      * @return {@link DocumentHeader}
      */
     public DocumentHeader getDocumentHeader() {
-        DocumentHeader header = applicationContext.getBean(DocumentHeader.class);
-        if (!header.isSetup()) {
-            for (DocumentHeaderObserver observer : applicationContext.getBeansOfType(DocumentHeaderObserver.class).values()) {
-                observer.onNewDocumentHeader(header);
-            }
-            header.setup();
-        }
-        return header;
+        return applicationContext.getBean(DocumentHeader.class);
     }
 
 }

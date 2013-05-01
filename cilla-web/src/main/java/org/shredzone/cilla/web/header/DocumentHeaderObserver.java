@@ -19,6 +19,8 @@
  */
 package org.shredzone.cilla.web.header;
 
+import javax.servlet.ServletRequest;
+
 /**
  * Beans implementing this interface are notified when a new {@link DocumentHeader}
  * instance was created. This is used for plugins to add tags to the document header, like
@@ -33,7 +35,9 @@ public interface DocumentHeaderObserver {
      *
      * @param header
      *            {@link DocumentHeader} that was created
+     * @param req
+     *            {@link ServletRequest} that is being processed
      */
-    void onNewDocumentHeader(DocumentHeader header);
+    void onNewDocumentHeader(DocumentHeader header, ServletRequest req);
 
 }

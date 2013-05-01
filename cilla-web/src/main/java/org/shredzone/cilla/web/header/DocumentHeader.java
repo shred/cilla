@@ -26,8 +26,13 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
+import javax.servlet.ServletRequest;
+
 import org.shredzone.cilla.web.header.tag.HeadTag;
 import org.shredzone.cilla.web.header.tag.MetaTag;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -42,9 +47,18 @@ import org.springframework.stereotype.Component;
 @Scope("request")
 public class DocumentHeader {
 
+    private @Resource ApplicationContext applicationContext;
+    private @Resource ServletRequest req;
+
     private SortedSet<MetaTag> metaTags = new TreeSet<>();
     private List<HeadTag> headTags = new ArrayList<>();
-    private boolean setup = false;
+
+    @PostConstruct
+    protected void setup() {
+        for (DocumentHeaderObserver observer : applicationContext.getBeansOfType(DocumentHeaderObserver.class).values()) {
+            observer.onNewDocumentHeader(this, req);
+        }
+    }
 
     /**
      * Adds a new {@link HeadTag} to the HTML document.
@@ -89,20 +103,6 @@ public class DocumentHeader {
      */
     public Collection<MetaTag> getMetaTags() {
         return Collections.unmodifiableCollection(metaTags);
-    }
-
-    /**
-     * Checks if the {@link DocumentHeader} is set up for this request. For internal use.
-     */
-    public boolean isSetup() {
-        return setup;
-    }
-
-    /**
-     * Notifies this {@link DocumentHeader} that it was set up. For internal use.
-     */
-    public void setup() {
-        setup = true;
     }
 
 }
