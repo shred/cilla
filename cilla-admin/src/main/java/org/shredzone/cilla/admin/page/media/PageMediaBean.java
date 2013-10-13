@@ -23,7 +23,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.faces.component.UIComponent;
 
 import org.primefaces.event.FileUploadEvent;
 import org.shredzone.cilla.admin.UploadedFileDataSource;
@@ -49,7 +48,6 @@ public class PageMediaBean implements PageSelectionObserver, Serializable {
 
     private PageDto page;
     private MediumDto[] selection;
-    private UIComponent uiTable;
 
     @Override
     public void onPageSelected(PageDto selectedPage) {
@@ -62,12 +60,6 @@ public class PageMediaBean implements PageSelectionObserver, Serializable {
      */
     public void setSelectedMedia(MediumDto[] selection) { this.selection = selection; }
     public MediumDto[] getSelectedMedia()        { return selection; }
-
-    /**
-     * {@link UIComponent} of the table showing the media images.
-     */
-    public UIComponent getUiTable()             { return uiTable; }
-    public void setUiTable(UIComponent uiTable) { this.uiTable = uiTable; }
 
     /**
      * Returns all {@link MediumDto} of the current page.

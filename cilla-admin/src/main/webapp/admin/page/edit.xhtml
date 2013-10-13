@@ -71,10 +71,10 @@
             <h:panelGrid columns="2">
               <h:outputLabel for="pageNewSection" value="#{msg['page.edit.newsection']}:" />
               <h:panelGroup>
-                <h:selectOneMenu id="pageNewSection" binding="#{pageBean.newSectionBinding}" immediate="true">
+                <h:selectOneMenu id="pageNewSection" binding="#{pageSectionBean.newSectionBinding}" immediate="true">
                   <f:selectItems value="#{listBean.sectionList}" />
                 </h:selectOneMenu>
-                <h:commandButton actionListener="#{pageBean.addNewSection()}" immediate="true" value="#{msg['page.edit.newsectionadd']}" />
+                <h:commandButton actionListener="#{pageSectionBean.addNewSection()}" immediate="true" value="#{msg['page.edit.newsectionadd']}" />
                 <p:message for="pageNewSection" />
               </h:panelGroup>
             </h:panelGrid>

@@ -25,14 +25,12 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.cilla.ws.page.PageDto;
 import org.shredzone.cilla.ws.page.PageInfoDto;
 import org.shredzone.cilla.ws.page.PageWs;
-import org.shredzone.cilla.ws.page.SectionDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -53,7 +51,6 @@ public class PageBean implements Serializable {
     private @Resource Collection<PageSelectionObserver> pageSelectionObservers;
 
     private PageDto page;
-    private UIInput sectionUi;
 
     /**
      * The {@link PageDto} being edited.
@@ -82,23 +79,6 @@ public class PageBean implements Serializable {
         } else {
             setPage(null);
         }
-    }
-
-    /**
-     * UI Binding for the section type selector.
-     */
-    public UIInput getNewSectionBinding()       { return sectionUi; }
-    public void setNewSectionBinding(UIInput selectBinding) { this.sectionUi = selectBinding; }
-
-    /**
-     * Adds a new section to the current page. The section type is selected by the UI
-     * component set at {@link #setNewSectionBinding(UIInput)}.
-     */
-    public void addNewSection() throws CillaServiceException {
-        String newType = sectionUi.getValue().toString();
-        SectionDto section = pageWs.createNewSection(newType);
-        page.getSections().add(section);
-        FacesContext.getCurrentInstance().renderResponse();
     }
 
     /**

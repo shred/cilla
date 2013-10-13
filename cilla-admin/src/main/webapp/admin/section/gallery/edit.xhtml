@@ -33,7 +33,7 @@
 
         <p:messages globalOnly="true" />
 
-        <p:dataGrid id="imageGrid" var="dto" value="#{galleryBean.pictures}" binding="#{galleryBean.uiGrid}" columns="4" rows="16" paginator="true">
+        <p:dataGrid id="imageGrid" var="dto" value="#{galleryBean.pictures}" binding="#{galleryGridBean.uiGrid}" columns="4" rows="16" paginator="true">
           <p:column>
             <p:fieldset>
               <p:toolbar style="white-space:nowrap">
@@ -53,7 +53,7 @@
               </p:toolbar>
               <div class="previewImage">
                 <p:graphicImage value="#{galleryImageBean.thumbnail}" style="pointer-events:none">
-                  <f:param name="index" value="#{galleryBean.uiGrid.rowIndex}" />
+                  <f:param name="index" value="#{galleryGridBean.uiGrid.rowIndex}" />
                 </p:graphicImage>
               </div>
               <h:outputText value="#{dto.caption}" style="font-size:80%" />
