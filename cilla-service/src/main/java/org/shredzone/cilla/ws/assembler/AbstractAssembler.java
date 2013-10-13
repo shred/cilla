@@ -36,12 +36,10 @@ import org.shredzone.cilla.ws.exception.CillaServiceException;
 public abstract class AbstractAssembler<F extends BaseModel, T extends BaseDto> implements Assembler<F, T> {
 
     /**
-     * Assembles a collection of entities with the given assembler.
+     * Assembles a collection of entities with this assembler.
      *
      * @param from
      *            {@link Collection} to assemble
-     * @param assembler
-     *            {@link Assembler} to be used
      * @return List containing the assembled DTO
      */
     public List<T> bulkAssemble(Collection<F> from) throws CillaServiceException {

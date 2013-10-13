@@ -68,7 +68,7 @@ public interface TextFormatter {
     /**
      * Strips all html from the given string. Opening tags are replaced by a whitespace.
      *
-     * @param str
+     * @param html
      *            HTML string to be stripped
      * @return Plain text
      */

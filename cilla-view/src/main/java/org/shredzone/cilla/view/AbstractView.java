@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.shredzone.cilla.core.datasource.ResourceDataSource;
 import org.shredzone.cilla.core.model.Page;
-import org.shredzone.cilla.core.model.Section;
 import org.shredzone.cilla.service.PageService;
 import org.shredzone.cilla.service.link.LinkService;
 import org.shredzone.cilla.web.page.ResourceLockManager;
@@ -106,8 +105,8 @@ public abstract class AbstractView {
      * been unlocked yet. If a view of a locked page has been invoked, the visitor will be
      * redirected to the page where the unlock question is asked.
      *
-     * @param section
-     *            {@link Section} that is to be shown
+     * @param page
+     *            {@link Page} that is to be shown
      * @param req
      *            {@link HttpServletRequest}
      * @param resp

@@ -32,7 +32,7 @@ import org.shredzone.commons.text.TextFilter;
  * A {@link StringBuilder} is passed to the filter. It contains formatted HTML, and may
  * either modify the {@link StringBuilder}, or create a new one.
  * <p>
- * {@link TextFormat#HTML} and {@value TextFormat#PREFORMATTED} are not post-processed.
+ * {@link TextFormat#HTML} and {@link TextFormat#PREFORMATTED} are not post-processed.
  *
  * @author Richard "Shred" Körber
  */

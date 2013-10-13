@@ -80,7 +80,7 @@ public interface BaseDao<T extends BaseModel> {
     List<T> fetchAll();
 
     /**
-     * Creates a {@link Critera} object that will result entities of this type.
+     * Creates a {@link Criteria} object that will result entities of this type.
      * <p>
      * The {@link Criteria} is bound to the current session.
      *

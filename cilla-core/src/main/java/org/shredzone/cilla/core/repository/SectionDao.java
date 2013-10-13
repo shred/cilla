@@ -30,7 +30,7 @@ import org.shredzone.cilla.core.model.Section;
 public interface SectionDao extends BaseDao<Section> {
 
     /**
-     * Creates a {@link Critera} object that will result entities of the given type. This
+     * Creates a {@link Criteria} object that will result entities of the given type. This
      * method is used to return only entities of the given Section subtype.
      * <p>
      * The {@link Criteria} is bound to the current session.

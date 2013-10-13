@@ -117,10 +117,8 @@ public abstract class AbstractImageBean implements Serializable {
      *
      * @param dh
      *            {@link DataHandler} to stream
-     * @param width
-     *            Maximum image width
-     * @param height
-     *            Maximum image height
+     * @param process
+     *            Width, height and image type to be used
      * @return {@link StreamedContent} containing that image
      */
     protected StreamedContent createStreamedContent(DataHandler dh, ImageProcessing process) {

@@ -23,11 +23,9 @@ import java.io.IOException;
 import java.util.Locale;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspWriter;
 
 import org.shredzone.cilla.core.model.is.Commentable;
-import org.shredzone.cilla.service.search.SearchResult;
 import org.shredzone.cilla.web.comment.CommentModel;
 import org.shredzone.cilla.web.comment.CommentThreadModel;
 import org.shredzone.cilla.web.comment.CommentThreadService;
@@ -55,14 +53,16 @@ public class CommentFragmentRenderer {
     /**
      * Renders a comment box.
      *
-     * @param result
-     *            {@link SearchResult}, today's calendar if {@code null}
+     * @param commentable
+     *            {@link Commentable} to be commented
+     * @param enabled
+     *            {@code true} if commenting is enabled
      * @param locale
-     *            {@link Locale} of the calendar output
-     * @param resp
-     *            {@link HttpServletResponse} for creating links
+     *            {@link Locale} of the comment
+     * @param context
+     *            {@link FragmentContext} of the commenting fragment
      * @param out
-     *            {@link JspWriter} to write the calendar to
+     *            {@link JspWriter} to write the comment to
      */
     @Fragment(name = "comment")
     public void commentFragment(
@@ -70,7 +70,6 @@ public class CommentFragmentRenderer {
         @FragmentValue("#enabled") Boolean enabled,
         Locale locale,
         FragmentContext context,
-        HttpServletResponse resp,
         JspWriter out
     ) throws CillaServiceException, IOException {
         CommentThreadModel thread = commentThreadService.getCommentThread(commentable);
