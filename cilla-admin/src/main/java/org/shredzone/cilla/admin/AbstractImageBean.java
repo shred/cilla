@@ -147,7 +147,8 @@ public abstract class AbstractImageBean implements Serializable {
         }
 
         if (scaledData != null) {
-            return new DefaultStreamedContent(new ByteArrayInputStream(scaledData), "image/png");
+            return new DefaultStreamedContent(new ByteArrayInputStream(scaledData),
+                            process.getType().getContentType());
         } else {
             return createEmptyStreamedContent();
         }
