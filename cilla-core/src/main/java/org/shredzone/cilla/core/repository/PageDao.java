@@ -131,6 +131,16 @@ public interface PageDao extends BaseDao<Page> {
      */
     List<Page> fetchBadPublishState();
 
-
+    /**
+     * Fetches all pages having the property with the key set to the given value. If the
+     * value is {@code null}, all pages having the property set at all will be returned.
+     *
+     * @param key
+     *            Property key to find, must not be {@code null}
+     * @param value
+     *            Property value to find, or {@code null} if the value does not matter
+     * @return List of {@link Page} matching the query
+     */
+    List<Page> fetchHavingProperty(String key, String value);
 
 }

@@ -214,7 +214,7 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
             return Collections.emptyList();
         }
 
-        return (List<Page>) getCurrentSession()
+        return getCurrentSession()
                 .createQuery("FROM Page" +
                         " WHERE (subject IS NOT NULL AND subject=:subject)" +
                         " AND (publication IS NOT NULL AND publication<=:now)" +
@@ -230,7 +230,7 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
     @Transactional(readOnly = true)
     @Override
     public List<String> fetchAllSubjects() {
-        return (List<String>) getCurrentSession()
+        return getCurrentSession()
                 .createQuery("SELECT DISTINCT subject FROM Page" +
                         " ORDER BY subject ASC")
                 .list();
@@ -262,6 +262,26 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
                         " AND publishedState=true)")
                 .setParameter("now", new Date())
                 .list();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Page> fetchHavingProperty(String key, String value) {
+        if (value != null) {
+            return getCurrentSession()
+                            .createQuery("FROM Page p" +
+                                    " WHERE p.properties[:key]=:value")
+                            .setParameter("key", key)
+                            .setParameter("value", value)
+                            .list();
+        } else {
+            return getCurrentSession()
+                            .createQuery("SELECT p FROM Page p" +
+                                    " JOIN p.properties o" +
+                                    " WHERE index(o)=:key")
+                            .setParameter("key", key)
+                            .list();
+        }
     }
 
 }
