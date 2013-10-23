@@ -25,7 +25,6 @@
         <hibernatesearch.version>3.4.2.Final</hibernatesearch.version>
         <hibernatevalidator.version>5.0.1.Final</hibernatevalidator.version>
         <jgroups.version>3.0.9.Final</jgroups.version>
-        <jshred.version>18</jshred.version>
         <jsf.version>2.1.10</jsf.version>
         <lucene.version>3.6.2</lucene.version><!-- HSEARCH-1191 -->
         <metadataextractor.version>2.6.2</metadataextractor.version>
@@ -264,11 +263,6 @@
                 <groupId>rome</groupId>
                 <artifactId>rome</artifactId>
                 <version>${rome.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.java</groupId>
-                <artifactId>textile-j</artifactId>
-                <version>${textilej.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
