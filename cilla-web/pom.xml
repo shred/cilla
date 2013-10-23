@@ -55,12 +55,11 @@
         </dependency>
         <dependency>
             <groupId>org.shredzone.commons</groupId>
-            <artifactId>commons-text</artifactId>
+            <artifactId>commons-taglib</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>org.shredzone.jshred</groupId>
-            <artifactId>jshred-spring</artifactId>
+            <groupId>org.shredzone.commons</groupId>
+            <artifactId>commons-text</artifactId>
         </dependency>
 
         <dependency>

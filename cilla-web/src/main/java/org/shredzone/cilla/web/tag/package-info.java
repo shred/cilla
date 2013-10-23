@@ -27,6 +27,6 @@
 @TagInfo("Support tags for Cilla")
 package org.shredzone.cilla.web.tag;
 
-import org.shredzone.jshred.spring.taglib.annotation.TagInfo;
-import org.shredzone.jshred.spring.taglib.annotation.TagLib;
+import org.shredzone.commons.taglib.annotation.TagInfo;
+import org.shredzone.commons.taglib.annotation.TagLib;
 

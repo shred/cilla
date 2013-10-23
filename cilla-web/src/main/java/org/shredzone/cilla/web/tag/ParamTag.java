@@ -23,9 +23,9 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTag;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import org.shredzone.jshred.spring.taglib.TaglibUtils;
-import org.shredzone.jshred.spring.taglib.annotation.TagInfo;
-import org.shredzone.jshred.spring.taglib.annotation.TagParameter;
+import org.shredzone.commons.taglib.TaglibUtils;
+import org.shredzone.commons.taglib.annotation.TagInfo;
+import org.shredzone.commons.taglib.annotation.TagParameter;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -35,7 +35,7 @@ import org.springframework.stereotype.Component;
  *
  * @author Richard "Shred" Körber
  */
-@org.shredzone.jshred.spring.taglib.annotation.Tag(type = BodyTag.class)
+@org.shredzone.commons.taglib.annotation.Tag(type = BodyTag.class)
 @TagInfo("A parameter to the parent tag.")
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)

@@ -28,8 +28,8 @@ import org.shredzone.cilla.core.model.is.Commentable;
 import org.shredzone.cilla.web.comment.CommentThreadModel;
 import org.shredzone.cilla.web.comment.CommentThreadService;
 import org.shredzone.cilla.web.util.TagUtils;
-import org.shredzone.jshred.spring.taglib.annotation.TagInfo;
-import org.shredzone.jshred.spring.taglib.annotation.TagParameter;
+import org.shredzone.commons.taglib.annotation.TagInfo;
+import org.shredzone.commons.taglib.annotation.TagParameter;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -39,7 +39,7 @@ import org.springframework.stereotype.Component;
  *
  * @author Richard "Shred" Körber
  */
-@org.shredzone.jshred.spring.taglib.annotation.Tag(type = BodyTag.class)
+@org.shredzone.commons.taglib.annotation.Tag(type = BodyTag.class)
 @TagInfo("Fetches a CommentThreadModel for a Commentable")
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)

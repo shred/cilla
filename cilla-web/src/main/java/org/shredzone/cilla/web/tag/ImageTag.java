@@ -35,8 +35,8 @@ import org.shredzone.cilla.service.link.LinkBuilder;
 import org.shredzone.cilla.service.link.LinkService;
 import org.shredzone.cilla.web.page.ResourceLockManagerImpl;
 import org.shredzone.cilla.web.util.TagUtils;
-import org.shredzone.jshred.spring.taglib.annotation.TagInfo;
-import org.shredzone.jshred.spring.taglib.annotation.TagParameter;
+import org.shredzone.commons.taglib.annotation.TagInfo;
+import org.shredzone.commons.taglib.annotation.TagParameter;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -47,7 +47,7 @@ import org.springframework.web.util.HtmlUtils;
  *
  * @author Richard "Shred" Körber
  */
-@org.shredzone.jshred.spring.taglib.annotation.Tag(type = BodyTag.class)
+@org.shredzone.commons.taglib.annotation.Tag(type = BodyTag.class)
 @TagInfo("Creates an image tag to a medium or picture.")
 @Component
 @Scope(BeanDefinition.SCOPE_PROTOTYPE)
