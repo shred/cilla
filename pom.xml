@@ -102,10 +102,6 @@
     </build>
     <repositories>
         <repository>
-            <id>shredzone.org</id>
-            <url>http://maven.shredzone.org/release/</url>
-        </repository>
-        <repository>
             <id>jboss</id>
             <url>https://repository.jboss.org/nexus/content/groups/public-jboss</url>
         </repository>

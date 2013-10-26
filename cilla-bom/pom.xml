@@ -13,11 +13,11 @@
     <description>Cilla Bill of Materials</description>
     <properties>
         <aspectj.version>1.7.3</aspectj.version>
-        <commonscaptcha.version>0.1-SNAPSHOT</commonscaptcha.version>
-        <commonsgravatar.version>0.1-SNAPSHOT</commonsgravatar.version>
-        <commonstaglib.version>0.1-SNAPSHOT</commonstaglib.version>
-        <commonstext.version>0.1-SNAPSHOT</commonstext.version>
-        <commonsview.version>0.1-SNAPSHOT</commonsview.version>
+        <commonscaptcha.version>1.0</commonscaptcha.version>
+        <commonsgravatar.version>1.0</commonsgravatar.version>
+        <commonstaglib.version>1.0</commonstaglib.version>
+        <commonstext.version>1.0</commonstext.version>
+        <commonsview.version>1.0</commonsview.version>
         <cxf.version>2.7.7</cxf.version>
         <ehcache.version>2.6.6</ehcache.version>
         <el.jboss.version>2.0.2.CR1</el.jboss.version>
