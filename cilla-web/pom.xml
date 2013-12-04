@@ -45,7 +45,17 @@
     <dependencies>
         <dependency>
             <groupId>org.shredzone.cilla</groupId>
+            <artifactId>cilla-core</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.shredzone.cilla</groupId>
             <artifactId>cilla-service</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.shredzone.cilla</groupId>
+            <artifactId>cilla-ws</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
 
@@ -61,10 +71,14 @@
             <groupId>org.shredzone.commons</groupId>
             <artifactId>commons-text</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.shredzone.commons</groupId>
+            <artifactId>commons-view</artifactId>
+        </dependency>
 
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -72,15 +86,29 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-expression</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>el-api</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -97,11 +125,5 @@
             <artifactId>jstl-api</artifactId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>javax.el</groupId>
-            <artifactId>el-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
     </dependencies>
 </project>
