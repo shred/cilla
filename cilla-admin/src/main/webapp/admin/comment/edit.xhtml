@@ -57,7 +57,7 @@
 
           <h:outputLabel for="commentCreation" value="#{msg['comment.edit.creation']}:" />
           <h:panelGroup>
-            <ca:datetime id="commentCreation" compositeId="commentCreation" value="#{commentBean.comment.creation}" />
+            <p:calendar id="commentCreation" value="#{commentBean.comment.creation}" timeZone="#{loginBean.timeZone}" pattern="#{msg['tag.datetime.pattern']}"/>
             <p:message for="commentCreation" />
           </h:panelGroup>
 

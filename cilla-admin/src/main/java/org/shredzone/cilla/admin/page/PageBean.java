@@ -21,11 +21,9 @@ package org.shredzone.cilla.admin.page;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.faces.context.FacesContext;
 
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.cilla.ws.page.PageDto;
@@ -143,14 +141,6 @@ public class PageBean implements Serializable {
      */
     public String getPageUrl() throws CillaServiceException {
         return pageWs.previewUrl(page.getId());
-    }
-
-    /**
-     * Sets the publication date of the currently selected {@link PageDto} to now.
-     */
-    public void publishNow() {
-        page.setPublication(new Date());
-        FacesContext.getCurrentInstance().renderResponse();
     }
 
     /**

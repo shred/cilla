@@ -92,10 +92,12 @@
 
           <h:outputLabel for="headerCreation" value="#{msg['header.edit.creation']}:" />
           <h:panelGroup>
-            <ca:datetime id="headerCreation" compositeId="headerCreation" value="#{headerBean.header.creation}" readonly="true" />
+            <p:inputMask id="headerCreation" value="#{headerBean.header.creation}" mask="#{msg['tag.datetime.mask']}" readonly="true">
+              <f:convertDateTime pattern="#{msg['tag.datetime.pattern']}" timeZone="#{loginBean.timeZone}"/>
+            </p:inputMask>
             <p:message for="headerCreation" />
           </h:panelGroup>
-          
+
           <h:outputText />
           <h:panelGroup>
             <p:selectBooleanCheckbox id="headerCommentable" value="#{headerBean.header.commentable}" />

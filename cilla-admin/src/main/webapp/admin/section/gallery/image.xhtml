@@ -52,10 +52,10 @@
 
           <h:outputLabel for="imageCreation" value="#{msg['section.gallery.image.creation']}:" />
           <h:panelGroup>
-            <ca:datetime id="imageCreation" compositeId="imageCreation" value="#{picture.createDate}" />
+            <p:calendar id="imageCreation" value="#{picture.createDate}" timeZone="#{loginBean.timeZone}" pattern="#{msg['tag.datetime.pattern']}"/>
             <p:message for="imageCreation" />
           </h:panelGroup>
-          
+
           <h:outputLabel for="imageTag" value="#{msg['page.edit.tag']}:" />
           <h:panelGroup>
             <p:outputPanel id="imageTagPanel">

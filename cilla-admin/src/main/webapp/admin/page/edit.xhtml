@@ -177,26 +177,33 @@
 
               <h:outputLabel for="pageCreation" value="#{msg['page.edit.creation']}:" />
               <h:panelGroup>
-                <ca:datetime id="pageCreation" compositeId="pageCreation" value="#{pageBean.page.creation}" readonly="true" />
+                <p:inputMask id="pageCreation" value="#{pageBean.page.creation}" mask="#{msg['tag.datetime.mask']}" readonly="true">
+                  <f:convertDateTime pattern="#{msg['tag.datetime.pattern']}" timeZone="#{loginBean.timeZone}"/>
+                </p:inputMask>
                 <p:message for="pageCreation" />
               </h:panelGroup>
 
               <h:outputLabel for="pageModification" value="#{msg['page.edit.modification']}:" />
               <h:panelGroup>
-                <ca:datetime id="pageModification" compositeId="pageModification" value="#{pageBean.page.modification}" readonly="true" />
+                <p:inputMask id="pageModification" value="#{pageBean.page.modification}" mask="#{msg['tag.datetime.mask']}" readonly="true">
+                  <f:convertDateTime pattern="#{msg['tag.datetime.pattern']}" timeZone="#{loginBean.timeZone}"/>
+                </p:inputMask>
                 <p:message for="pageModification" />
               </h:panelGroup>
 
               <h:outputLabel for="pagePublication" value="#{msg['page.edit.publication']}:" />
-              <h:panelGroup>
-                <ca:datetime id="pagePublication" compositeId="pagePublication" value="#{pageBean.page.publication}" compositeImmediate="true" />
-                <p:commandButton actionListener="#{pageBean.publishNow()}" value="#{msg['page.edit.publication.now']}" update=":editForm" immediate="true" />
+              <h:panelGroup id="pagePublicationGroup">
+                <p:calendar id="pagePublication" value="#{pageBean.page.publication}" widgetVar="pagePublicationPicker" timeZone="#{loginBean.timeZone}" pattern="#{msg['tag.datetime.pattern']}"/>
+                <p:commandButton type="button" onclick="pagePublicationPicker.setDate(new Date());" value="#{msg['page.edit.publication.now']}" />
+                <p:commandButton type="button" onclick="pagePublicationPicker.setDate(null);" value="#{msg['page.edit.publication.never']}" />
                 <p:message for="pagePublication" />
               </h:panelGroup>
 
               <h:outputLabel for="pageExpiration" value="#{msg['page.edit.expiration']}:" />
               <h:panelGroup>
-                <ca:datetime id="pageExpiration" compositeId="pageExpiration" value="#{pageBean.page.expiration}" />
+                <p:calendar id="pageExpiration" value="#{pageBean.page.expiration}" widgetVar="pageExpirationPicker" timeZone="#{loginBean.timeZone}" pattern="#{msg['tag.datetime.pattern']}"/>
+                <p:commandButton type="button" onclick="pageExpirationPicker.setDate(new Date());" value="#{msg['page.edit.expiration.now']}" />
+                <p:commandButton type="button" onclick="pageExpirationPicker.setDate(null);" value="#{msg['page.edit.expiration.never']}" />
                 <p:message for="pageExpiration" />
               </h:panelGroup>
 
