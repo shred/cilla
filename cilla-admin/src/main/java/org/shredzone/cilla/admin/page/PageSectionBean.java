@@ -38,7 +38,7 @@ import org.springframework.stereotype.Component;
  * @author Richard "Shred" Körber
  */
 @Component
-@Scope("view")
+@Scope("request")
 public class PageSectionBean implements Serializable {
     private static final long serialVersionUID = 9023901491882118139L;
 

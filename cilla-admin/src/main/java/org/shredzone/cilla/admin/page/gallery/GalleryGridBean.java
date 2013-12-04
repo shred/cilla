@@ -32,7 +32,7 @@ import org.springframework.stereotype.Controller;
  * @author Richard "Shred" Körber
  */
 @Controller
-@Scope("view")
+@Scope("request")
 public class GalleryGridBean implements Serializable {
     private static final long serialVersionUID = 5676997413214057854L;
 

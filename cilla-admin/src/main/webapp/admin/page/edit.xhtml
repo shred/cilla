@@ -74,7 +74,7 @@
                 <h:selectOneMenu id="pageNewSection" binding="#{pageSectionBean.newSectionBinding}" immediate="true">
                   <f:selectItems value="#{listBean.sectionList}" />
                 </h:selectOneMenu>
-                <h:commandButton actionListener="#{pageSectionBean.addNewSection()}" immediate="true" value="#{msg['page.edit.newsectionadd']}" />
+                <h:commandButton action="#{pageSectionBean.addNewSection()}" immediate="true" value="#{msg['page.edit.newsectionadd']}" />
                 <p:message for="pageNewSection" />
               </h:panelGroup>
             </h:panelGrid>

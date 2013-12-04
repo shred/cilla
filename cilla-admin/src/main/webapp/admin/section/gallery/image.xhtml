@@ -27,9 +27,7 @@
   <composite:implementation>
     <p:toolbar>
       <p:toolbarGroup>
-        <p:commandButton id="submit" type="submit" ajax="false"
-            actionListener="#{galleryBean.commitTimeOverride()}"
-            value="#{msg['section.gallery.image.commit']}" icon="ui-icon-check" />
+        <p:commandButton id="submit" type="submit" ajax="false" action="#{galleryBean.commitTimeOverride()}" value="#{msg['section.gallery.image.commit']}" icon="ui-icon-check" />
       </p:toolbarGroup>
     </p:toolbar>
 

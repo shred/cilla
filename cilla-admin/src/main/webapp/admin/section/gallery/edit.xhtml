@@ -38,8 +38,8 @@
             <p:fieldset>
               <p:toolbar style="white-space:nowrap">
                 <p:toolbarGroup>
-                  <p:commandButton actionListener="#{galleryBean.moveImage(dto, -1)}" immediate="true" update=":imageForm:imageGrid" icon="ui-icon-arrowthick-1-w" />
-                  <p:commandButton actionListener="#{galleryBean.moveImage(dto, 1)}" immediate="true" update=":imageForm:imageGrid" icon="ui-icon-arrowthick-1-e" />
+                  <p:commandButton action="#{galleryBean.moveImage(dto, -1)}" immediate="true" update=":imageForm:imageGrid" icon="ui-icon-arrowthick-1-w" />
+                  <p:commandButton action="#{galleryBean.moveImage(dto, 1)}" immediate="true" update=":imageForm:imageGrid" icon="ui-icon-arrowthick-1-e" />
                   <p:commandButton immediate="true" oncomplete="editDialog.show()" update=":editForm:editDetail" icon="ui-icon-pencil">
                     <f:setPropertyActionListener target="#{galleryBean.selectedImage}" value="#{dto}" />
                   </p:commandButton>
@@ -83,7 +83,7 @@
     <ui:define name="dialog">
       <h:form id="editForm">
         <p:confirmDialog header="#{msg['section.gallery.delete.header']}" widgetVar="deleteConfirmation" message="#{msg['section.gallery.delete.message']}">
-          <p:commandButton value="#{msg['section.gallery.delete.yes']}" actionListener="#{galleryBean.removeImage(galleryBean.selectedImage)}" update=":imageForm:imageGrid" oncomplete="deleteConfirmation.hide()" />
+          <p:commandButton value="#{msg['section.gallery.delete.yes']}" action="#{galleryBean.removeImage(galleryBean.selectedImage)}" update=":imageForm:imageGrid" oncomplete="deleteConfirmation.hide()" />
           <p:commandButton value="#{msg['section.gallery.delete.no']}" onclick="deleteConfirmation.hide()" type="button" />
         </p:confirmDialog>
 

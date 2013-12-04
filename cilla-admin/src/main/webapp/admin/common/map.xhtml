@@ -30,9 +30,9 @@
 
         <p:toolbar>
           <p:toolbarGroup>
-            <p:commandButton id="submit" type="submit" actionListener="#{mapModel.commit()}" ajax="false" value="#{msg['mapedit.commit']}" icon="ui-icon-check" />
+            <p:commandButton id="submit" type="submit" action="#{mapModel.commit()}" ajax="false" value="#{msg['mapedit.commit']}" icon="ui-icon-check" />
             <p:commandButton id="cancel" type="submit" immediate="true" ajax="false" value="#{msg['mapedit.cancel']}" icon="ui-icon-cancel" />
-            <p:commandButton id="remove" type="submit" actionListener="#{mapModel.clear()}" immediate="true" ajax="false" value="#{msg['mapedit.remove']}" icon="ui-icon-trash" />
+            <p:commandButton id="remove" type="submit" action="#{mapModel.clear()}" immediate="true" ajax="false" value="#{msg['mapedit.remove']}" icon="ui-icon-trash" />
           </p:toolbarGroup>
         </p:toolbar>
 
