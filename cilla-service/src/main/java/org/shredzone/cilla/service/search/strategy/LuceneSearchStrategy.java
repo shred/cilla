@@ -111,7 +111,7 @@ public class LuceneSearchStrategy extends AbstractSearchStrategy {
         List<String> highlighted = new ArrayList<>(result.size());
         for (Page page : result) {
             String plain = bridge.objectToString(page);
-            try (SimpleAnalyzer analyzer = new SimpleAnalyzer(Version.LUCENE_31)) {
+            try (SimpleAnalyzer analyzer = new SimpleAnalyzer(Version.LUCENE_36)) {
                 TokenStream tokenStream = analyzer.tokenStream("text", new StringReader(plain));
 
                 StringBuilder sb = new StringBuilder();

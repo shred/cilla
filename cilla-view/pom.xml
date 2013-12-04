@@ -31,58 +31,54 @@
     <artifactId>cilla-view</artifactId>
     <name>Cilla Views</name>
     <description>Cilla Standard Views</description>
-    <licenses>
-        <license>
-            <name>GNU Affero General Public License Version 3</name>
-            <url>LICENSE-AGPL.txt</url>
-        </license>
-    </licenses>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.shredzone.cilla</groupId>
+                <artifactId>cilla-bom</artifactId>
+                <version>0.1-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.shredzone.cilla</groupId>
             <artifactId>cilla-core</artifactId>
             <version>0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.shredzone.cilla</groupId>
             <artifactId>cilla-service</artifactId>
             <version>0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.shredzone.cilla</groupId>
             <artifactId>cilla-web</artifactId>
             <version>0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.shredzone.commons</groupId>
             <artifactId>commons-view</artifactId>
-            <version>${commonsview.version}</version>
-            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>rome</groupId>
             <artifactId>rome</artifactId>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>

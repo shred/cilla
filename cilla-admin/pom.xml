@@ -32,12 +32,6 @@
     <packaging>war</packaging>
     <name>Cilla Admin</name>
     <description>Cilla Administration Center</description>
-    <licenses>
-        <license>
-            <name>GNU Affero General Public License Version 3</name>
-            <url>LICENSE-AGPL.txt</url>
-        </license>
-    </licenses>
     <build>
         <plugins>
             <plugin>
@@ -67,44 +61,48 @@
             </plugin>
         </plugins>
     </build>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.shredzone.cilla</groupId>
+                <artifactId>cilla-bom</artifactId>
+                <version>0.1-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.shredzone.cilla</groupId>
             <artifactId>cilla-ws</artifactId>
             <version>0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.shredzone.cilla</groupId>
             <artifactId>cilla-ws-client</artifactId>
             <version>0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>com.sun.faces</groupId>
             <artifactId>jsf-api</artifactId>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.sun.faces</groupId>
             <artifactId>jsf-impl</artifactId>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.el</groupId>
             <artifactId>jboss-el</artifactId>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.primefaces.themes</groupId>
             <artifactId>start</artifactId>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <!-- Required by primefaces -->
@@ -121,27 +119,22 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>

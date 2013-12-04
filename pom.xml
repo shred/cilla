@@ -20,56 +20,39 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.shredzone</groupId>
-        <artifactId>parent</artifactId>
-        <version>1.0.0</version>
-    </parent>
     <groupId>org.shredzone.cilla</groupId>
     <artifactId>cilla</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Cilla Parent</name>
+    <name>Cilla</name>
     <description>Cilla Blog Management System</description>
-    <inceptionYear>2009</inceptionYear>
     <url>http://cilla.shredzone.org</url>
+    <inceptionYear>2009</inceptionYear>
     <licenses>
         <license>
             <name>GNU Affero General Public License Version 3</name>
             <url>LICENSE-AGPL.txt</url>
         </license>
     </licenses>
+    <scm>
+        <url>scm:git:git@github.com:shred/cilla.git</url>
+        <connection>scm:git:git@github.com:shred/cilla.git</connection>
+        <developerConnection>scm:git:git@github.com:shred/cilla.git</developerConnection>
+    </scm>
     <issueManagement>
         <system>Redmine</system>
         <url>http://www.shredzone.org/projects/cilla/issues</url>
     </issueManagement>
-    <scm>
-        <connection>scm:git:git@github.com:shred/cilla.git</connection>
-        <developerConnection>scm:git:git@github.com:shred/cilla.git</developerConnection>
-        <url>scm:git:git@github.com:shred/cilla.git</url>
-    </scm>
-    <properties>
-        <commonscaptcha.version>0.1-SNAPSHOT</commonscaptcha.version>
-        <commonsgravatar.version>0.1-SNAPSHOT</commonsgravatar.version>
-        <commonstext.version>0.1-SNAPSHOT</commonstext.version>
-        <commonsview.version>0.1-SNAPSHOT</commonsview.version>
-        <jshred.version>18</jshred.version>
-    </properties>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.shredzone</groupId>
-                <artifactId>bom</artifactId>
-                <version>1.1</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+    <developers>
+        <developer>
+            <id>shred</id>
+            <name>Richard Körber</name>
+        </developer>
+    </developers>
     <modules>
+        <module>cilla-bom</module>
         <module>cilla-ws</module>
         <module>cilla-core</module>
         <module>cilla-service</module>
@@ -78,15 +61,41 @@
         <module>cilla-ws-client</module>
         <module>cilla-admin</module>
     </modules>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    </properties>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>2.5.1</version>
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
+                    <optimize>true</optimize>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/.gitignore</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.4.1</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
+                    <pushChanges>false</pushChanges>
+                    <localCheckout>true</localCheckout>
                 </configuration>
             </plugin>
         </plugins>
@@ -106,26 +115,50 @@
         </repository>
         <repository>
             <id>primefaces</id>
-            <url>http://repository.primefaces.org</url>  
+            <url>http://repository.primefaces.org</url>
+        </repository>
+        <repository>
+            <id>restlet</id>
+            <url>http://maven.restlet.org</url>
         </repository>
     </repositories>
-    <dependencies>
-        <dependency>
-            <groupId>org.shredzone.jshred</groupId>
-            <artifactId>jshred-spring</artifactId>
-            <version>${jshred.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jsp-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.4</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>dependencies</report>
+                            <report>issue-tracking</report>
+                            <report>license</report>
+                            <report>summary</report>
+                            <report>project-team</report>
+                            <report>scm</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>2.12</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.8.1</version>
+                <configuration>
+                    <links>
+                        <link>http://docs.oracle.com/javase/7/docs/api/</link>
+                        <link>http://docs.oracle.com/javaee/6/api/</link>
+                    </links>
+                    <charset>UTF-8</charset>
+                    <linksource>true</linksource>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>

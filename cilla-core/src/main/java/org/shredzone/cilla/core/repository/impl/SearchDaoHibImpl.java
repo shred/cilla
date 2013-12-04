@@ -59,7 +59,7 @@ public class SearchDaoHibImpl implements SearchDao {
     public Query parseQuery(String query, Locale locale) throws ParseException {
         FullTextSession fullTextSession = getFullTextSession();
 
-        MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_31,
+        MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_36,
                         new String[] {"text", "title"},
                         fullTextSession.getSearchFactory().getAnalyzer("content"));
 
