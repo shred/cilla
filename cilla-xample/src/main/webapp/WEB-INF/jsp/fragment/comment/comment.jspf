@@ -1,0 +1,63 @@
+<%@ page pageEncoding="utf-8" trimDirectiveWhitespaces="true" %>
+<%--
+ -
+ -  cilla - Blog Management System
+ -
+ -  Copyright (C) 2013 Richard "Shred" Körber
+ -    http://cilla.shredzone.org
+ -
+ -  This program is free software: you can redistribute it and/or modify
+ -  it under the terms of the GNU Affero General Public License as published
+ -  by the Free Software Foundation, either version 3 of the License, or
+ -  (at your option) any later version.
+ -
+ -  This program is distributed in the hope that it will be useful,
+ -  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ -  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ -  GNU General Public License for more details.
+ -
+ -  You should have received a copy of the GNU Affero General Public License
+ -  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ -
+ --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="cilla" uri="http://cilla.shredzone.org/taglib/cilla" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<fmt:setBundle basename="messages"/>
+
+<div class="comment" id="comment-${comment.id}" style="margin-left: ${comment.level * 30}px">
+  <div class="comment-header">
+    <c:choose>
+      <c:when test="${not empty comment.creatorId}">
+        <%-- Commentor was a local user --%>
+        <spring:eval expression="@userDao.fetch(comment.creatorId)" var="creator"/>
+        <cilla:link author="${creator}"><c:out value="${creator.name}"/></cilla:link>
+      </c:when>
+      <c:when test="${not empty comment.name and not empty comment.url}">
+        <%-- Commentor left a name and a link --%>
+        <a href="<c:out value="${comment.url}"/>" rel="nofollow" target="_blank" class="ext"><c:out value="${comment.name}"/></a>
+      </c:when>
+      <c:when test="${not empty comment.name}">
+        <%-- Commentor left only a name --%>
+        <c:out value="${comment.name}"/>
+      </c:when>
+      <c:otherwise>
+        <%-- Commentor preferred to be anonymous --%>
+        <fmt:message key="comment.anonymous"/>
+      </c:otherwise>
+    </c:choose>
+    ${", "}
+    <fmt:formatDate value="${comment.creation}" type="both"/>
+    ${", "}
+    <cilla:link commentable="${item}" anchor="comment-${comment.id}"><fmt:message key="comment.link"/></cilla:link>
+    ${", "}
+    <cilla:link commentable="${item}" anchor="postcomment" onclick="commentform.setReplyTo('${comment.id}')"><fmt:message key="comment.reply"/></cilla:link>
+    <sec:authorize ifAllGranted="ROLE_MODERATOR">
+      ${", "}
+      <cilla:link commentable="${item}" anchor="postcomment"><cilla:param name="cmtDelete" value="${comment.id}"/><fmt:message key="comment.delete"/></cilla:link>
+    </sec:authorize>
+  </div>
+  <cilla:format text="${comment.text}" format="HTML"/>
+</div>

@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /resource/
+Disallow: /captcha

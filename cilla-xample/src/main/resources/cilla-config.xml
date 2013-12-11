@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+  cilla - Blog Management System
+
+  Copyright (C) 2013 Richard "Shred" Körber
+    http://cilla.shredzone.org
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published
+  by the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
+
+    <jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/CillaDS"/>
+    <jee:jndi-lookup id="dataSourceProperties" jndi-name="java:comp/env/hibernate/CillaDS"/>
+    <jee:jndi-lookup id="cillaProperties" jndi-name="java:comp/env/cilla/Properties"/>
+    <jee:jndi-lookup id="cillaMailProperties" jndi-name="java:comp/env/cilla/MailProperties"/>
+
+    <context:property-placeholder properties-ref="cillaProperties" order="1" ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath:/cilla-config.properties" order="100"/>
+
+    <bean id="freemarkerConfiguration" class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean">
+        <property name="templateLoaderPath" value="classpath:notification/"/>
+    </bean>
+
+</beans>

@@ -60,6 +60,7 @@
         <module>cilla-view</module>
         <module>cilla-ws-client</module>
         <module>cilla-admin</module>
+        <module>cilla-xample</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

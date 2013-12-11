@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+  cilla - Blog Management System
+
+  Copyright (C) 2013 Richard "Shred" Körber
+    http://cilla.shredzone.org
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published
+  by the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+
+<!-- For a description of the configuration options, see http://ehcache.org/ehcache.xml -->
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+         updateCheck="true" monitoring="autodetect"
+         dynamicConfig="true">
+
+    <diskStore path="/var/local/cilla/ehcache"/>
+
+    <defaultCache
+        maxElementsInMemory="10000"
+        eternal="false"
+        timeToIdleSeconds="120"
+        timeToLiveSeconds="120"
+        overflowToDisk="true"
+        diskSpoolBufferSizeMB="30"
+        maxElementsOnDisk="10000000"
+        diskPersistent="false"
+        diskExpiryThreadIntervalSeconds="120"
+        memoryStoreEvictionPolicy="LRU"
+        statistics="false" />
+
+    <!-- Cache for Scaled Images -->
+    <cache name="processedImages"
+        maxElementsInMemory="50"
+        eternal="true"
+        overflowToDisk="true" />
+
+    <!-- Cache for threaded Comment -->
+    <cache name="commentThread"
+        maxElementsInMemory="200"
+        timeToIdleSeconds="300"
+        timeToLiveSeconds="300"
+        eternal="false"
+        overflowToDisk="true" />
+
+    <!-- Domain Objects -->
+    <cache name="org.shredzone.cilla.core.model.Authority"
+        maxElementsInMemory="300"
+        eternal="true"
+        overflowToDisk="false" />
+
+    <cache name="org.shredzone.cilla.core.model.Category"
+        maxElementsInMemory="300"
+        eternal="true"
+        overflowToDisk="false" />
+
+    <cache name="org.shredzone.cilla.core.model.Comment"
+        maxElementsInMemory="2000"
+        eternal="false"
+        overflowToDisk="false" />
+
+    <cache name="org.shredzone.cilla.core.model.Header"
+        maxElementsInMemory="1000"
+        eternal="true"
+        overflowToDisk="false" />
+
+    <cache name="org.shredzone.cilla.core.model.Language"
+        maxElementsInMemory="300"
+        eternal="true"
+        overflowToDisk="false" />
+
+    <cache name="org.shredzone.cilla.core.model.Media"
+        maxElementsInMemory="2000"
+        eternal="false"
+        overflowToDisk="false" />
+
+    <cache name="org.shredzone.cilla.core.model.Page"
+        maxElementsInMemory="2000"
+        eternal="false"
+        overflowToDisk="false" />
+
+    <cache name="org.shredzone.cilla.core.model.Picture"
+        maxElementsInMemory="2000"
+        eternal="false"
+        overflowToDisk="false" />
+
+    <cache name="org.shredzone.cilla.core.model.Role"
+        maxElementsInMemory="300"
+        eternal="true"
+        overflowToDisk="false" />
+
+    <cache name="org.shredzone.cilla.core.model.Section"
+        maxElementsInMemory="2000"
+        eternal="false"
+        overflowToDisk="false" />
+
+    <cache name="org.shredzone.cilla.core.model.Setting"
+        maxElementsInMemory="300"
+        eternal="true"
+        overflowToDisk="false" />
+
+    <cache name="org.shredzone.cilla.core.model.Store"
+        maxElementsInMemory="2000"
+        eternal="false"
+        overflowToDisk="false" />
+
+    <cache name="org.shredzone.cilla.core.model.Tag"
+        maxElementsInMemory="5000"
+        eternal="true"
+        overflowToDisk="false" />
+
+    <cache name="org.shredzone.cilla.core.model.Token"
+        maxElementsInMemory="300"
+        eternal="true"
+        overflowToDisk="false" />
+
+    <cache name="org.shredzone.cilla.core.model.User"
+        maxElementsInMemory="300"
+        eternal="true"
+        overflowToDisk="false"/>
+
+</ehcache>

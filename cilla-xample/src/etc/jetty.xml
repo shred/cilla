@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!--
+
+  cilla - Blog Management System
+
+  Copyright (C) 2013 Richard "Shred" Körber
+    http://cilla.shredzone.org
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Affero General Public License as published
+  by the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU Affero General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
+
+<Configure id="Server" class="org.eclipse.jetty.server.Server">
+
+  <New id="cillaDs" class="org.eclipse.jetty.plus.jndi.Resource">
+    <Arg>jdbc/CillaDS</Arg>
+    <Arg>
+      <New class="org.apache.commons.dbcp.BasicDataSource">
+        <Set name="driverClassName">org.postgresql.Driver</Set>
+        <Set name="url">jdbc:postgresql://localhost/cilla</Set>
+        <Set name="username">cilla</Set>
+        <Set name="password">cilla</Set>
+      </New>
+    </Arg>
+  </New>
+
+  <New id="cillaDsProps" class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg>hibernate/CillaDS</Arg>
+    <Arg type="java.lang.String">
+        hibernate.dialect      = org.shredzone.cilla.core.hibernate.TableNameSequencePostgresDialect
+        hibernate.search.default.indexBase = /var/local/cilla/search
+    </Arg>
+  </New>
+
+  <New id="cillaProps" class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg>cilla/Properties</Arg>
+    <Arg type="java.lang.String">
+        site.baseurl        = http://localhost:8090
+    </Arg>
+  </New>
+
+  <New id="cillaMailProps" class="org.eclipse.jetty.plus.jndi.EnvEntry">
+    <Arg>cilla/MailProperties</Arg>
+    <Arg type="java.lang.String">
+        mail.debug          = true
+        mail.smtp.host      = localhost
+        mail.from           = someone@example.com
+    </Arg>
+  </New>
+
+</Configure>
