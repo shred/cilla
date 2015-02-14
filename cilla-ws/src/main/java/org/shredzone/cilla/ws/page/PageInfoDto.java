@@ -51,6 +51,7 @@ public class PageInfoDto extends BaseDto {
     private boolean hidden;
     private boolean commentable;
     private boolean donatable;
+    private boolean promoted;
 
     @Size(min = 0, max = 50)
     public String getName()                         { return name; }
@@ -103,6 +104,9 @@ public class PageInfoDto extends BaseDto {
 
     public boolean isDonatable()                    { return donatable; }
     public void setDonatable(boolean donatable)     { this.donatable = donatable; }
+
+    public boolean isPromoted()                     { return promoted; }
+    public void setPromoted(boolean promoted)       { this.promoted = promoted; }
 
     public boolean isPublished() {
         return (publication != null && publication.before(new Date()));

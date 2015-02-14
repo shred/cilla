@@ -85,6 +85,7 @@ public class Page extends BaseModel implements Commentable {
     private boolean sticky;
     private boolean hidden;
     private boolean donatable;
+    private boolean promoted;
     private boolean publishedState;
     private String challenge;
     private String responsePattern;
@@ -242,6 +243,13 @@ public class Page extends BaseModel implements Commentable {
      */
     public String getDonateUrl()                { return donateUrl; }
     public void setDonateUrl(String donateUrl)  { this.donateUrl = donateUrl; }
+
+    /**
+     * {@code true} if the page shall be promoted on social network.
+     */
+    @Column(nullable = false)
+    public boolean isPromoted()                 { return promoted; }
+    public void setPromoted(boolean promoted)   { this.promoted = promoted; }
 
     /**
      * Common page properties.

@@ -223,6 +223,13 @@
 
               <h:outputText />
               <h:panelGroup>
+                <p:selectBooleanCheckbox id="pagePromoted" value="#{pageBean.page.promoted}" />
+                <h:outputLabel for="pagePromoted" value="#{msg['page.edit.promoted']}" />
+                <p:message for="pagePromoted" />
+              </h:panelGroup>
+
+              <h:outputText />
+              <h:panelGroup>
                 <p:selectBooleanCheckbox id="pageDonatable" value="#{pageBean.page.donatable}" />
                 <h:outputLabel for="pageDonatable" value="#{msg['page.edit.donatable']}" />
                 <p:message for="pageDonatable" />

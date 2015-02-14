@@ -67,6 +67,7 @@ public class PageAssembler extends AbstractAssembler<Page, PageDto> {
         dto.setHidden(entity.isHidden());
         dto.setCommentable(entity.getThread().isCommentable());
         dto.setDonatable(entity.isDonatable());
+        dto.setPromoted(entity.isPromoted());
         dto.setChallenge(entity.getChallenge());
         dto.setResponsePattern(entity.getResponsePattern());
 
@@ -95,6 +96,7 @@ public class PageAssembler extends AbstractAssembler<Page, PageDto> {
         entity.setHidden(dto.isHidden());
         entity.getThread().setCommentable(dto.isCommentable());
         entity.setDonatable(dto.isDonatable());
+        entity.setPromoted(dto.isPromoted());
 
         if (dto.getTeaser() != null && dto.getTeaserFormat() != null) {
             entity.setTeaser(new FormattedText(dto.getTeaser(), dto.getTeaserFormat()));
@@ -131,6 +133,7 @@ public class PageAssembler extends AbstractAssembler<Page, PageDto> {
         projection.add(Property.forName("sticky")      .as("sticky"));
         projection.add(Property.forName("hidden")      .as("hidden"));
         projection.add(Property.forName("donatable")   .as("donatable"));
+        projection.add(Property.forName("promoted")    .as("promoted"));
         projection.add(Property.forName("c.id")        .as("creatorId"));
         projection.add(Property.forName("c.login")     .as("creatorLogin"));
         projection.add(Property.forName("c.name")      .as("creatorName"));
