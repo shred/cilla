@@ -19,12 +19,16 @@
  */
 package org.shredzone.cilla.view;
 
+import static java.util.stream.Collectors.toList;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -46,7 +50,6 @@ import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.commons.view.ViewContext;
 import org.shredzone.commons.view.annotation.PathPart;
 import org.shredzone.commons.view.annotation.View;
-import org.shredzone.commons.view.annotation.ViewGroup;
 import org.shredzone.commons.view.annotation.ViewHandler;
 import org.shredzone.commons.view.exception.ErrorResponseException;
 import org.shredzone.commons.view.exception.PageNotFoundException;
@@ -90,10 +93,8 @@ public class FeedView extends AbstractView {
     /**
      * A feed for all pages.
      */
-    @ViewGroup({
-        @View(pattern = "/feed/list.${#feed}", signature = {"date", "#feed"}),
-        @View(pattern = "/feed/list.${#feed}", signature = {"#feed"})
-    })
+    @View(pattern = "/feed/list.${#feed}", signature = {"date", "#feed"})
+    @View(pattern = "/feed/list.${#feed}", signature = {"#feed"})
     public void feedListView(
             @PathPart("#feed") String suffix,
             HttpServletRequest req, HttpServletResponse resp, ViewContext context)
@@ -106,10 +107,8 @@ public class FeedView extends AbstractView {
     /**
      * A feed for a single category.
      */
-    @ViewGroup({
-        @View(pattern = "/feed/category/${category.id}/${#simplify(category.name)}.${#feed}", signature = {"category", "date", "#feed"}),
-        @View(pattern = "/feed/category/${category.id}/${#simplify(category.name)}.${#feed}", signature = {"category", "#feed"})
-    })
+    @View(pattern = "/feed/category/${category.id}/${#simplify(category.name)}.${#feed}", signature = {"category", "date", "#feed"})
+    @View(pattern = "/feed/category/${category.id}/${#simplify(category.name)}.${#feed}", signature = {"category", "#feed"})
     public void feedCategoryView(
             @PathPart("category.id") Category category,
             @PathPart("#feed") String suffix,
@@ -124,10 +123,8 @@ public class FeedView extends AbstractView {
     /**
      * A feed for a single tag.
      */
-    @ViewGroup({
-        @View(pattern = "/feed/tag/${#encode(tag.name)}.${#feed}", signature = {"tag", "date", "#feed"}),
-        @View(pattern = "/feed/tag/${#encode(tag.name)}.${#feed}", signature = {"tag", "#feed"})
-    })
+    @View(pattern = "/feed/tag/${#encode(tag.name)}.${#feed}", signature = {"tag", "date", "#feed"})
+    @View(pattern = "/feed/tag/${#encode(tag.name)}.${#feed}", signature = {"tag", "#feed"})
     public void feedTagView(
             @PathPart("#encode(tag.name)") Tag tag,
             @PathPart("#feed") String suffix,
@@ -142,10 +139,8 @@ public class FeedView extends AbstractView {
     /**
      * A feed for a single author.
      */
-    @ViewGroup({
-        @View(pattern = "/feed/author/${author.id}/${#simplify(author.name)}.${#feed}", signature = {"author", "date", "#feed"}),
-        @View(pattern = "/feed/author/${author.id}/${#simplify(author.name)}.${#feed}", signature = {"author", "#feed"})
-    })
+    @View(pattern = "/feed/author/${author.id}/${#simplify(author.name)}.${#feed}", signature = {"author", "date", "#feed"})
+    @View(pattern = "/feed/author/${author.id}/${#simplify(author.name)}.${#feed}", signature = {"author", "#feed"})
     public void feedAuthorView(
             @PathPart("author.id") User user,
             @PathPart("#feed") String suffix,
@@ -167,12 +162,11 @@ public class FeedView extends AbstractView {
      *             if the feed suffix is unknown
      */
     private String convertFeedType(String suffix) throws PageNotFoundException {
-        for (FeedType type : FeedType.values()) {
-            if (type.getSuffix().equals(suffix)) {
-                return type.getType();
-            }
-        }
-        throw new PageNotFoundException("Unknown feed type " + suffix);
+        return Arrays.stream(FeedType.values())
+                .filter(type -> type.getSuffix().equals(suffix))
+                .map(FeedType::getType)
+                .findFirst()
+                .orElseThrow(() -> new PageNotFoundException("Unknown feed type " + suffix));
     }
 
     /**
@@ -229,13 +223,10 @@ public class FeedView extends AbstractView {
         selfLink.setType(contentType);
         selfLink.setHref(selfUrl);
         feed.getLinks().add(selfLink);
-
-        for (Page page : result.getPages()) {
-            if (!page.isRestricted()) {
-                // Do not show restricted pages
-                feed.getEntries().add(createEntry(page, uriPrefix));
-            }
-        }
+        feed.getEntries().addAll(result.getPages().stream()
+                .filter(page -> !page.isRestricted()) // do not show restricted pages
+                .map(page -> createEntry(page, uriPrefix))
+                .collect(Collectors.toList()));
 
         resp.setContentType(contentType);
         resp.setDateHeader("Last-Modified", lastModified.getTime());
@@ -287,19 +278,23 @@ public class FeedView extends AbstractView {
         description.setValue(body);
         entry.setDescription(description);
 
-        for (Category cat : page.getCategories()) {
-            SyndCategory category = new SyndCategoryImpl();
-            category.setName(cat.getName());
-            category.setTaxonomyUri(buildTaxonomyUri(uriPrefix, "category", cat.getId()));
-            entry.getCategories().add(category);
-        }
+        entry.getCategories().addAll(page.getCategories().stream()
+                .map(cat -> {
+                    SyndCategory category = new SyndCategoryImpl();
+                    category.setName(cat.getName());
+                    category.setTaxonomyUri(buildTaxonomyUri(uriPrefix, "category", cat.getId()));
+                    return category;
+                })
+                .collect(toList()));
 
-        for (Tag tag : page.getTags()) {
-            SyndCategory category = new SyndCategoryImpl();
-            category.setName(tag.getName());
-            category.setTaxonomyUri(buildTaxonomyUri(uriPrefix, "tag", tag.getName()));
-            entry.getCategories().add(category);
-        }
+        entry.getCategories().addAll(page.getTags().stream()
+                .map(tag -> {
+                    SyndCategory category = new SyndCategoryImpl();
+                    category.setName(tag.getName());
+                    category.setTaxonomyUri(buildTaxonomyUri(uriPrefix, "tag", tag.getName()));
+                    return category;
+                })
+                .collect(toList()));
 
         List<SyndPerson> authorList = new ArrayList<>();
         User creator = page.getCreator();

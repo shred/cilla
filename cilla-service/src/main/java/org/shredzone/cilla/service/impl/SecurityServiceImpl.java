@@ -19,6 +19,8 @@
  */
 package org.shredzone.cilla.service.impl;
 
+import static java.util.function.Predicate.isEqual;
+
 import org.shredzone.cilla.service.SecurityService;
 import org.shredzone.cilla.service.security.CillaUserDetails;
 import org.springframework.security.access.AccessDeniedException;
@@ -45,12 +47,9 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public boolean hasRole(String role) {
-        for (GrantedAuthority authority : SecurityContextHolder.getContext().getAuthentication().getAuthorities()) {
-            if (authority.getAuthority().equals(role)) {
-                return true;
-            }
-        }
-        return false;
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .anyMatch(isEqual(role));
     }
 
     @Override

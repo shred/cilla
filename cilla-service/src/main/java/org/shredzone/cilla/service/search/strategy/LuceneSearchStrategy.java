@@ -20,8 +20,8 @@
 package org.shredzone.cilla.service.search.strategy;
 
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -106,30 +106,41 @@ public class LuceneSearchStrategy extends AbstractSearchStrategy {
 
         Highlighter hilighter = new Highlighter(formatter, scorer);
         hilighter.setTextFragmenter(fragmenter);
+
         PageBridge bridge = new PageBridge();
 
-        List<String> highlighted = new ArrayList<>(result.size());
-        for (Page page : result) {
-            String plain = bridge.objectToString(page);
-            try (SimpleAnalyzer analyzer = new SimpleAnalyzer(Version.LUCENE_36)) {
-                TokenStream tokenStream = analyzer.tokenStream("text", new StringReader(plain));
+        return result.stream().parallel()
+                .map(bridge::objectToString)
+                .map(plain -> highlight(plain, hilighter))
+                .collect(Collectors.toList());
+    }
 
-                StringBuilder sb = new StringBuilder();
-                sb.append(searchResultRenderer.getHeader());
-                sb.append(hilighter.getBestFragments(
-                                tokenStream,
-                                plain,
-                                searchResultRenderer.getMaxResults(),
-                                searchResultRenderer.getSeparator()
-                ));
-                sb.append(searchResultRenderer.getFooter());
-                highlighted.add(sb.toString());
-            } catch (Exception ex) {
-                highlighted.add(plain);
-            }
+    /**
+     * Highlight the contents by search result.
+     *
+     * @param content
+     *            Plain text content to highlight
+     * @param hilighter
+     *            {@link Highlighter} to use
+     * @return Highlighted content
+     */
+    private String highlight(String content, Highlighter hilighter) {
+        try (SimpleAnalyzer analyzer = new SimpleAnalyzer(Version.LUCENE_36)) {
+            TokenStream tokenStream = analyzer.tokenStream("text", new StringReader(content));
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(searchResultRenderer.getHeader());
+            sb.append(hilighter.getBestFragments(
+                            tokenStream,
+                            content,
+                            searchResultRenderer.getMaxResults(),
+                            searchResultRenderer.getSeparator()
+            ));
+            sb.append(searchResultRenderer.getFooter());
+            return sb.toString();
+        } catch (Exception ex) {
+            return content;
         }
-
-        return highlighted;
     }
 
 }

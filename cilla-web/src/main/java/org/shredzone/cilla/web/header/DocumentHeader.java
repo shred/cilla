@@ -55,9 +55,8 @@ public class DocumentHeader {
 
     @PostConstruct
     protected void setup() {
-        for (DocumentHeaderObserver observer : applicationContext.getBeansOfType(DocumentHeaderObserver.class).values()) {
-            observer.onNewDocumentHeader(this, req);
-        }
+        applicationContext.getBeansOfType(DocumentHeaderObserver.class).values()
+                .forEach(observer -> observer.onNewDocumentHeader(this, req));
     }
 
     /**

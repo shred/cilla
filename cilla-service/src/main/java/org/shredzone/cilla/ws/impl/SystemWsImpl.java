@@ -54,10 +54,10 @@ public class SystemWsImpl implements SystemWs {
     @Override
     public List<LanguageDto> listLanguages() {
         return languageDao.criteria()
-            .setProjection(languageAssembler.projection())
-            .addOrder(Order.asc("name"))
-            .setResultTransformer(new AliasToBeanResultTransformer(LanguageDto.class))
-            .list();
+                .setProjection(languageAssembler.projection())
+                .addOrder(Order.asc("name"))
+                .setResultTransformer(new AliasToBeanResultTransformer(LanguageDto.class))
+                .list();
     }
 
 }

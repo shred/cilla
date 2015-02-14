@@ -20,16 +20,17 @@
 package org.shredzone.cilla.core.model;
 
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Index;
 
 /**
  * A single {@link Section} of a {@link Page}. This is an abstract superclass. Each
@@ -43,6 +44,7 @@ import org.hibernate.annotations.Index;
 })
 @Inheritance(strategy = InheritanceType.JOINED)
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Table(indexes = {@Index(name = "idx_section_page", columnList = "page_id")})
 public abstract class Section extends BaseModel {
     private static final long serialVersionUID = 5882612665202288874L;
 
@@ -53,7 +55,6 @@ public abstract class Section extends BaseModel {
      * {@link Page} this section belongs to.
      */
     @ManyToOne(optional = false)
-    @Index(name = "idx_section_page")
     public Page getPage()                       { return page; }
     public void setPage(Page page)              { this.page = page; }
 

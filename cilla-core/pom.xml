@@ -34,57 +34,22 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>hibernate3-maven-plugin</artifactId>
-                <version>2.2</version>
+                <groupId>de.juplo</groupId>
+                <artifactId>hibernate4-maven-plugin</artifactId>
+                <version>1.0.4</version>
                 <executions>
                     <execution>
-                        <phase>process-classes</phase>
                         <goals>
-                            <goal>hbm2ddl</goal>
+                            <goal>export</goal>
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
-                    <components>
-                        <component>
-                            <name>hbm2ddl</name>
-                            <outputDirectory>target/schema/</outputDirectory>
-                        </component>
-                    </components>
-                    <componentProperties>
-                        <export>false</export>
-                        <drop>false</drop>
-                        <create>true</create>
-                        <update>false</update>
-                        <format>true</format>
-                        <outputfilename>schema.sql</outputfilename>
-                        <implementation>annotationconfiguration</implementation>
-                    </componentProperties>
+                    <hibernateDialect>org.hibernate.dialect.PostgreSQL82Dialect</hibernateDialect>
+                    <target>NONE</target><!-- only create schema.sql file -->
+                    <type>CREATE</type>
+                    <outputFile>${project.build.directory}/schema/schema.sql</outputFile>
                 </configuration>
-                <dependencies>
-                    <!-- the following versions are only used for hbm2ddl -->
-                    <dependency>
-                        <groupId>org.hibernate</groupId>
-                        <artifactId>hibernate-core</artifactId>
-                        <version>3.6.8.Final</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.hibernate</groupId>
-                        <artifactId>hibernate-entitymanager</artifactId>
-                        <version>3.6.8.Final</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.hibernate</groupId>
-                        <artifactId>hibernate-validator</artifactId>
-                        <version>4.2.0.Final</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>javax.validation</groupId>
-                        <artifactId>validation-api</artifactId>
-                        <version>1.0.0.GA</version>
-                    </dependency>
-                </dependencies> 
             </plugin>
         </plugins>
         <pluginManagement>
@@ -99,11 +64,15 @@
                             <pluginExecutions>
                                 <pluginExecution>
                                     <pluginExecutionFilter>
-                                        <groupId>org.codehaus.mojo</groupId>
-                                        <artifactId>hibernate3-maven-plugin</artifactId>
-                                        <versionRange>[2.2,)</versionRange>
+                                        <groupId>de.juplo</groupId>
+                                        <artifactId>
+                                            hibernate4-maven-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [1.0.4,)
+                                        </versionRange>
                                         <goals>
-                                            <goal>hbm2ddl</goal>
+                                            <goal>export</goal>
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
@@ -140,11 +109,6 @@
             <artifactId>commons-text</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>javassist</groupId>
-            <artifactId>javassist</artifactId>
-            <scope>runtime</scope>
-        </dependency>
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-analyzers</artifactId>
@@ -193,7 +157,7 @@
         </dependency>
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jgroups</groupId>

@@ -67,8 +67,8 @@ public class RoleDaoHibImpl extends BaseDaoHibImpl<Role> implements RoleDao {
     @Override
     public Role fetchByName(String name) {
         return (Role) getCurrentSession().createQuery("FROM Role WHERE name = :name")
-            .setParameter("name", name)
-            .uniqueResult();
+                .setParameter("name", name)
+                .uniqueResult();
     }
 
 }

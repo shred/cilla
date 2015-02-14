@@ -41,8 +41,7 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Sort;
-import org.hibernate.annotations.SortType;
+import org.hibernate.annotations.SortNatural;
 import org.shredzone.cilla.core.model.embed.ExifData;
 import org.shredzone.cilla.core.model.embed.FormattedText;
 import org.shredzone.cilla.core.model.embed.Geolocation;
@@ -161,7 +160,7 @@ public class Picture extends BaseModel implements Commentable {
      * All {@link Tag} this page are tagged with.
      */
     @ManyToMany
-    @Sort(type = SortType.NATURAL)
+    @SortNatural
     public SortedSet<Tag> getTags()             { return tags; }
     public void setTags(SortedSet<Tag> tags)    { this.tags = tags; }
 

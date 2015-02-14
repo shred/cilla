@@ -71,10 +71,10 @@ public class TokenDaoHibImpl extends BaseDaoHibImpl<Token> implements TokenDao {
     @Override
     public Token fetch(User user, String site) {
         return (Token) getCurrentSession()
-            .createQuery("FROM Token WHERE user=:user AND site=:site")
-            .setParameter("user", user)
-            .setParameter("site", site)
-            .uniqueResult();
+                .createQuery("FROM Token WHERE user=:user AND site=:site")
+                .setParameter("user", user)
+                .setParameter("site", site)
+                .uniqueResult();
     }
 
     @Override

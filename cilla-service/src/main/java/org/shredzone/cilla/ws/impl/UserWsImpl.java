@@ -76,10 +76,10 @@ public class UserWsImpl extends AbstractWs implements UserWs {
     @Override
     public List<UserDto> list(ListRange lr) {
         Criteria crit = userDao.criteria()
-            .createAlias("role", "r")
-            .createAlias("language", "l")
-            .setProjection(userAssembler.projection())
-            .setResultTransformer(new AliasToBeanResultTransformer(UserDto.class));
+                .createAlias("role", "r")
+                .createAlias("language", "l")
+                .setProjection(userAssembler.projection())
+                .setResultTransformer(new AliasToBeanResultTransformer(UserDto.class));
 
         applyListRange(lr, "login", false, crit);
 

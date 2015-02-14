@@ -19,6 +19,8 @@
  */
 package org.shredzone.cilla.view;
 
+import static java.util.stream.Collectors.joining;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
@@ -26,13 +28,13 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.shredzone.commons.view.annotation.PathPart;
 import org.shredzone.commons.view.annotation.View;
-import org.shredzone.commons.view.annotation.ViewGroup;
 import org.shredzone.commons.view.annotation.ViewHandler;
 import org.shredzone.commons.view.exception.ErrorResponseException;
 import org.shredzone.commons.view.exception.PageNotFoundException;
@@ -56,9 +58,7 @@ public class ResourceView extends AbstractView {
     /**
      * Streams a resource.
      */
-    @ViewGroup({
-        @View(pattern = "/resource/${#package}/${#name}", name="resource"),
-    })
+    @View(pattern = "/resource/${#package}/${#name}", name="resource")
     public void resourceView(
             @PathPart("#package") String pack,
             @PathPart("#name") String name,
@@ -88,11 +88,8 @@ public class ResourceView extends AbstractView {
             resp.setContentLength(sizeMap.get(key));
             resp.setDateHeader("Last-Modified", lastModified.getTime());
 
-            InputStream in = ResourceView.class.getResourceAsStream("/public/" + pack + '/' + name);
-            try {
+            try (InputStream in = ResourceView.class.getResourceAsStream("/public/" + pack + '/' + name)) {
                 FileCopyUtils.copy(in, resp.getOutputStream());
-            } finally {
-                in.close();
             }
 
         } catch (IOException ex) {
@@ -113,10 +110,7 @@ public class ResourceView extends AbstractView {
         String key = pack + '/' + name;
 
         if (!(etagMap.containsKey(key) && sizeMap.containsKey(key))) {
-            InputStream in = null;
-            try {
-                in = ResourceView.class.getResourceAsStream("/public/" + pack + '/' + name);
-
+            try (InputStream in = ResourceView.class.getResourceAsStream("/public/" + pack + '/' + name)) {
                 MessageDigest md5 = MessageDigest.getInstance("MD5");
                 md5.reset();
 
@@ -129,22 +123,15 @@ public class ResourceView extends AbstractView {
                     counter += length;
                 }
 
-                StringBuilder digest = new StringBuilder();
-                digest.append('"');
-                for (byte b : md5.digest()) {
-                    digest.append(String.format("%02x", b & 0xFF));
-                }
-                digest.append('"');
+                byte[] digest = md5.digest();
+                etagMap.put(key, IntStream.range(0, digest.length)
+                        .mapToObj(ix -> String.format("%02x", digest[ix] & 0xFF))
+                        .collect(joining("", "\"", "\"")));
 
-                etagMap.put(key, digest.toString());
                 sizeMap.put(key, counter);
             } catch (NoSuchAlgorithmException ex) {
                 // we expect no exception, since MD5 is a standard digester
                 throw new InternalError();
-            } finally {
-                if (in != null) {
-                    in.close();
-                }
             }
         }
 

@@ -19,7 +19,8 @@
  */
 package org.shredzone.cilla.ws.cxf;
 
-import java.util.ArrayList;
+import static java.util.stream.Collectors.toList;
+
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -27,7 +28,6 @@ import javax.xml.ws.soap.SOAPFaultException;
 
 import org.shredzone.cilla.ws.client.RemoteUserDetails;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
-import org.shredzone.cilla.ws.system.GrantedRoleDto;
 import org.shredzone.cilla.ws.system.LoginWs;
 import org.shredzone.cilla.ws.user.UserWs;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -61,11 +61,10 @@ public class CillaRemoteAuthenticationProvider implements AuthenticationProvider
         try {
             RemoteUserDetails userDetails = (RemoteUserDetails) authentication.getPrincipal();
 
-            GrantedRoleDto granted = loginWs.authenticate();
-            List<GrantedAuthority> authorities = new ArrayList<>(granted.getRights().size());
-            for (String role : granted.getRights()) {
-                authorities.add(new SimpleGrantedAuthority(role));
-            }
+            List<GrantedAuthority> authorities = loginWs.authenticate().getRights().stream()
+                    .map(SimpleGrantedAuthority::new)
+                    .collect(toList());
+
             userDetails.setAuthorities(authorities);
             userDetails.setUser(userWs.fetchByLogin(userDetails.getUsername()));
 

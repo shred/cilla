@@ -37,7 +37,6 @@ import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.commons.view.annotation.Optional;
 import org.shredzone.commons.view.annotation.PathPart;
 import org.shredzone.commons.view.annotation.View;
-import org.shredzone.commons.view.annotation.ViewGroup;
 import org.shredzone.commons.view.annotation.ViewHandler;
 import org.shredzone.commons.view.exception.ErrorResponseException;
 import org.shredzone.commons.view.exception.PageNotFoundException;
@@ -61,10 +60,8 @@ public class MediaView extends AbstractView implements LocalLinkResolver {
     /**
      * Streams a medium of the given page.
      */
-    @ViewGroup({
-        @View(pattern = "/page/${page.id}/${#type}/${#name}", signature = {"page", "#type", "#name"}),
-        @View(pattern = "/page/${page.id}/${#name}", signature = {"page", "#name"})
-    })
+    @View(pattern = "/page/${page.id}/${#type}/${#name}", signature = {"page", "#type", "#name"})
+    @View(pattern = "/page/${page.id}/${#name}", signature = {"page", "#name"})
     public void mediumView(
             @PathPart("page.id") Page page,
             @Optional @PathPart("#type") String type,

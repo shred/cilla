@@ -19,7 +19,8 @@
  */
 package org.shredzone.cilla.admin;
 
-import java.util.ArrayList;
+import static java.util.stream.Collectors.toList;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -32,9 +33,7 @@ import javax.faces.model.SelectItem;
 import org.shredzone.cilla.ws.TextFormat;
 import org.shredzone.cilla.ws.TimeDefinition;
 import org.shredzone.cilla.ws.page.PageWs;
-import org.shredzone.cilla.ws.system.LanguageDto;
 import org.shredzone.cilla.ws.system.SystemWs;
-import org.shredzone.cilla.ws.user.UserDto;
 import org.shredzone.cilla.ws.user.UserWs;
 import org.springframework.stereotype.Component;
 
@@ -58,37 +57,32 @@ public class ListBean {
     public List<SelectItem> createTextFormatList() {
         ResourceBundle msg = getResourceBundle();
 
-        TextFormat[] values = TextFormat.values();
-        SelectItem[] items = new SelectItem[values.length];
-        for (int ix = 0; ix < values.length; ix++) {
-            String value = values[ix].name();
-            String label = msg.getString("select.textformat." + value.toLowerCase());
-            String description = msg.getString("select.textformat.tt." + value.toLowerCase());
-            items[ix] = new SelectItem(value, label, description);
-        }
-        return Arrays.asList(items);
+        return Arrays.stream(TextFormat.values())
+                .map(TextFormat::name)
+                .map(value -> {
+                    String label = msg.getString("select.textformat." + value.toLowerCase());
+                    String description = msg.getString("select.textformat.tt." + value.toLowerCase());
+                    return new SelectItem(value, label, description);
+                })
+                .collect(toList());
     }
 
     /**
      * Returns a list of available users.
      */
     public List<SelectItem> createUserList() {
-        List<SelectItem> result = new ArrayList<>();
-        for (UserDto user : userWs.list(null)) {
-            result.add(new SelectItem(user.getId(), user.getLogin(), user.getName()));
-        }
-        return result;
+        return userWs.list(null).stream()
+                .map(user -> new SelectItem(user.getId(), user.getLogin(), user.getName()))
+                .collect(toList());
     }
 
     /**
      * Returns a list of available languages.
      */
     public List<SelectItem> createLanguageList() {
-        List<SelectItem> result = new ArrayList<>();
-        for (LanguageDto lang : systemWs.listLanguages()) {
-            result.add(new SelectItem(lang.getId(), lang.getName()));
-        }
-        return result;
+        return systemWs.listLanguages().stream()
+                .map(lang -> new SelectItem(lang.getId(), lang.getName()))
+                .collect(toList());
     }
 
     /**
@@ -97,15 +91,14 @@ public class ListBean {
     public List<SelectItem> createTimeDefinitionList() {
         ResourceBundle msg = getResourceBundle();
 
-        TimeDefinition[] values = TimeDefinition.values();
-        SelectItem[] items = new SelectItem[values.length];
-        for (int ix = 0; ix < values.length; ix++) {
-            String value = values[ix].name();
-            String label = msg.getString("select.timedefinition." + value.toLowerCase());
-            String description = msg.getString("select.timedefinition.tt." + value.toLowerCase());
-            items[ix] = new SelectItem(value, label, description);
-        }
-        return Arrays.asList(items);
+        return Arrays.stream(TimeDefinition.values())
+                .map(TimeDefinition::name)
+                .map(value -> {
+                    String label = msg.getString("select.timedefinition." + value.toLowerCase());
+                    String description = msg.getString("select.timedefinition.tt." + value.toLowerCase());
+                    return new SelectItem(value, label, description);
+                })
+                .collect(toList());
     }
 
     /**
@@ -114,13 +107,13 @@ public class ListBean {
     public List<SelectItem> getSectionList() {
         ResourceBundle msg = getResourceBundle();
 
-        List<SelectItem> result = new ArrayList<>();
-        for (String type : pageWs.getSectionTypes()) {
-            String label = msg.getString("select.sectiontype." + type);
-            String description = msg.getString("select.sectiontype.tt." + type);
-            result.add(new SelectItem(type, label, description));
-        }
-        return result;
+        return pageWs.getSectionTypes().stream()
+                .map(type -> {
+                    String label = msg.getString("select.sectiontype." + type);
+                    String description = msg.getString("select.sectiontype.tt." + type);
+                    return new SelectItem(type, label, description);
+                })
+                .collect(toList());
     }
 
     /**

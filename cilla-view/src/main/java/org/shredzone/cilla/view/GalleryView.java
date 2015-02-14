@@ -41,7 +41,6 @@ import org.shredzone.commons.view.annotation.Optional;
 import org.shredzone.commons.view.annotation.PathPart;
 import org.shredzone.commons.view.annotation.Qualifier;
 import org.shredzone.commons.view.annotation.View;
-import org.shredzone.commons.view.annotation.ViewGroup;
 import org.shredzone.commons.view.annotation.ViewHandler;
 import org.shredzone.commons.view.exception.ErrorResponseException;
 import org.shredzone.commons.view.exception.PageNotFoundException;
@@ -67,10 +66,8 @@ public class GalleryView extends AbstractView {
      * Shows a single picture of a gallery.
      */
     @Framed
-    @ViewGroup({
-        @View(pattern = "/show/gallery/${section.id}/picture/${picture.id}.html", signature = {"section", "picture"}),
-        @View(pattern = "/ajax/gallery/${section.id}/picture/${picture.id}.html", signature = {"section", "picture"}, qualifier = "ajax")
-    })
+    @View(pattern = "/show/gallery/${section.id}/picture/${picture.id}.html", signature = {"section", "picture"})
+    @View(pattern = "/ajax/gallery/${section.id}/picture/${picture.id}.html", signature = {"section", "picture"}, qualifier = "ajax")
     public String galleryPictureView(
             @PathPart("section.id") GallerySection section,
             @PathPart("picture.id") Picture picture,
@@ -141,10 +138,8 @@ public class GalleryView extends AbstractView {
     /**
      * Streams the picture of a gallery.
      */
-    @ViewGroup({
-        @View(pattern = "/picture/${picture.id}-${#type}.${#suffix(picture.image.contentType)}", signature = {"picture", "#type"}),
-        @View(pattern = "/picture/${picture.id}.${#suffix(picture.image.contentType)}", signature = {"picture"})
-    })
+    @View(pattern = "/picture/${picture.id}-${#type}.${#suffix(picture.image.contentType)}", signature = {"picture", "#type"})
+    @View(pattern = "/picture/${picture.id}.${#suffix(picture.image.contentType)}", signature = {"picture"})
     public void pictureView(
             @PathPart("picture.id") Picture picture,
             @Optional @PathPart("#type") String type,

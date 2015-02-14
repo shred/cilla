@@ -29,8 +29,8 @@ import org.shredzone.commons.text.TextFilter;
  * To implement a {@link PostProcessingTextFilter}, just register it as a Spring bean.
  * Use {@link Priority} annotation to define the order of the filters to be executed.
  * <p>
- * A {@link StringBuilder} is passed to the filter. It contains formatted HTML, and may
- * either modify the {@link StringBuilder}, or create a new one.
+ * A {@link CharSequence} is passed to the filter, containing formatted HTML. As result,
+ * a {@link CharSequence} with the filtered text is expected.
  * <p>
  * {@link TextFormat#HTML} and {@link TextFormat#PREFORMATTED} are not post-processed.
  *

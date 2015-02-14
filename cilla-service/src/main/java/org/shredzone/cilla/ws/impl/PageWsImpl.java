@@ -19,11 +19,12 @@
  */
 package org.shredzone.cilla.ws.impl;
 
+import static java.util.stream.Collectors.*;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.activation.DataHandler;
@@ -33,7 +34,6 @@ import javax.jws.WebService;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.transform.AliasToBeanResultTransformer;
-import org.shredzone.cilla.core.model.Category;
 import org.shredzone.cilla.core.model.Medium;
 import org.shredzone.cilla.core.model.Page;
 import org.shredzone.cilla.core.model.Picture;
@@ -109,10 +109,7 @@ public class PageWsImpl extends AbstractWs implements PageWs {
         dto.setSections(sectionFacade.assembleSections(entity.getSections()));
         dto.setMedia(mediumAssembler.bulkAssemble(mediumDao.fetchAll(entity)));
         dto.setCategories(categoryAssembler.bulkAssemble(entity.getCategories()));
-
-        for (Tag tag : entity.getTags()) {
-            dto.getTags().add(tag.getName());
-        }
+        dto.getTags().addAll(entity.getTags().stream().map(Tag::getName).collect(toList()));
 
         return dto;
     }
@@ -127,11 +124,11 @@ public class PageWsImpl extends AbstractWs implements PageWs {
     @Override
     public List<PageInfoDto> list(ListRange lr) {
         Criteria crit = pageDao.criteria()
-            .createAlias("creator", "c")
-            .createAlias("thread", "t")
-            .addOrder(Order.desc("creation"))
-            .setProjection(pageAssembler.projection())
-            .setResultTransformer(new AliasToBeanResultTransformer(PageInfoDto.class));
+                .createAlias("creator", "c")
+                .createAlias("thread", "t")
+                .addOrder(Order.desc("creation"))
+                .setProjection(pageAssembler.projection())
+                .setResultTransformer(new AliasToBeanResultTransformer(PageInfoDto.class));
 
         applyListRange(lr, "creation", true, crit);
 
@@ -287,14 +284,11 @@ public class PageWsImpl extends AbstractWs implements PageWs {
      *            {@link Page} to commit the categories to
      */
     private void commitCategories(PageDto dto, Page entity) throws CillaServiceException {
-        Set<Category> catSet = new HashSet<>();
-        for (CategoryDto catDto : dto.getCategories()) {
-            Category cat = categoryDao.fetch(catDto.getId());
-            if (cat != null) {
-                catSet.add(cat);
-            }
-        }
-        entity.setCategories(catSet);
+        entity.setCategories(dto.getCategories().stream()
+                .map(CategoryDto::getId)
+                .map(categoryDao::fetch)
+                .filter(it -> it != null)
+                .collect(toCollection(HashSet::new)));
     }
 
     /**
@@ -306,11 +300,9 @@ public class PageWsImpl extends AbstractWs implements PageWs {
      *            {@link Page} to commit the tags to
      */
     private void commitTags(PageDto dto, Page entity) throws CillaServiceException {
-        SortedSet<Tag> tagSet = new TreeSet<>();
-        for (String tag : dto.getTags()) {
-            tagSet.add(tagDao.fetchOrCreate(tag));
-        }
-        entity.setTags(tagSet);
+        entity.setTags(dto.getTags().stream()
+                .map(tagDao::fetchOrCreate)
+                .collect(toCollection(TreeSet::new)));
     }
 
 }

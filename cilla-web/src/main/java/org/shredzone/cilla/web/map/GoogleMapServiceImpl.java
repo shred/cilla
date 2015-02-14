@@ -73,9 +73,7 @@ public class GoogleMapServiceImpl implements MapService {
         appendMapTypeId(sb, data.getType());
         sb.append("});");
 
-        for (Marker marker : data.getMarkers()) {
-            appendMarker(sb, marker);
-        }
+        data.getMarkers().forEach(marker -> appendMarker(sb, marker));
 
         sb.append(";});");
 

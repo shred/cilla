@@ -36,14 +36,7 @@ public class ViewScope implements Scope {
     @Override
     public Object get(String name, ObjectFactory<?> objectFactory) {
         Map<String, Object> viewMap = FacesContext.getCurrentInstance().getViewRoot().getViewMap();
-
-        Object result = viewMap.get(name);
-        if (result == null) {
-            result = objectFactory.getObject();
-            viewMap.put(name, result);
-        }
-
-        return result;
+        return viewMap.computeIfAbsent(name, it -> objectFactory.getObject());
     }
 
     @Override

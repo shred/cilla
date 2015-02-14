@@ -19,9 +19,9 @@
  */
 package org.shredzone.cilla.web.plugin.manager;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -41,19 +41,17 @@ public class ImageProcessingManager {
 
     private @Resource ApplicationContext applicationContext;
 
-    private List<ImageProcessingFactory> factories = new ArrayList<>();
+    private List<ImageProcessingFactory> factories;
 
     /**
      * Sets up the manager.
      */
     @PostConstruct
     protected void setup() {
-        List<ImageProcessingFactory> collect = new ArrayList<>();
-        for (ImageProcessingFactory ipf : applicationContext.getBeansOfType(ImageProcessingFactory.class).values()) {
-            collect.add(ipf);
-        }
-        Collections.sort(collect, new PriorityComparator<>(ImageProcessingFactory.class));
-        factories = Collections.unmodifiableList(collect);
+        factories = Collections.unmodifiableList(
+                applicationContext.getBeansOfType(ImageProcessingFactory.class).values().stream()
+                    .sorted(new PriorityComparator<>(ImageProcessingFactory.class))
+                    .collect(Collectors.toList()));
     }
 
     /**
@@ -64,13 +62,11 @@ public class ImageProcessingManager {
      * @return {@link ImageProcessing}, or {@code null} if there is no such type
      */
     public ImageProcessing createImageProcessing(String type) {
-        for (ImageProcessingFactory ipf : factories) {
-            ImageProcessing result = ipf.createImageProcessing(type);
-            if (result != null) {
-                return result;
-            }
-        }
-        return null;
+        return factories.stream()
+                .map(ipf -> ipf.createImageProcessing(type))
+                .filter(it -> it != null)
+                .findFirst()
+                .orElse(null);
     }
 
 }

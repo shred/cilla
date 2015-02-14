@@ -25,7 +25,7 @@ import javax.annotation.Resource;
 import javax.jws.WebService;
 
 import org.hibernate.Criteria;
-import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.sql.JoinType;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.shredzone.cilla.core.model.Comment;
 import org.shredzone.cilla.core.model.Header;
@@ -82,10 +82,10 @@ public class CommentWsImpl extends AbstractWs implements CommentWs {
     @Override
     public List<CommentDto> list(ListRange lr) {
         Criteria crit = commentDao.criteria()
-            .createAlias("thread", "t")
-            .createAlias("creator", "c", CriteriaSpecification.LEFT_JOIN)
-            .setProjection(commentAssembler.projection())
-            .setResultTransformer(new AliasToBeanResultTransformer(CommentDto.class));
+                .createAlias("thread", "t")
+                .createAlias("creator", "c", JoinType.LEFT_OUTER_JOIN)
+                .setProjection(commentAssembler.projection())
+                .setResultTransformer(new AliasToBeanResultTransformer(CommentDto.class));
 
         applyListRange(lr, "creation", true, crit);
 

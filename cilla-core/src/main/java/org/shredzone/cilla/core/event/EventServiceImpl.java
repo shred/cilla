@@ -20,7 +20,6 @@
 package org.shredzone.cilla.core.event;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.EnumMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -56,18 +55,14 @@ public class EventServiceImpl implements EventService {
      */
     @PostConstruct
     protected void setup() {
-        Collection<Object> beans = applicationContext.getBeansWithAnnotation(EventListener.class).values();
-        for (Object bean : beans) {
-            EventListener ehAnno = bean.getClass().getAnnotation(EventListener.class);
-            if (ehAnno != null) {
-                for (Method method : bean.getClass().getMethods()) {
-                    OnEvent evAnno = AnnotationUtils.findAnnotation(method, OnEvent.class);
-                    if (evAnno != null) {
-                        processEventMethod(evAnno, bean, method);
-                    }
+        applicationContext.getBeansWithAnnotation(EventListener.class).values().forEach(bean -> {
+            for (Method method : bean.getClass().getMethods()) {
+                OnEvent evAnno = AnnotationUtils.findAnnotation(method, OnEvent.class);
+                if (evAnno != null) {
+                    processEventMethod(evAnno, bean, method);
                 }
             }
-        }
+        });
     }
 
     /**
@@ -92,12 +87,7 @@ public class EventServiceImpl implements EventService {
         }
 
         for (EventType type : events) {
-            List<EventInvoker> list = invokerMap.get(type);
-            if (list == null) {
-                list = new LinkedList<>();
-                invokerMap.put(type, list);
-            }
-            list.add(invoker);
+            invokerMap.computeIfAbsent(type, it -> new LinkedList<>()).add(invoker);
         }
     }
 
@@ -109,9 +99,7 @@ public class EventServiceImpl implements EventService {
 
         List<EventInvoker> listeners = invokerMap.get(event.getType());
         if (listeners != null) {
-            for (EventInvoker invoker : listeners) {
-                invoker.invoke(event);
-            }
+            listeners.forEach(invoker -> invoker.invoke(event));
         }
     }
 

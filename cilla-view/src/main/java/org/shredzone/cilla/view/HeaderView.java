@@ -34,7 +34,6 @@ import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.commons.view.annotation.Optional;
 import org.shredzone.commons.view.annotation.PathPart;
 import org.shredzone.commons.view.annotation.View;
-import org.shredzone.commons.view.annotation.ViewGroup;
 import org.shredzone.commons.view.annotation.ViewHandler;
 import org.shredzone.commons.view.exception.ErrorResponseException;
 import org.shredzone.commons.view.exception.ViewException;
@@ -106,10 +105,8 @@ public class HeaderView extends AbstractView {
     /**
      * Streams the header image.
      */
-    @ViewGroup({
-        @View(pattern = "/header/image/${header.id}-${#type}.${#suffix(header.headerImage.contentType)}"),
-        @View(pattern = "/header/image/${header.id}.${#suffix(header.headerImage.contentType)}")
-    })
+    @View(pattern = "/header/image/${header.id}-${#type}.${#suffix(header.headerImage.contentType)}")
+    @View(pattern = "/header/image/${header.id}.${#suffix(header.headerImage.contentType)}")
     public void headerImageView(
             @PathPart("header.id") Header header,
             @Optional @PathPart("#type") String type,
@@ -134,10 +131,8 @@ public class HeaderView extends AbstractView {
     /**
      * Streams the uncropped header image.
      */
-    @ViewGroup({
-        @View(pattern = "/header/full/${header.id}-${#type}.${#suffix(header.headerImage.contentType)}"),
-        @View(pattern = "/header/full/${header.id}.${#suffix(header.headerImage.contentType)}")
-    })
+    @View(pattern = "/header/full/${header.id}-${#type}.${#suffix(header.headerImage.contentType)}")
+    @View(pattern = "/header/full/${header.id}.${#suffix(header.headerImage.contentType)}")
     public void headerUncroppedView(
             @PathPart("header.id") Header header,
             @Optional @PathPart("#type") String type,

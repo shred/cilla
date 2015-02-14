@@ -36,7 +36,6 @@ import org.shredzone.commons.view.annotation.Optional;
 import org.shredzone.commons.view.annotation.Parameter;
 import org.shredzone.commons.view.annotation.PathPart;
 import org.shredzone.commons.view.annotation.View;
-import org.shredzone.commons.view.annotation.ViewGroup;
 import org.shredzone.commons.view.annotation.ViewHandler;
 import org.shredzone.commons.view.exception.ViewException;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,10 +59,8 @@ public class PageListView extends AbstractView {
      * Lists all blog entries.
      */
     @Framed
-    @ViewGroup({
-        @View(pattern = "/list/index.html", signature = {""}),
-        @View(pattern = "/list/${date}/index.html", signature = {"date"}),
-    })
+    @View(pattern = "/list/index.html", signature = {""})
+    @View(pattern = "/list/${date}/index.html", signature = {"date"})
     public String listView(
             @Optional @PathPart("date") DateRange date,
             @Optional @Parameter("p") PaginatorModel paginator,
@@ -78,10 +75,8 @@ public class PageListView extends AbstractView {
      * Lists all blog entries by category.
      */
     @Framed
-    @ViewGroup({
-        @View(pattern = "/category/${category.id}/${date}/${#simplify(category.name)}.html", signature = {"category", "date"}),
-        @View(pattern = "/category/${category.id}/${#simplify(category.name)}.html", signature = {"category"})
-    })
+    @View(pattern = "/category/${category.id}/${date}/${#simplify(category.name)}.html", signature = {"category", "date"})
+    @View(pattern = "/category/${category.id}/${#simplify(category.name)}.html", signature = {"category"})
     public String categoryView(
             @PathPart("category.id") Category category,
             @Optional @PathPart("date") DateRange date,
@@ -98,10 +93,8 @@ public class PageListView extends AbstractView {
      * Lists all blog entries by tag.
      */
     @Framed
-    @ViewGroup({
-        @View(pattern = "/tag/${date}/${#encode(tag.name)}.html", signature = {"tag", "date"}),
-        @View(pattern = "/tag/${#encode(tag.name)}.html", signature = {"tag"})
-    })
+    @View(pattern = "/tag/${date}/${#encode(tag.name)}.html", signature = {"tag", "date"})
+    @View(pattern = "/tag/${#encode(tag.name)}.html", signature = {"tag"})
     public String tagView(
             @PathPart("#encode(tag.name)") Tag tag,
             @Optional @PathPart("date") DateRange date,
@@ -118,10 +111,8 @@ public class PageListView extends AbstractView {
      * Lists all blog entries by author.
      */
     @Framed
-    @ViewGroup({
-        @View(pattern = "/author/${author.id}/${date}/${#simplify(author.name)}.html", signature = {"author", "date"}),
-        @View(pattern = "/author/${author.id}/${#simplify(author.name)}.html", signature = {"author"})
-    })
+    @View(pattern = "/author/${author.id}/${date}/${#simplify(author.name)}.html", signature = {"author", "date"})
+    @View(pattern = "/author/${author.id}/${#simplify(author.name)}.html", signature = {"author"})
     public String authorView(
             @PathPart("author.id") User user,
             @Optional @PathPart("date") DateRange date,

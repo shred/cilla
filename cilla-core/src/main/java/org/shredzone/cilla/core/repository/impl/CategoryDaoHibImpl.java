@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -86,11 +87,9 @@ public class CategoryDaoHibImpl extends BaseDaoHibImpl<Category> implements Cate
     @Transactional(readOnly = true)
     @Override
     public Collection<Category> fetchRootCategoriesOfPage(Page page) {
-        Set<Category> result = new HashSet<>();
-        for (Category cat : page.getCategories()) {
-            result.add(fetchRootCategory(cat));
-        }
-        return result;
+        return page.getCategories().stream()
+                .map(this::fetchRootCategory)
+                .collect(Collectors.toSet());
     }
 
     @Transactional(readOnly = true)

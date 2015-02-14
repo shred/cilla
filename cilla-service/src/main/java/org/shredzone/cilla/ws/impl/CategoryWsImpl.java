@@ -64,10 +64,10 @@ public class CategoryWsImpl implements CategoryWs {
     @Override
     public List<CategoryDto> list() throws CillaServiceException {
         return categoryDao.criteria()
-            .setProjection(categoryAssembler.projection())
-            .addOrder(Order.asc("name"))
-            .setResultTransformer(new AliasToBeanResultTransformer(CategoryDto.class))
-            .list();
+                .setProjection(categoryAssembler.projection())
+                .addOrder(Order.asc("name"))
+                .setResultTransformer(new AliasToBeanResultTransformer(CategoryDto.class))
+                .list();
     }
 
     @Override

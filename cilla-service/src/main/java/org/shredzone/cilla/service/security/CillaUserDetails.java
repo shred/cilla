@@ -19,11 +19,11 @@
  */
 package org.shredzone.cilla.service.security;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 import org.shredzone.cilla.core.model.Authority;
 import org.shredzone.cilla.core.model.User;
@@ -67,13 +67,11 @@ public class CillaUserDetails implements UserDetails {
 
         role = user.getRole().getName();
 
-        Collection<Authority> roleauhtorities = user.getRole().getAuthorities();
-        GrantedAuthority[] ga = new GrantedAuthority[roleauhtorities.size()];
-        int ix = 0;
-        for (Authority authority : roleauhtorities) {
-            ga[ix++] = new SimpleGrantedAuthority("ROLE_" + authority.getName());
-        }
-        rights = Collections.unmodifiableCollection(Arrays.asList(ga));
+        rights = Collections.unmodifiableCollection(user.getRole().getAuthorities().stream()
+                .map(Authority::getName)
+                .map(it -> "ROLE_" + it)
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList()));
     }
 
     @Override

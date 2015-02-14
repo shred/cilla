@@ -46,7 +46,7 @@ public class PriorityComparator<T> implements Comparator<T> {
 
     @Override
     public int compare(T o1, T o2) {
-        return getPriority(o2) - getPriority(o1);
+        return Comparator.comparingInt(this::getPriority).reversed().compare(o1, o2);
     }
 
     /**

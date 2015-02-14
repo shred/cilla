@@ -19,6 +19,8 @@
  */
 package org.shredzone.cilla.core.search;
 
+import static java.util.stream.Collectors.joining;
+
 import org.hibernate.search.bridge.StringBridge;
 import org.shredzone.cilla.core.model.GallerySection;
 import org.shredzone.cilla.core.model.Page;
@@ -50,20 +52,27 @@ public class PageBridge implements StringBridge {
         StringBuilder sb = new StringBuilder();
 
         sb.append(PlainTextFormatter.format(page.getTeaser()));
-
-        for (Section section : page.getSections()) {
-            if (section instanceof TextSection) {
-                sb.append(' ').append(PlainTextFormatter.format(((TextSection) section).getText()));
-
-            } else if (section instanceof GallerySection) {
-                GallerySection gs = (GallerySection) section;
-                for (Picture pic : gs.getPictures()) {
-                    sb.append(' ').append(PlainTextFormatter.format(pic.getCaption()));
-                }
-            }
-        }
+        sb.append(' ');
+        sb.append(page.getSections().stream().parallel()
+                .map(this::formatSection)
+                .collect(joining(" ")));
 
         return sb.toString();
+    }
+
+    private CharSequence formatSection(Section section) {
+        if (section instanceof TextSection) {
+            return PlainTextFormatter.format(((TextSection) section).getText());
+
+        } else if (section instanceof GallerySection) {
+            GallerySection gs = (GallerySection) section;
+            return gs.getPictures().stream().parallel()
+                    .map(pic -> PlainTextFormatter.format(pic.getCaption()))
+                    .collect(joining(" "));
+
+        } else {
+            return "";
+        }
     }
 
 }

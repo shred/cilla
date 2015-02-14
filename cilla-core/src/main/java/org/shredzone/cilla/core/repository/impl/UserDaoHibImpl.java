@@ -90,10 +90,10 @@ public class UserDaoHibImpl extends BaseDaoHibImpl<User> implements UserDao {
     @Override
     public Collection<User> fetchAllWithAuthority(String authority) {
         return getCurrentSession()
-        .createQuery("SELECT u FROM User u, IN (u.role.authorities) a" +
-               " WHERE a.name = :authority")
-        .setParameter("authority", authority)
-        .list();
+                .createQuery("SELECT u FROM User u, IN (u.role.authorities) a" +
+                       " WHERE a.name = :authority")
+                .setParameter("authority", authority)
+                .list();
     }
 
 }

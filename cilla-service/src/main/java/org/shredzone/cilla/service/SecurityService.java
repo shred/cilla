@@ -19,6 +19,8 @@
  */
 package org.shredzone.cilla.service;
 
+import java.util.function.Consumer;
+
 import org.shredzone.cilla.service.security.CillaUserDetails;
 
 /**
@@ -52,5 +54,19 @@ public interface SecurityService {
      *            name of the role that is required
      */
     void requireRole(String role);
+
+    /**
+     * Executes the consumer if the current user has the given role.
+     *
+     * @param role
+     *            name of the role to be checked
+     * @param consumer
+     *            Consumer to be executed. The role name is passed to the consumer.
+     */
+    default void ifRole(String role, Consumer<String> consumer) {
+        if (hasRole(role)) {
+            consumer.accept(role);
+        }
+    }
 
 }

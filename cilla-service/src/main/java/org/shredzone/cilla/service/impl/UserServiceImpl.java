@@ -66,9 +66,9 @@ public class UserServiceImpl implements UserService {
             throw new CillaServiceException("Login name cannot be changed!");
         }
 
-        if (securityService.hasRole("ROLE_ROLEADMIN")) {
+        securityService.ifRole("ROLE_ROLEADMIN", role -> {
             attached.setRole(user.getRole());
-        }
+        });
 
         attached.setName(user.getName());
         attached.setMail(user.getMail());

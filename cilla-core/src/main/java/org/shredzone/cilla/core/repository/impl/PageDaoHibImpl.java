@@ -74,9 +74,9 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
     @Override
     public Page fetchByName(String name) {
         return (Page) getCurrentSession()
-            .createQuery("FROM Page WHERE name=:name")
-            .setParameter("name", name)
-            .uniqueResult();
+                .createQuery("FROM Page WHERE name=:name")
+                .setParameter("name", name)
+                .uniqueResult();
     }
 
     @SuppressWarnings("unchecked")
@@ -241,11 +241,11 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
     @Transactional(readOnly = true)
     public List<String> proposeSubjects(String query, int limit) {
         return getCurrentSession().createCriteria(Page.class)
-                        .add(Restrictions.like("subject", query, MatchMode.ANYWHERE))
-                        .setMaxResults(limit)
-                        .addOrder(Order.asc("subject"))
-                        .setProjection(Projections.distinct(Projections.property("subject")))
-                        .list();
+                .add(Restrictions.like("subject", query, MatchMode.ANYWHERE))
+                .setMaxResults(limit)
+                .addOrder(Order.asc("subject"))
+                .setProjection(Projections.distinct(Projections.property("subject")))
+                .list();
     }
 
     @SuppressWarnings("unchecked")

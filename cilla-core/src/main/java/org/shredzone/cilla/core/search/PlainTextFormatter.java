@@ -19,8 +19,12 @@
  */
 package org.shredzone.cilla.core.search;
 
+import java.util.Objects;
+import java.util.function.Function;
+
 import org.shredzone.cilla.core.model.embed.FormattedText;
 import org.shredzone.cilla.ws.TextFormat;
+import org.shredzone.commons.text.filter.KeepFilter;
 import org.shredzone.commons.text.filter.ParagraphFilter;
 import org.shredzone.commons.text.filter.SimplifyHtmlFilter;
 import org.shredzone.commons.text.filter.StripHtmlFilter;
@@ -33,6 +37,7 @@ import org.shredzone.commons.text.filter.TextileFilter;
  */
 public final class PlainTextFormatter {
 
+    private static final KeepFilter KEEP_FILTER = new KeepFilter();
     private static final ParagraphFilter PARAGRAPH_FILTER = new ParagraphFilter();
     private static final SimplifyHtmlFilter HTML_SIMPLIFY_FILTER = new SimplifyHtmlFilter();
     private static final StripHtmlFilter STRIP_HTML_FILTER = new StripHtmlFilter();
@@ -40,6 +45,44 @@ public final class PlainTextFormatter {
 
     private PlainTextFormatter() {
         // Utility class without constructor
+    }
+
+    /**
+     * Returns a {@link Function} that converts the input {@link CharSequence} to a
+     * plaintext output {@link CharSequence}.
+     *
+     * @param format
+     *            Text to format
+     * @return Formatted text as plaintext
+     */
+    public static Function<CharSequence, CharSequence> formatting(TextFormat format) {
+        switch (Objects.requireNonNull(format)) {
+            case HTML:
+                return STRIP_HTML_FILTER;
+
+            case PLAIN:
+                return KEEP_FILTER;
+
+            case SIMPLIFIED:
+                return HTML_SIMPLIFY_FILTER
+                        .andThen(PARAGRAPH_FILTER)
+                        .andThen(STRIP_HTML_FILTER);
+
+            case PARAGRAPHED:
+                return PARAGRAPH_FILTER
+                        .andThen(STRIP_HTML_FILTER);
+
+            case PREFORMATTED:
+                return KEEP_FILTER;
+
+            case TEXTILE:
+                return TEXTILE_FILTER
+                        .andThen(STRIP_HTML_FILTER);
+
+            default:
+                throw new IllegalArgumentException("Unknown format " + format);
+        }
+
     }
 
     /**
@@ -55,7 +98,6 @@ public final class PlainTextFormatter {
         }
         return format(text.getText(), text.getFormat());
     }
-
     /**
      * Formats the given formatted text
      *
@@ -70,40 +112,7 @@ public final class PlainTextFormatter {
             return null;
         }
 
-        StringBuilder sb = new StringBuilder(text);
-
-        switch (format) {
-            case HTML:
-                sb = STRIP_HTML_FILTER.filter(sb);
-                break;
-
-            case PLAIN:
-                break;
-
-            case SIMPLIFIED:
-                sb = HTML_SIMPLIFY_FILTER.filter(sb);
-                sb = PARAGRAPH_FILTER.filter(sb);
-                sb = STRIP_HTML_FILTER.filter(sb);
-                break;
-
-            case PARAGRAPHED:
-                sb = PARAGRAPH_FILTER.filter(sb);
-                sb = STRIP_HTML_FILTER.filter(sb);
-                break;
-
-            case PREFORMATTED:
-                break;
-
-            case TEXTILE:
-                sb = TEXTILE_FILTER.filter(sb);
-                sb = STRIP_HTML_FILTER.filter(sb);
-                break;
-
-            default:
-                throw new IllegalArgumentException("Cannot handle format " + format);
-        }
-
-        return sb;
+        return formatting(format).apply(text);
     }
 
 }

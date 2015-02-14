@@ -19,9 +19,8 @@
  */
 package org.shredzone.cilla.web.format;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -33,6 +32,7 @@ import org.shredzone.cilla.web.plugin.manager.PriorityComparator;
 import org.shredzone.cilla.ws.TextFormat;
 import org.shredzone.commons.text.TextFilter;
 import org.shredzone.commons.text.filter.HtmlEscapeFilter;
+import org.shredzone.commons.text.filter.KeepFilter;
 import org.shredzone.commons.text.filter.ParagraphFilter;
 import org.shredzone.commons.text.filter.SimplifyHtmlFilter;
 import org.shredzone.commons.text.filter.StripHtmlFilter;
@@ -47,6 +47,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class TextFormatterImpl implements TextFormatter {
+    private static final KeepFilter KEEP_FILTER = new KeepFilter();
     private static final ParagraphFilter PARAGRAPH_FILTER = new ParagraphFilter();
     private static final HtmlEscapeFilter HTML_ESCAPE_FILTER = new HtmlEscapeFilter();
     private static final SimplifyHtmlFilter HTML_SIMPLIFY_FILTER = new SimplifyHtmlFilter();
@@ -54,19 +55,18 @@ public class TextFormatterImpl implements TextFormatter {
 
     private @Resource ApplicationContext applicationContext;
 
-    private List<TextFilter> postFilters;
+    private Function<CharSequence, CharSequence> postProcessingTextFilters = KEEP_FILTER;
 
     /**
      * Initializes the text formatter.
      */
     @PostConstruct
     protected void setup() {
-        List<TextFilter> filterList = new ArrayList<>();
-        for (PostProcessingTextFilter filter : applicationContext.getBeansOfType(PostProcessingTextFilter.class).values()) {
-            filterList.add(filter);
-        }
-        Collections.sort(filterList, new PriorityComparator<>(TextFilter.class));
-        postFilters = Collections.unmodifiableList(filterList);
+        applicationContext.getBeansOfType(PostProcessingTextFilter.class).values().stream()
+                .sorted(new PriorityComparator<>(TextFilter.class))
+                .forEachOrdered(filter -> {
+                    postProcessingTextFilters = postProcessingTextFilters.andThen(filter);
+                });
     }
 
     @Override
@@ -81,34 +81,46 @@ public class TextFormatterImpl implements TextFormatter {
 
     @Override
     public CharSequence format(CharSequence text, TextFormat format, Page page) {
-        StringBuilder sb = new StringBuilder(text);
+        return formatting(format, page).apply(text);
+    }
 
-        switch (format) {
+    @Override
+    public CharSequence stripHtml(CharSequence str) {
+        return STRIP_HTML_FILTER.apply(str);
+    }
+
+    /**
+     * Returns a formatting {@link Function} for the given {@link TextFormat}.
+     *
+     * @param format
+     *            {@link TextFormat} to return a formatting function of
+     * @param page
+     *            {@link Page} context, may be {@code null}
+     * @return {@link Function} formatting the {@link TextFormat}. Can be a singleton or a
+     *         new instance.
+     */
+    private Function<CharSequence, CharSequence> formatting(TextFormat format, Page page) {
+        switch (Objects.requireNonNull(format)) {
             case HTML:
-                break;
+                return KEEP_FILTER;
 
             case PLAIN:
-                sb = HTML_ESCAPE_FILTER.filter(sb);
-                sb = PARAGRAPH_FILTER.filter(sb);
-                sb = applyPostProcessingTextFilters(sb);
-                break;
+                return HTML_ESCAPE_FILTER
+                        .andThen(PARAGRAPH_FILTER)
+                        .andThen(postProcessingTextFilters);
 
             case SIMPLIFIED:
-                sb = HTML_SIMPLIFY_FILTER.filter(sb);
-                sb = PARAGRAPH_FILTER.filter(sb);
-                sb = applyPostProcessingTextFilters(sb);
-                break;
+                return HTML_SIMPLIFY_FILTER
+                        .andThen(PARAGRAPH_FILTER)
+                        .andThen(postProcessingTextFilters);
 
             case PARAGRAPHED:
-                sb = PARAGRAPH_FILTER.filter(sb);
-                sb = applyPostProcessingTextFilters(sb);
-                break;
+                return PARAGRAPH_FILTER
+                        .andThen(postProcessingTextFilters);
 
             case PREFORMATTED:
-                sb = HTML_ESCAPE_FILTER.filter(sb);
-                sb.insert(0, "<pre>");
-                sb.append("</pre>");
-                break;
+                return HTML_ESCAPE_FILTER
+                        .andThen(ch -> "<pre>" + ch + "</pre>");
 
             case TEXTILE:
                 ReferenceResolver rr = applicationContext.getBean(ReferenceResolver.class);
@@ -117,36 +129,11 @@ public class TextFormatterImpl implements TextFormatter {
                 TextileFilter tf = new TextileFilter();
                 tf.setAnalyzer(rr);
 
-                sb = tf.filter(sb);
-                sb = applyPostProcessingTextFilters(sb);
-                break;
+                return tf.andThen(postProcessingTextFilters);
 
             default:
                 throw new IllegalArgumentException("Cannot handle format " + format);
         }
-
-        return sb;
-    }
-
-    @Override
-    public CharSequence stripHtml(CharSequence str) {
-        return STRIP_HTML_FILTER.filter(new StringBuilder(str));
-    }
-
-    /**
-     * Applies all {@link PostProcessingTextFilter} to the {@link StringBuilder}, in
-     * prioritized order.
-     *
-     * @param sb
-     *            {@link StringBuilder} to change
-     * @return new {@link StringBuilder} with the filters applied
-     */
-    private StringBuilder applyPostProcessingTextFilters(StringBuilder sb) {
-        StringBuilder result = sb;
-        for (TextFilter filter : postFilters) {
-            result = filter.filter(result);
-        }
-        return result;
     }
 
 }

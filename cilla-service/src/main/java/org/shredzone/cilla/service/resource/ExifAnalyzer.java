@@ -358,15 +358,9 @@ public class ExifAnalyzer {
 
             StringBuilder sb = new StringBuilder();
             switch (code & 0x18) {
-            case 0x08:
-                sb.append("on");
-                break;
-            case 0x10:
-                sb.append("off");
-                break;
-            case 0x18:
-                sb.append("auto");
-                break;
+                case 0x08: sb.append("on"); break;
+                case 0x10: sb.append("off"); break;
+                case 0x18: sb.append("auto"); break;
             }
 
             if ((code & 0x01) != 0) {

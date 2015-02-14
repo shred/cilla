@@ -56,9 +56,7 @@ public class PageBean implements Serializable {
     public PageDto getPage()                    { return page; }
     public void setPage(PageDto page)           {
         this.page = page;
-        for (PageSelectionObserver observer : pageSelectionObservers) {
-            observer.onPageSelected(page);
-        }
+        pageSelectionObservers.forEach(observer -> observer.onPageSelected(page));
     }
 
     /**

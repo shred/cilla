@@ -75,10 +75,10 @@ public class HeaderWsImpl extends AbstractWs implements HeaderWs {
     @Override
     public List<HeaderDto> list(ListRange lr) {
         Criteria crit = headerDao.criteria()
-            .createAlias("creator", "c")
-            .createAlias("thread", "t")
-            .setProjection(headerAssembler.projection())
-            .setResultTransformer(new AliasToBeanResultTransformer(HeaderDto.class));
+                .createAlias("creator", "c")
+                .createAlias("thread", "t")
+                .setProjection(headerAssembler.projection())
+                .setResultTransformer(new AliasToBeanResultTransformer(HeaderDto.class));
 
         applyListRange(lr, "creation", true, crit);
 

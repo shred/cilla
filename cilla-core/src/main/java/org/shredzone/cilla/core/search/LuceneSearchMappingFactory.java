@@ -62,10 +62,10 @@ public class LuceneSearchMappingFactory {
     private void setupIndex(SearchMapping mapping) {
         mapping
             .entity(Page.class)
-                .classBridge(PageBridge.class).name("text").index(Index.TOKENIZED).store(Store.YES)
+                .classBridge(PageBridge.class).name("text").index(Index.YES).store(Store.YES)
                 .indexed()
                 .property("id", ElementType.METHOD).documentId()
-                .property("title", ElementType.METHOD).field().index(Index.TOKENIZED).analyzer(GermanAnalyzer.class)
+                .property("title", ElementType.METHOD).field().index(Index.YES).analyzer(GermanAnalyzer.class)
         ;
     }
 

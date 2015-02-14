@@ -19,7 +19,9 @@
  */
 package org.shredzone.cilla.service.security;
 
-import java.util.ArrayList;
+import static java.util.stream.Collectors.toList;
+
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -116,23 +118,21 @@ public class CillaUserDetailsManager implements UserDetailsManager, GroupManager
 
     @Override
     public List<String> findAllGroups() {
-        List<String> result = new ArrayList<String>();
-        for (Role role : roleDao.fetchAll()) {
-            result.add(role.getName());
-        }
-        return result;
+        return roleDao.fetchAll().stream()
+                .map(Role::getName)
+                .collect(toList());
     }
 
     @Override
     public List<String> findUsersInGroup(String groupName) {
-        List<String> result = new ArrayList<String>();
         Role role = roleDao.fetchByName(groupName);
-        if (role != null) {
-            for (User user : userDao.fetchAllWithRole(role)) {
-                result.add(user.getLogin());
-            }
+        if (role == null) {
+            return Collections.emptyList();
         }
-        return result;
+
+        return userDao.fetchAllWithRole(role).stream()
+                .map(User::getLogin)
+                .collect(toList());
     }
 
     @Override
@@ -162,14 +162,16 @@ public class CillaUserDetailsManager implements UserDetailsManager, GroupManager
 
     @Override
     public List<GrantedAuthority> findGroupAuthorities(String groupName) {
-        List<GrantedAuthority> result = new ArrayList<GrantedAuthority>();
         Role role = roleDao.fetchByName(groupName);
-        if (role != null) {
-            for (Authority auth : role.getAuthorities()) {
-                result.add(new SimpleGrantedAuthority("ROLE_" + auth.getName()));
-            }
+        if (role == null) {
+            return Collections.emptyList();
         }
-        return result;
+
+        return role.getAuthorities().stream()
+                .map(Authority::getName)
+                .map(it -> "ROLE_" + it)
+                .map(SimpleGrantedAuthority::new)
+                .collect(toList());
     }
 
     @Override

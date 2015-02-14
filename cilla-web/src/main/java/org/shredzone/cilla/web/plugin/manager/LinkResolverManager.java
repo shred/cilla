@@ -19,7 +19,8 @@
  */
 package org.shredzone.cilla.web.plugin.manager;
 
-import java.util.ArrayList;
+import static java.util.stream.Collectors.toList;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -47,19 +48,15 @@ public class LinkResolverManager {
 
     @PostConstruct
     protected void setup() {
-        List<LinkTypeMatcher> matcherList = new ArrayList<>();
-        for (LinkTypeMatcher m : applicationContext.getBeansOfType(LinkTypeMatcher.class).values()) {
-            matcherList.add(m);
-        }
-        Collections.sort(matcherList, new PriorityComparator<>(LinkTypeMatcher.class));
-        linkTypeMatchers = Collections.unmodifiableList(matcherList);
+        linkTypeMatchers = Collections.unmodifiableList(
+                applicationContext.getBeansOfType(LinkTypeMatcher.class).values().stream()
+                        .sorted(new PriorityComparator<>(LinkTypeMatcher.class))
+                        .collect(toList()));
 
-        List<LocalLinkResolver> resolverList = new ArrayList<>();
-        for (LocalLinkResolver m : applicationContext.getBeansOfType(LocalLinkResolver.class).values()) {
-            resolverList.add(m);
-        }
-        Collections.sort(resolverList, new PriorityComparator<>(LocalLinkResolver.class));
-        localLinkResolvers = Collections.unmodifiableList(resolverList);
+        localLinkResolvers = Collections.unmodifiableList(
+                applicationContext.getBeansOfType(LocalLinkResolver.class).values().stream()
+                        .sorted(new PriorityComparator<>(LocalLinkResolver.class))
+                        .collect(toList()));
     }
 
     /**

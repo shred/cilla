@@ -19,9 +19,9 @@
  */
 package org.shredzone.cilla.ws.impl;
 
+import static java.util.stream.Collectors.toSet;
+
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.jws.WebService;
@@ -56,12 +56,9 @@ public class LoginWsImpl implements LoginWs {
 
         GrantedRoleDto dto = new GrantedRoleDto();
         dto.setName(cud.getRole());
-
-        Set<String> rights = new HashSet<>();
-        for (GrantedAuthority authority : cud.getAuthorities()) {
-            rights.add(authority.getAuthority());
-        }
-        dto.setRights(Collections.unmodifiableSet(rights));
+        dto.setRights(Collections.unmodifiableSet(cud.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(toSet())));
 
         return dto;
     }

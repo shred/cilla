@@ -35,7 +35,6 @@ import org.shredzone.commons.view.annotation.Optional;
 import org.shredzone.commons.view.annotation.Parameter;
 import org.shredzone.commons.view.annotation.PathPart;
 import org.shredzone.commons.view.annotation.View;
-import org.shredzone.commons.view.annotation.ViewGroup;
 import org.shredzone.commons.view.annotation.ViewHandler;
 import org.shredzone.commons.view.exception.ViewException;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,10 +57,8 @@ public class SearchView extends AbstractView {
      * Shows the view result page.
      */
     @Framed
-    @ViewGroup({
-        @View(pattern = "/search", name="search"),
-        @View(pattern = "/search/${date}", name="search")
-    })
+    @View(pattern = "/search", name="search")
+    @View(pattern = "/search/${date}", name="search")
     public String searchView(HttpServletRequest req,
             @Optional @PathPart("date") DateRange date,
             @Optional @Parameter("p") PaginatorModel paginator,

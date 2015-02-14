@@ -19,13 +19,12 @@
  */
 package org.shredzone.cilla.admin;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.SortedMap;
 import java.util.TimeZone;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.faces.component.UIComponent;
@@ -65,18 +64,11 @@ public class TimeZoneBean implements Converter {
      */
     public List<String> complete(String query) {
         String qstr = query.trim().toLowerCase();
-        List<String> result = new ArrayList<>(maxResults);
 
-        for (String entry : timeZoneMap.keySet()) {
-            if (entry.toLowerCase().contains(qstr)) {
-                result.add(entry);
-                if (result.size() == maxResults) {
-                    break;
-                }
-            }
-        }
-
-        return result;
+        return timeZoneMap.keySet().stream()
+                .filter(entry -> entry.toLowerCase().contains(qstr))
+                .limit(maxResults)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -96,13 +88,11 @@ public class TimeZoneBean implements Converter {
                 return timeZoneMap.get(qstr);
             }
 
-            for (Map.Entry<String, TimeZone> entry : timeZoneMap.entrySet()) {
-                if (entry.getKey().equalsIgnoreCase(qstr)) {
-                    return entry.getValue();
-                }
-            }
-
-            return TimeZone.getTimeZone(string);
+            return timeZoneMap.entrySet().stream()
+                    .filter(it -> it.getKey().equalsIgnoreCase(qstr))
+                    .map(it -> it.getValue())
+                    .findFirst()
+                    .orElse(TimeZone.getTimeZone(string));
         } catch (Exception ex) {
             ex.printStackTrace();
             throw new ConverterException(ex);

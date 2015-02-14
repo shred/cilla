@@ -123,9 +123,9 @@ public abstract class AbstractSearchStrategy implements SearchStrategy {
                 // I'd prefer to use Restrictions.in instead, but this seems to be difficult.
                 // http://stackoverflow.com/questions/407737/hibernate-criteria-querying-tables-in-nm-relationship
                 Disjunction dis = Restrictions.disjunction();
-                for (Category c : result.getEffectiveCategories()) {
-                    dis.add(Restrictions.idEq(c.getId()));
-                }
+                result.getEffectiveCategories().stream()
+                        .mapToLong(Category::getId)
+                        .forEach(id -> dis.add(Restrictions.idEq(id)));
                 crit.createCriteria("categories").add(dis);
             }
 

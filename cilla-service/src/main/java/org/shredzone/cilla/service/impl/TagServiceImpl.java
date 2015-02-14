@@ -63,7 +63,6 @@ public class TagServiceImpl implements TagService {
     @Cacheable("tagCloud")
     @Override
     public Map<Tag, Float> createTagCloud(long limit) {
-        Map<Tag, Float> result = new HashMap<>();
         Date now = new Date();
         Date limitDate = new Date(now.getTime() - limit);
 
@@ -79,12 +78,28 @@ public class TagServiceImpl implements TagService {
                .add(Restrictions.isNotEmpty("tags"))
                .list();
 
-        long minSpan = limitDate.getTime();
+        return computeTagCloud(pages, limitDate.getTime(), limit);
+    }
+
+    /**
+     * Computes the tag cloud map.
+     *
+     * @param pages
+     *            List of {@link Page} found in the time range
+     * @param beginning
+     *            Time range beginning (ms since epoch)
+     * @param limit
+     *            Time range size (ms)
+     * @return Map of {@link Tag} and its cloud map factor
+     */
+    protected Map<Tag, Float> computeTagCloud(List<Page> pages, long beginning, long limit) {
         float max = 0f;
+
+        Map<Tag, Float> result = new HashMap<>();
 
         for (Page page : pages) {
             long pageDate = page.getPublication().getTime();
-            float weight = (pageDate - minSpan) / (float) limit;
+            float weight = (pageDate - beginning) / (float) limit;
 
             for (Tag tag : page.getTags()) {
                 if (result.containsKey(tag)) {

@@ -19,10 +19,10 @@
  */
 package org.shredzone.cilla.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -31,7 +31,6 @@ import org.shredzone.cilla.core.model.CommentThread;
 import org.shredzone.cilla.core.model.Header;
 import org.shredzone.cilla.core.model.Page;
 import org.shredzone.cilla.core.model.Picture;
-import org.shredzone.cilla.core.model.User;
 import org.shredzone.cilla.core.model.embed.FormattedText;
 import org.shredzone.cilla.core.model.is.Commentable;
 import org.shredzone.cilla.core.repository.CommentDao;
@@ -105,14 +104,15 @@ public class CommentServiceImpl implements CommentService {
 
         commentDao.persist(comment);
 
-        List<NotificationTarget> targets = new ArrayList<>();
-        for (User user : userDao.fetchAllWithAuthority("MODERATOR")) {
-            NotificationTarget target = new NotificationTarget();
-            target.setLocale(user.getLanguage().getLocale());
-            target.setMail(user.getMail());
-            target.setName(user.getName());
-            targets.add(target);
-        }
+        List<NotificationTarget> targets = userDao.fetchAllWithAuthority("MODERATOR").stream()
+                .map(user -> {
+                    NotificationTarget target = new NotificationTarget();
+                    target.setLocale(user.getLanguage().getLocale());
+                    target.setMail(user.getMail());
+                    target.setName(user.getName());
+                    return target;
+                })
+                .collect(Collectors.toList());
 
         String title = null;
 
@@ -145,9 +145,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void remove(Comment comment) {
         securityService.requireRole("ROLE_MODERATOR");
-        for (Comment reply : commentDao.fetchReplies(comment)) {
-            remove(reply);
-        }
+        commentDao.fetchReplies(comment).forEach(this::remove);
         commentDao.delete(comment);
     }
 

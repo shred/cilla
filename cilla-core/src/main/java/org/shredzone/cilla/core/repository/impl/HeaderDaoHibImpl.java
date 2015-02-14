@@ -106,10 +106,10 @@ public class HeaderDaoHibImpl extends BaseDaoHibImpl<Header> implements HeaderDa
         if (count.intValue() != 0) {
             int index = rnd.nextInt(count.intValue());
             result = (Header) criteria()
-                .add(restriction)
-                .setFirstResult(index)
-                .setMaxResults(1)
-                .uniqueResult();
+                    .add(restriction)
+                    .setFirstResult(index)
+                    .setMaxResults(1)
+                    .uniqueResult();
         }
 
         return result;

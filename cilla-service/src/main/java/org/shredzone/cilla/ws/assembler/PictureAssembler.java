@@ -19,6 +19,8 @@
  */
 package org.shredzone.cilla.ws.assembler;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.SortedSet;
 
 import javax.annotation.Resource;
@@ -65,9 +67,9 @@ public class PictureAssembler extends AbstractAssembler<Picture, PictureDto> {
             dto.setAltitude(gl.getAltitude());
         }
 
-        for (Tag tag : entity.getTags()) {
-            dto.getTags().add(tag.getName());
-        }
+        dto.getTags().addAll(entity.getTags().stream()
+                .map(Tag::getName)
+                .collect(toList()));
 
         return dto;
     }
@@ -99,9 +101,7 @@ public class PictureAssembler extends AbstractAssembler<Picture, PictureDto> {
 
         SortedSet<Tag> tagSet = entity.getTags();
         tagSet.clear();
-        for (String tag : dto.getTags()) {
-            tagSet.add(tagDao.fetchOrCreate(tag));
-        }
+        dto.getTags().stream().map(tagDao::fetchOrCreate).forEach(tag -> tagSet.add(tag));
     }
 
 }

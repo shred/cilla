@@ -60,7 +60,7 @@ public class CommentDaoHibImpl extends BaseDaoHibImpl<Comment> implements Commen
     @Override
     public long countAll() {
         Query q = getCurrentSession()
-                        .getNamedQuery("countAllComments");
+                .getNamedQuery("countAllComments");
         return ((Number) q.uniqueResult()).longValue();
     }
 

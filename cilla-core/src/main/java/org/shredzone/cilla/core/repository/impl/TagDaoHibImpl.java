@@ -61,8 +61,7 @@ public class TagDaoHibImpl extends BaseDaoHibImpl<Tag> implements TagDao {
     @Transactional(readOnly = true)
     @Override
     public List<Tag> fetchAll() {
-        return getCurrentSession().createQuery(
-                        "FROM Tag ORDER BY name")
+        return getCurrentSession().createQuery("FROM Tag ORDER BY name")
                 .list();
     }
 
