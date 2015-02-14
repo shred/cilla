@@ -19,12 +19,17 @@
  */
 package org.shredzone.cilla.core.model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TimeZone;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cache;
@@ -48,6 +53,7 @@ public class User extends BaseModel {
     private Role role;
     private Language language;
     private TimeZone timeZone;
+    private Map<String, String> properties = new HashMap<>();
 
     /**
      * Login name of the user.
@@ -97,5 +103,15 @@ public class User extends BaseModel {
     @Column(nullable = false)
     public TimeZone getTimeZone()               { return timeZone; }
     public void setTimeZone(TimeZone timeZone)  { this.timeZone = timeZone; }
+
+    /**
+     * Common user properties.
+     */
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "User_Properties")
+    @MapKeyColumn(name = "key")
+    @Column(name = "value", length = 4096)
+    public Map<String, String> getProperties()  { return properties; }
+    public void setProperties(Map<String, String> properties) { this.properties = properties; }
 
 }
