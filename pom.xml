@@ -24,7 +24,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.shredzone.cilla</groupId>
     <artifactId>cilla</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Cilla</name>
     <description>Cilla Blog Management System</description>
