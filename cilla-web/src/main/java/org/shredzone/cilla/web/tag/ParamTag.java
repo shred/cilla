@@ -66,7 +66,7 @@ public class ParamTag extends BodyTagSupport {
         if (parent != null) {
             if (value != null) {
                 parent.addParam(name, value);
-            } else {
+            } else if (getBodyContent() != null) {
                 parent.addParam(name, getBodyContent().getString());
             }
         }
