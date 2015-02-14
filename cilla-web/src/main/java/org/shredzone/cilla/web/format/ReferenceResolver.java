@@ -19,11 +19,12 @@
  */
 package org.shredzone.cilla.web.format;
 
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 import javax.annotation.Resource;
 
-import org.shredzone.cilla.core.model.Page;
+import org.shredzone.cilla.service.link.LinkBuilder;
 import org.shredzone.cilla.web.plugin.LinkTypeMatcher;
 import org.shredzone.cilla.web.plugin.LocalLinkResolver;
 import org.shredzone.cilla.web.plugin.manager.LinkResolverManager;
@@ -44,10 +45,15 @@ public class ReferenceResolver implements LinkAnalyzer {
 
     private @Resource LinkResolverManager linkResolverManager;
 
-    private Page page;
+    private Supplier<LinkBuilder> linkBuilderSupplier = null;
 
-    public Page getPage()                       { return page; }
-    public void setPage(Page page)              { this.page = page; }
+    public Supplier<LinkBuilder> getLinkBuilderSupplier() {
+        return linkBuilderSupplier;
+    }
+
+    public void setLinkBuilderSupplier(Supplier<LinkBuilder> linkBuilderSupplier) {
+        this.linkBuilderSupplier = linkBuilderSupplier;
+    }
 
     @Override
     public String linkType(String url) {
@@ -62,9 +68,9 @@ public class ReferenceResolver implements LinkAnalyzer {
 
     @Override
     public String linkUrl(String url) {
-        if (page != null && !ABSOLUTE_URL.matcher(url).matches()) {
+        if (linkBuilderSupplier != null && !ABSOLUTE_URL.matcher(url).matches()) {
             for (LocalLinkResolver r : linkResolverManager.getLocalLinkResolvers()) {
-                String result = r.resolveLocalLink(url, page, false);
+                String result = r.resolveLocalLink(url, false, linkBuilderSupplier);
                 if (result != null) {
                     return result;
                 }
@@ -75,9 +81,9 @@ public class ReferenceResolver implements LinkAnalyzer {
 
     @Override
     public String imageUrl(String url) {
-        if (page != null && !ABSOLUTE_URL.matcher(url).matches()) {
+        if (linkBuilderSupplier != null && !ABSOLUTE_URL.matcher(url).matches()) {
             for (LocalLinkResolver r : linkResolverManager.getLocalLinkResolvers()) {
-                String result = r.resolveLocalLink(url, page, true);
+                String result = r.resolveLocalLink(url, true, linkBuilderSupplier);
                 if (result != null) {
                     return result;
                 }

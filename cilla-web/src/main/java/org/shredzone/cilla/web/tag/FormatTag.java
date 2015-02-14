@@ -28,6 +28,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.shredzone.cilla.core.model.Page;
 import org.shredzone.cilla.core.model.embed.FormattedText;
+import org.shredzone.cilla.service.link.LinkService;
 import org.shredzone.cilla.web.format.TextFormatter;
 import org.shredzone.cilla.web.util.TagUtils;
 import org.shredzone.cilla.ws.TextFormat;
@@ -51,6 +52,7 @@ public class FormatTag extends BodyTagSupport {
     private static final long serialVersionUID = -1870489798167703697L;
 
     private @Resource TextFormatter textFormatter;
+    private @Resource LinkService linkService;
 
     private Object text;
     private Object format;
@@ -115,7 +117,7 @@ public class FormatTag extends BodyTagSupport {
 
         if (result == null) result = "";
 
-        result = textFormatter.format(result, txtFormat, page);
+        result = textFormatter.format(result, txtFormat, () -> linkService.linkTo().page(page));
 
         if (stripHtml) {
             result = textFormatter.stripHtml(result);

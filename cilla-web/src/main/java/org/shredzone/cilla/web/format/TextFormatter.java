@@ -19,8 +19,11 @@
  */
 package org.shredzone.cilla.web.format;
 
+import java.util.function.Supplier;
+
 import org.shredzone.cilla.core.model.Page;
 import org.shredzone.cilla.core.model.embed.FormattedText;
+import org.shredzone.cilla.service.link.LinkBuilder;
 import org.shredzone.cilla.ws.TextFormat;
 
 /**
@@ -45,11 +48,24 @@ public interface TextFormatter {
      *
      * @param text
      *            the {@link FormattedText} to be formatted
-     * @param page
-     *            {@link Page} to resolve relative links to
+     * @param linkBuilderSupplier
+     *            supplier for a preconfigured {@link LinkBuilder} to be used, or
+     *            {@code null} to generate relative links
      * @return HTML
      */
-    CharSequence format(FormattedText text, Page page);
+    CharSequence format(FormattedText text, Supplier<LinkBuilder> linkBuilderSupplier);
+
+    /**
+     * Formats the given {@link CharSequence}. The text is formatted according to the
+     * given {@link TextFormat}. Relative links are not resolved.
+     *
+     * @param text
+     *            the text to be formatted
+     * @param format
+     *            the {@link TextFormat} the given text is in
+     * @return HTML
+     */
+    CharSequence format(CharSequence text, TextFormat format);
 
     /**
      * Formats the given {@link CharSequence}. The text is formatted according to the
@@ -59,11 +75,12 @@ public interface TextFormatter {
      *            the text to be formatted
      * @param format
      *            the {@link TextFormat} the given text is in
-     * @param page
-     *            {@link Page} to resolve relative links to
+     * @param linkBuilderSupplier
+     *            supplier for a preconfigured {@link LinkBuilder} to be used, or
+     *            {@code null} to generate relative links
      * @return HTML
      */
-    CharSequence format(CharSequence text, TextFormat format, Page page);
+    CharSequence format(CharSequence text, TextFormat format, Supplier<LinkBuilder> linkBuilderSupplier);
 
     /**
      * Strips all html from the given string. Opening tags are replaced by a whitespace.

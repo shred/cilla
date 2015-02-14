@@ -21,12 +21,13 @@ package org.shredzone.cilla.web.format;
 
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
-import org.shredzone.cilla.core.model.Page;
 import org.shredzone.cilla.core.model.embed.FormattedText;
+import org.shredzone.cilla.service.link.LinkBuilder;
 import org.shredzone.cilla.web.plugin.PostProcessingTextFilter;
 import org.shredzone.cilla.web.plugin.manager.PriorityComparator;
 import org.shredzone.cilla.ws.TextFormat;
@@ -75,13 +76,18 @@ public class TextFormatterImpl implements TextFormatter {
     }
 
     @Override
-    public CharSequence format(FormattedText text, Page page) {
-        return format(text.getText(), text.getFormat(), page);
+    public CharSequence format(FormattedText text, Supplier<LinkBuilder> linkBuilderSupplier) {
+        return format(text.getText(), text.getFormat(), linkBuilderSupplier);
     }
 
     @Override
-    public CharSequence format(CharSequence text, TextFormat format, Page page) {
-        return formatting(format, page).apply(text);
+    public CharSequence format(CharSequence text, TextFormat format) {
+        return format(text, format, null);
+    }
+
+    @Override
+    public CharSequence format(CharSequence text, TextFormat format, Supplier<LinkBuilder> linkBuilderSupplier) {
+         return formatting(format, linkBuilderSupplier).apply(text);
     }
 
     @Override
@@ -94,12 +100,13 @@ public class TextFormatterImpl implements TextFormatter {
      *
      * @param format
      *            {@link TextFormat} to return a formatting function of
-     * @param page
-     *            {@link Page} context, may be {@code null}
+     * @param linkBuilderSupplier
+     *            supplier for a preconfigured {@link LinkBuilder} to be used, or
+     *            {@code null} to generate relative links
      * @return {@link Function} formatting the {@link TextFormat}. Can be a singleton or a
      *         new instance.
      */
-    private Function<CharSequence, CharSequence> formatting(TextFormat format, Page page) {
+    private Function<CharSequence, CharSequence> formatting(TextFormat format, Supplier<LinkBuilder> linkBuilderSupplier) {
         switch (Objects.requireNonNull(format)) {
             case HTML:
                 return KEEP_FILTER;
@@ -124,7 +131,7 @@ public class TextFormatterImpl implements TextFormatter {
 
             case TEXTILE:
                 ReferenceResolver rr = applicationContext.getBean(ReferenceResolver.class);
-                rr.setPage(page);
+                rr.setLinkBuilderSupplier(linkBuilderSupplier);
 
                 TextileFilter tf = new TextileFilter();
                 tf.setAnalyzer(rr);

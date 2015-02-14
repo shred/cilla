@@ -19,6 +19,8 @@
  */
 package org.shredzone.cilla.view;
 
+import java.util.function.Supplier;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,7 +30,7 @@ import org.shredzone.cilla.core.model.Medium;
 import org.shredzone.cilla.core.model.Page;
 import org.shredzone.cilla.core.repository.MediumDao;
 import org.shredzone.cilla.service.PageService;
-import org.shredzone.cilla.service.link.LinkService;
+import org.shredzone.cilla.service.link.LinkBuilder;
 import org.shredzone.cilla.view.annotation.Framed;
 import org.shredzone.cilla.web.plugin.LocalLinkResolver;
 import org.shredzone.cilla.web.plugin.manager.ImageProcessingManager;
@@ -53,7 +55,6 @@ import org.springframework.stereotype.Component;
 public class MediaView extends AbstractView implements LocalLinkResolver {
 
     private @Resource PageService pageService;
-    private @Resource LinkService linkService;
     private @Resource MediumDao mediaDao;
     private @Resource ImageProcessingManager imageProcessingManager;
 
@@ -115,26 +116,26 @@ public class MediaView extends AbstractView implements LocalLinkResolver {
     }
 
     @Override
-    public String resolveLocalLink(String url, Page page, boolean image) {
+    public String resolveLocalLink(String url, boolean image, Supplier<LinkBuilder> linkBuilderSupplier) {
         String[] parts = url.split("/", 2);
 
         if (image && parts.length == 1) {
-            return linkService.linkTo().page(page)
+            return linkBuilderSupplier.get()
                             .param("name", parts[0])
                             .toString();
 
         } else if (image && parts.length == 2) {
-            return linkService.linkTo().page(page)
+            return linkBuilderSupplier.get()
                             .param("type", parts[0])
                             .param("name", parts[1])
                             .toString();
 
         } else if (!image && parts.length == 2) {
             if ("show".equals(parts[0])) {
-                return linkService.linkTo().page(page)
-                                .view("showPreview")
-                                .param("name", parts[1])
-                                .toString();
+                return linkBuilderSupplier.get()
+                            .view("showPreview")
+                            .param("name", parts[1])
+                            .toString();
             }
         }
 

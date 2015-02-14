@@ -255,7 +255,7 @@ public class FeedView extends AbstractView {
 
         String body = textFormatter.format(
                 page.getTeaser(),
-                page
+                () -> linkService.linkTo().page(page)
         ).toString();
 
         SyndEntry entry = new SyndEntryImpl();

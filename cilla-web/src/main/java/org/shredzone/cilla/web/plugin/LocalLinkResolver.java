@@ -19,7 +19,10 @@
  */
 package org.shredzone.cilla.web.plugin;
 
+import java.util.function.Supplier;
+
 import org.shredzone.cilla.core.model.Page;
+import org.shredzone.cilla.service.link.LinkBuilder;
 import org.shredzone.cilla.web.plugin.annotation.Priority;
 
 /**
@@ -37,14 +40,15 @@ public interface LocalLinkResolver {
      *
      * @param url
      *            local link URL to resolve, always relative
-     * @param page
-     *            {@link Page} this link is related to
      * @param image
      *            {@code true} if the resolved URL should be a reference to an image
      *            resource, {@code false} for a clickable link
+     * @param linkBuilderSupplier
+     *            {@link Supplier} to a pre-configured {@link LinkBuilder}. It will create
+     *            relative or absolute URLs as demanded from the invoker
      * @return Resolved URL, either relative to the blog or absolute, or {@code null} if
      *         this resolver could not resolve the given link URL
      */
-    String resolveLocalLink(String url, Page page, boolean image);
+    String resolveLocalLink(String url, boolean image, Supplier<LinkBuilder> linkBuilderSupplier);
 
 }
