@@ -72,11 +72,11 @@ public class RenderTag extends BodyTagSupport implements Parameterizable {
     @Override
     public int doEndTag() throws JspException {
         try {
-            if (rendered != null && rendered == Boolean.FALSE) {
+            if (rendered != null && rendered.booleanValue() == false) {
                 return EVAL_PAGE;
             }
 
-            if (optional != null && optional == Boolean.TRUE) {
+            if (optional != null && optional.booleanValue() == true) {
                 if (!fragmentService.hasFragment(fragment)) {
                     // Fragment is optional and does not exist
                     return EVAL_PAGE;
