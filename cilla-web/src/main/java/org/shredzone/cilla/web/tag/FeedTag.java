@@ -54,16 +54,40 @@ import org.springframework.web.util.HtmlUtils;
 public class FeedTag extends TagSupport {
     private static final long serialVersionUID = -8820686144322884700L;
 
-    private @TagParameter(required = true) String type;
-    private @TagParameter String var;
-    private @TagParameter String scope;
-    private @TagParameter String title;
-    private @TagParameter Linkable ref;
-    private @TagParameter Category category;
-    private @TagParameter Tag tag;
-    private @TagParameter User author;
-
     private @Resource LinkService linkService;
+
+    private String type;
+    private String var;
+    private String scope;
+    private String title;
+    private Linkable ref;
+    private Category category;
+    private Tag tag;
+    private User author;
+
+    @TagParameter(required = true)
+    public void setType(String type)            { this.type = type; }
+
+    @TagParameter
+    public void setVar(String var)              { this.var = var; }
+
+    @TagParameter
+    public void setScope(String scope)          { this.scope = scope; }
+
+    @TagParameter
+    public void setTitle(String title)          { this.title = title; }
+
+    @TagParameter
+    public void setRef(Linkable ref)            { this.ref = ref; }
+
+    @TagParameter
+    public void setCategory(Category category)  { this.category = category; }
+
+    @TagParameter
+    public void setTag(Tag tag)                 { this.tag = tag; }
+
+    @TagParameter
+    public void setAuthor(User author)          { this.author = author; }
 
     @Override
     public int doEndTag() throws JspException {

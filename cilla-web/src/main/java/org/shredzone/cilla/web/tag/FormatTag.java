@@ -50,15 +50,36 @@ import org.springframework.stereotype.Component;
 public class FormatTag extends BodyTagSupport {
     private static final long serialVersionUID = -1870489798167703697L;
 
-    private @TagParameter Object text;
-    private @TagParameter Object format;
-    private @TagParameter Page page;
-    private @TagParameter boolean stripHtml;
-    private @TagParameter Integer truncate;
-    private @TagParameter String var;
-    private @TagParameter String scope;
-
     private @Resource TextFormatter textFormatter;
+
+    private Object text;
+    private Object format;
+    private Page page;
+    private boolean stripHtml;
+    private Integer truncate;
+    private String var;
+    private String scope;
+
+    @TagParameter
+    public void setText(Object text)            { this.text = text; }
+
+    @TagParameter
+    public void setFormat(Object format)        { this.format = format; }
+
+    @TagParameter
+    public void setPage(Page page)              { this.page = page; }
+
+    @TagParameter
+    public void setStripHtml(boolean stripHtml) { this.stripHtml = stripHtml; }
+
+    @TagParameter
+    public void setTruncate(Integer truncate)   { this.truncate = truncate; }
+
+    @TagParameter
+    public void setVar(String var)              { this.var = var; }
+
+    @TagParameter
+    public void setScope(String scope)          { this.scope = scope; }
 
     @Override
     public int doEndTag() throws JspException {

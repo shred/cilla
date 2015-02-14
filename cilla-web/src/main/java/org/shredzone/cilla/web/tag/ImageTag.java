@@ -54,20 +54,53 @@ import org.springframework.web.util.HtmlUtils;
 public class ImageTag extends BodyTagSupport {
     private static final long serialVersionUID = 5910446039930945197L;
 
-    private @TagParameter String var;
-    private @TagParameter String scope;
-    private @TagParameter String styleClass;
-    private @TagParameter String style;
-    private @TagParameter String title;
-    private @TagParameter String alt;
-    private @TagParameter Picture picture;
-    private @TagParameter Header header;
-    private @TagParameter Medium medium;
-    private @TagParameter String type;
-    private @TagParameter Boolean uncropped;
-
     private @Resource LinkService linkService;
     private @Resource ResourceLockManagerImpl unlockService;
+
+    private String var;
+    private String scope;
+    private String styleClass;
+    private String style;
+    private String title;
+    private String alt;
+    private Picture picture;
+    private Header header;
+    private Medium medium;
+    private String type;
+    private Boolean uncropped;
+
+    @TagParameter
+    public void setVar(String var)              { this.var = var; }
+
+    @TagParameter
+    public void setScope(String scope)          { this.scope = scope; }
+
+    @TagParameter
+    public void setStyleClass(String styleClass) { this.styleClass = styleClass; }
+
+    @TagParameter
+    public void setStyle(String style)          { this.style = style; }
+
+    @TagParameter
+    public void setTitle(String title)          { this.title = title; }
+
+    @TagParameter
+    public void setAlt(String alt)              { this.alt = alt; }
+
+    @TagParameter
+    public void setPicture(Picture picture)     { this.picture = picture; }
+
+    @TagParameter
+    public void setHeader(Header header)        { this.header = header; }
+
+    @TagParameter
+    public void setMedium(Medium medium)        { this.medium = medium; }
+
+    @TagParameter
+    public void setType(String type)            { this.type = type; }
+
+    @TagParameter
+    public void setUncropped(Boolean uncropped) { this.uncropped = uncropped; }
 
     @Override
     public int doStartTag() throws JspException {

@@ -43,8 +43,14 @@ import org.springframework.stereotype.Component;
 public class CaptureTag extends BodyTagSupport {
     private static final long serialVersionUID = 6615139385480183801L;
 
-    private @TagParameter(required = true) String var;
-    private @TagParameter String scope;
+    private String var;
+    private String scope;
+
+    @TagParameter(required = true)
+    public void setVar(String var)              { this.var = var; }
+
+    @TagParameter
+    public void setScope(String scope)          { this.scope = scope; }
 
     @Override
     public int doStartTag() throws JspException {

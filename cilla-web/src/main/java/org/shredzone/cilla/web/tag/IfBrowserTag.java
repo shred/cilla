@@ -45,7 +45,10 @@ import org.springframework.stereotype.Component;
 public class IfBrowserTag extends BodyTagSupport {
     private static final long serialVersionUID = 8221367255630620892L;
 
-    private @TagParameter(required = true) String agent;
+    private String agent;
+
+    @TagParameter(required = true)
+    public void setAgent(String agent)          { this.agent = agent; }
 
     @Override
     public int doStartTag() throws JspException {

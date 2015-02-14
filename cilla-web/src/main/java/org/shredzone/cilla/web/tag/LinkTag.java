@@ -59,30 +59,87 @@ import org.springframework.web.util.HtmlUtils;
 public class LinkTag extends BodyTagSupport implements Parameterizable {
     private static final long serialVersionUID = 5910446039930945197L;
 
-    private @TagParameter String var;
-    private @TagParameter String scope;
-    private @TagParameter String anchor;
-    private @TagParameter String onclick;
-    private @TagParameter String styleClass;
-    private @TagParameter String style;
-    private @TagParameter String id;
-    private @TagParameter String title;
-
-    private @TagParameter String view;
-    private @TagParameter String qualifier;
-    private @TagParameter Linkable ref;
-    private @TagParameter Commentable commentable;
-    private @TagParameter Page page;
-    private @TagParameter Category category;
-    private @TagParameter Tag tag;
-    private @TagParameter User author;
-    private @TagParameter Section section;
-    private @TagParameter Picture picture;
-    private @TagParameter Header header;
-
     private @Resource LinkService linkService;
 
+    private String var;
+    private String scope;
+    private String anchor;
+    private String onclick;
+    private String styleClass;
+    private String style;
+    private String title;
+
+    private String view;
+    private String qualifier;
+    private Linkable ref;
+    private Commentable commentable;
+    private Page page;
+    private Category category;
+    private Tag tag;
+    private User author;
+    private Section section;
+    private Picture picture;
+    private Header header;
+
     private LinkBuilder lb;
+
+    @TagParameter
+    public void setVar(String var)              { this.var = var; }
+
+    @TagParameter
+    public void setScope(String scope)          { this.scope = scope; }
+
+    @TagParameter
+    public void setAnchor(String anchor)        { this.anchor = anchor; }
+
+    @TagParameter
+    public void setOnclick(String onclick)      { this.onclick = onclick; }
+
+    @TagParameter
+    public void setStyleClass(String styleClass) { this.styleClass = styleClass; }
+
+    @TagParameter
+    public void setStyle(String style)          { this.style = style; }
+
+    @TagParameter
+    @Override
+    public void setId(String id)                { super.setId(id); }
+
+    @TagParameter
+    public void setTitle(String title)          { this.title = title; }
+
+    @TagParameter
+    public void setView(String view)            { this.view = view; }
+
+    @TagParameter
+    public void setQualifier(String qualifier)  { this.qualifier = qualifier; }
+
+    @TagParameter
+    public void setRef(Linkable ref)            { this.ref = ref; }
+
+    @TagParameter
+    public void setCommentable(Commentable commentable) { this.commentable = commentable; }
+
+    @TagParameter
+    public void setPage(Page page)              { this.page = page; }
+
+    @TagParameter
+    public void setCategory(Category category)  { this.category = category; }
+
+    @TagParameter
+    public void setTag(Tag tag)                 { this.tag = tag; }
+
+    @TagParameter
+    public void setAuthor(User author)          { this.author = author; }
+
+    @TagParameter
+    public void setSection(Section section)     { this.section = section; }
+
+    @TagParameter
+    public void setPicture(Picture picture)     { this.picture = picture; }
+
+    @TagParameter
+    public void setHeader(Header header)        { this.header = header; }
 
     @Override
     public void addParam(String key, Object value) {

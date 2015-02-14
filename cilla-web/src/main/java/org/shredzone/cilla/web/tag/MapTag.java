@@ -52,17 +52,38 @@ import org.springframework.stereotype.Component;
 public class MapTag extends BodyTagSupport implements Parameterizable {
     private static final long serialVersionUID = 7313809751943580566L;
 
-    private @TagParameter(required = true) Geolocation location;
-    private @TagParameter boolean satellite;
-    private @TagParameter String divId;
-    private @TagParameter String style;
-    private @TagParameter String styleClass;
-    private @TagParameter String var;
-    private @TagParameter String scope;
-
     private @Resource MapService mapService;
 
+    private Geolocation location;
+    private boolean satellite;
+    private String divId;
+    private String style;
+    private String styleClass;
+    private String var;
+    private String scope;
+
     private MapModel data;
+
+    @TagParameter(required = true)
+    public void setLocation(Geolocation location) { this.location = location; }
+
+    @TagParameter
+    public void setSatellite(boolean satellite) { this.satellite = satellite; }
+
+    @TagParameter
+    public void setDivId(String divId)          { this.divId = divId; }
+
+    @TagParameter
+    public void setStyle(String style)          { this.style = style; }
+
+    @TagParameter
+    public void setStyleClass(String styleClass) { this.styleClass = styleClass; }
+
+    @TagParameter
+    public void setVar(String var)              { this.var = var; }
+
+    @TagParameter
+    public void setScope(String scope)          { this.scope = scope; }
 
     public void addMarker(Marker marker) {
         data.getMarkers().add(marker);

@@ -46,11 +46,20 @@ import org.springframework.stereotype.Component;
 public class CommentThreadTag extends BodyTagSupport {
     private static final long serialVersionUID = -7835017044001110609L;
 
-    private @TagParameter(required = true) String var;
-    private @TagParameter String scope;
-    private @TagParameter(required = true) Commentable item;
-
     private @Resource CommentThreadService commentThreadService;
+
+    private String var;
+    private String scope;
+    private Commentable item;
+
+    @TagParameter(required = true)
+    public void setVar(String var)              { this.var = var; }
+
+    @TagParameter
+    public void setScope(String scope)          { this.scope = scope; }
+
+    @TagParameter(required = true)
+    public void setItem(Commentable item)       { this.item = item; }
 
     @Override
     public int doStartTag() throws JspException {

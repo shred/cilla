@@ -42,8 +42,14 @@ import org.springframework.stereotype.Component;
 public class ParamTag extends BodyTagSupport {
     private static final long serialVersionUID = 3127696613728198638L;
 
-    private @TagParameter(required = true) String name;
-    private @TagParameter Object value;
+    private String name;
+    private Object value;
+
+    @TagParameter(required = true)
+    public void setName(String name)            { this.name = name; }
+
+    @TagParameter
+    public void setValue(Object value)          { this.value = value; }
 
     @Override
     public int doStartTag() throws JspException {

@@ -48,14 +48,26 @@ import org.springframework.stereotype.Component;
 public class RenderTag extends BodyTagSupport implements Parameterizable {
     private static final long serialVersionUID = -23348027985991513L;
 
-    private @TagParameter(required = true) String fragment;
-    private @TagParameter Object item;
-    private @TagParameter Boolean rendered;
-    private @TagParameter Boolean optional;
-
     private @Resource FragmentService fragmentService;
 
+    private String fragment;
+    private Object item;
+    private Boolean rendered;
+    private Boolean optional;
+
     private FragmentContext context;
+
+    @TagParameter(required = true)
+    public void setFragment(String fragment)    { this.fragment = fragment; }
+
+    @TagParameter
+    public void setItem(Object item)            { this.item = item; }
+
+    @TagParameter
+    public void setRendered(Boolean rendered)   { this.rendered = rendered; }
+
+    @TagParameter
+    public void setOptional(Boolean optional)   { this.optional = optional; }
 
     @Override
     public int doStartTag() throws JspException {

@@ -44,9 +44,18 @@ import org.springframework.stereotype.Component;
 public class MapMarkerTag extends BodyTagSupport {
     private static final long serialVersionUID = 3396938844924733218L;
 
-    private @TagParameter(required = true) Geolocation location;
-    private @TagParameter String text;
-    private @TagParameter String link;
+    private Geolocation location;
+    private String text;
+    private String link;
+
+    @TagParameter(required = true)
+    public void setLocation(Geolocation location) { this.location = location; }
+
+    @TagParameter
+    public void setText(String text)            { this.text = text; }
+
+    @TagParameter
+    public void setLink(String link)            { this.link = link; }
 
     @Override
     public int doStartTag() throws JspException {

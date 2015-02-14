@@ -46,12 +46,24 @@ import org.springframework.stereotype.Component;
 public class MetaTag extends BodyTagSupport {
     private static final long serialVersionUID = 1155264881573999741L;
 
-    private @TagParameter(required = true) String name;
-    private @TagParameter String content;
-    private @TagParameter String scheme;
-    private @TagParameter boolean replace = false;
-
     private @Resource DocumentHeaderManager documentHeaderManager;
+
+    private String name;
+    private String content;
+    private String scheme;
+    private boolean replace = false;
+
+    @TagParameter(required = true)
+    public void setName(String name)            { this.name = name; }
+
+    @TagParameter
+    public void setContent(String content)      { this.content = content; }
+
+    @TagParameter
+    public void setScheme(String scheme)        { this.scheme = scheme; }
+
+    @TagParameter
+    public void setReplace(boolean replace)     { this.replace = replace; }
 
     @Override
     public int doStartTag() throws JspException {
