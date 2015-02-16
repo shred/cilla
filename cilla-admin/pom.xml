@@ -35,28 +35,23 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.mortbay.jetty</groupId>
+                <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-maven-plugin</artifactId>
-                <version>8.0.0.M3</version>
+                <version>9.2.2.v20140723</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.eclipse.jetty</groupId>
                         <artifactId>jetty-jndi</artifactId>
-                        <version>8.0.0.M3</version>
+                        <version>9.2.2.v20140723</version>
                         <scope>runtime</scope>
                     </dependency>
                 </dependencies>
                 <configuration>
+                    <httpConnector>
+                        <port>8091</port>
+                    </httpConnector>
                     <reload>manual</reload>
-                    <scanIntervalSeconds>5</scanIntervalSeconds>
-                    <jettyConfig>${basedir}/src/etc/jetty.xml</jettyConfig>
-                    <webAppSourceDirectory>${basedir}/src/main/webapp</webAppSourceDirectory>
-                    <connectors>
-                        <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
-                            <port>8091</port>
-                            <host>0.0.0.0</host>
-                        </connector>
-                    </connectors>
+                    <jettyXml>${basedir}/src/etc/jetty.xml</jettyXml>
                 </configuration>
             </plugin>
         </plugins>
