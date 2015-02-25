@@ -28,7 +28,6 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
@@ -65,8 +64,7 @@ public class Category extends BaseModel {
     /**
      * A list of sub-categories of this {@link Category}.
      */
-    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "parent_id")
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY, orphanRemoval = true)
     @OrderBy("sequence")
     public List<Category> getChildren()         { return children; }
     public void setChildren(List<Category> children) { this.children = children; }
