@@ -24,9 +24,7 @@ import java.io.Serializable;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.Lob;
 
-import org.hibernate.annotations.Type;
 import org.shredzone.cilla.ws.TextFormat;
 
 /**
@@ -71,8 +69,6 @@ public class FormattedText implements Serializable {
     /**
      * The formatted text.
      */
-    @Lob
-    @Type(type = "org.hibernate.type.TextType")
     public String getText()                     { return text; }
     public void setText(String text)            { this.text = text; }
 

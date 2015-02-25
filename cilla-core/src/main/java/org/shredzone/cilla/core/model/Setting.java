@@ -21,11 +21,9 @@ package org.shredzone.cilla.core.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Lob;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.hibernate.annotations.Type;
 
 /**
  * A single setting.
@@ -50,8 +48,7 @@ public class Setting extends BaseModel {
     /**
      * Value of that setting.
      */
-    @Lob
-    @Type(type = "org.hibernate.type.TextType")
+    @Column(columnDefinition = "text")
     public String getValue()                    { return value; }
     public void setValue(String value)          { this.value = value; }
 

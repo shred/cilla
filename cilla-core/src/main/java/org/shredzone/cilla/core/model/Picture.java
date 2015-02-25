@@ -128,7 +128,7 @@ public class Picture extends BaseModel implements Commentable {
      */
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "text", column = @Column(name = "caption")),
+        @AttributeOverride(name = "text", column = @Column(name = "caption", columnDefinition = "text")),
         @AttributeOverride(name = "format", column = @Column(name = "captionFormat"))
     })
     public FormattedText getCaption()           { return caption; }

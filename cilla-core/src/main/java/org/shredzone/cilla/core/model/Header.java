@@ -81,7 +81,7 @@ public class Header extends BaseModel implements Commentable {
      */
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "text", column = @Column(name = "description")),
+        @AttributeOverride(name = "text", column = @Column(name = "description", columnDefinition = "text")),
         @AttributeOverride(name = "format", column = @Column(name = "descriptionFormat"))
     })
     public FormattedText getDescription()       { return description; }

@@ -107,7 +107,7 @@ public class Comment extends BaseModel implements Commentable {
      */
     @Embedded
     @AttributeOverrides({
-        @AttributeOverride(name = "text", column = @Column(name = "text", nullable = false)),
+        @AttributeOverride(name = "text", column = @Column(name = "text", columnDefinition = "text", nullable = false)),
         @AttributeOverride(name = "format", column = @Column(name = "textFormat", nullable = false))
     })
     public FormattedText getText()              { return text; }
