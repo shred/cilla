@@ -257,7 +257,7 @@ public class Page extends BaseModel implements Commentable {
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "Page_Properties")
     @MapKeyColumn(name = "key")
-    @Column(name = "value", length = 4096)
+    @Column(name = "value", columnDefinition = "text")
     public Map<String, String> getProperties()  { return properties; }
     public void setProperties(Map<String, String> properties) { this.properties = properties; }
 
