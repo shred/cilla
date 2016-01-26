@@ -37,13 +37,13 @@
         </license>
     </licenses>
     <scm>
-        <url>scm:git:git@github.com:shred/cilla.git</url>
+        <url>https://github.com/shred/cilla/</url>
         <connection>scm:git:git@github.com:shred/cilla.git</connection>
         <developerConnection>scm:git:git@github.com:shred/cilla.git</developerConnection>
     </scm>
     <issueManagement>
-        <system>Redmine</system>
-        <url>http://www.shredzone.org/projects/cilla/issues</url>
+        <system>GitHub</system>
+        <url>https://github.com/shred/cilla/issues</url>
     </issueManagement>
     <developers>
         <developer>
