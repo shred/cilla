@@ -103,20 +103,12 @@
     </build>
     <repositories>
         <repository>
-            <id>jboss</id>
-            <url>https://repository.jboss.org/nexus/content/groups/public-jboss</url>
-        </repository>
-        <repository>
-            <id>maven2-java-net</id>
-            <url>http://download.java.net/maven/2</url>
-        </repository>
-        <repository>
             <id>primefaces</id>
             <url>http://repository.primefaces.org</url>
         </repository>
         <repository>
-            <id>restlet</id>
-            <url>http://maven.restlet.org</url>
+            <id>jboss</id>
+            <url>https://repository.jboss.org/nexus/content/groups/public-jboss</url>
         </repository>
     </repositories>
     <reporting>
