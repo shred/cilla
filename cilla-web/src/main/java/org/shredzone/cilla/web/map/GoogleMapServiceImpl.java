@@ -33,7 +33,7 @@ public class GoogleMapServiceImpl implements MapService {
         StringBuilder sb = new StringBuilder();
 
         sb.append("var maploader = {");
-        sb.append("url:'http://maps.google.com/maps/api/js?sensor=false&callback=maploader.start',");
+        sb.append("url:'//maps.google.com/maps/api/js?sensor=false&callback=maploader.start',");
         sb.append("setup:false,");
         sb.append("callback:null,");
         sb.append("show:function(callback){if(this.setup){callback()}else{this.callback=callback;this.init()}},");
