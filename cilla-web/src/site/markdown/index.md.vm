@@ -1,0 +1,26 @@
+cilla-web
+=========
+
+This module contains all necessary classes for rendering the blog, except of the view classes provided by [cilla-view](../cilla-view/index.html). The views are separated to make even more complex customizations possible.
+
+Contents
+--------
+
+* Tag library for JSP `<cilla>`-Tags
+* Renderers for fragments, paginators, calendars, and comment sections
+* Plugin management
+* Comment form handling
+* Text formatters for the different text styles
+
+How to Use
+----------
+
+Add this snippet to your `pom.xml`:
+
+```xml
+<dependency>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>${project.artifactId}</artifactId>
+  <version>${project.version}</version>
+</dependency>
+```

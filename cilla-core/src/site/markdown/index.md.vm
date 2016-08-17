@@ -1,0 +1,26 @@
+cilla-core
+==========
+
+This is the core module of Cilla.
+
+Contents
+--------
+
+* Database models
+* Repository and database handling
+* Full text content search
+* Event handling
+* Datasources for storing media files on a file system
+
+How to Use
+----------
+
+Add this snippet to your `pom.xml`:
+
+```xml
+<dependency>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>${project.artifactId}</artifactId>
+  <version>${project.version}</version>
+</dependency>
+```

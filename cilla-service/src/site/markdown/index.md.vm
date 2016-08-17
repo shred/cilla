@@ -1,0 +1,25 @@
+cilla-service
+=============
+
+This module contains the high level services provided by Cilla.
+
+Contents
+--------
+
+* Services for content and user management.
+* Configuration services.
+* Implementation of the Cilla Web Services.
+* Session management and role checking for the Web Services.
+
+How to Use
+----------
+
+Add this snippet to your `pom.xml`:
+
+```xml
+<dependency>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>${project.artifactId}</artifactId>
+  <version>${project.version}</version>
+</dependency>
+```

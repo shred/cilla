@@ -50,6 +50,8 @@
         <stax.version>1.0.1</stax.version>
         <thumbnailator.version>0.4.7</thumbnailator.version>
         <wss4j.version>1.6.16</wss4j.version>
+
+        <maven.site.skip>true</maven.site.skip>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -241,9 +243,9 @@
                 <version>${mockito.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.primefaces</groupId>  
-                <artifactId>primefaces</artifactId>  
-                <version>${primefaces.version}</version>  
+                <groupId>org.primefaces</groupId>
+                <artifactId>primefaces</artifactId>
+                <version>${primefaces.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.primefaces.themes</groupId>

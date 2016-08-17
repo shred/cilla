@@ -1,0 +1,15 @@
+cilla-xample
+============
+
+This is an example blog.
+
+It is also a kind of minimal blog, and a good starting point for designing your own blog with Cilla.
+
+See the [Getting Started](../setup.html) chapter about how to make it run.
+
+Acknowledgements
+----------------
+
+The font used for captcha is called [Dark Garden](http://openfontlibrary.org/en/font/dark-garden) and was made by Micha Kosmulski (GNU General Public License).
+
+The miniature icons are called [Silk](http://www.famfamfam.com/lab/icons/silk/) and were made by Mark James (Creative Commons Attribution 3.0).

@@ -1,0 +1,23 @@
+cilla-admin
+===========
+
+This is Cilla's administration web interface.
+
+It is a standalone tool that runs on an own web server instance and connects to the Cilla Web Services for administration.
+
+It expects the cilla installation at http://localhost:8090 by default. To change that, edit the `src/etc/jetty.xml` file.
+
+Run it with jetty:
+
+```
+mvn jetty:run
+```
+
+Then point your browser to http://localhost:8091.
+
+Acknowledgements
+----------------
+
+* The icons used in the Administration Frontend are called [Silk](http://www.famfamfam.com/lab/icons/silk/) and were made by Mark James (Creative Commons Attribution 2.5 License).
+* Other icons are from the [Bluecurve theme](https://fedorahosted.org/bluecurve/) made by Red Hat (GNU Public License).
+* The GUI theme is called "Start" and is released by jQuery UI team (MIT or GPL Version 2 Licenses). PrimeFaces adaption of the theme was made by PrimeFaces.

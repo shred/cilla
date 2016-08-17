@@ -1,0 +1,21 @@
+cilla-view
+==========
+
+This module contains all the standard views of the blog.
+
+You certainly want to use this module for all standard weblogs.
+
+However, you can also omit this module and implement all the views on your own, to make more complex customizations possible. For example, the Cilla code base is also suitable for content management systems or photo galleries.
+
+How to Use
+----------
+
+Add this snippet to your `pom.xml`:
+
+```xml
+<dependency>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>${project.artifactId}</artifactId>
+  <version>${project.version}</version>
+</dependency>
+```

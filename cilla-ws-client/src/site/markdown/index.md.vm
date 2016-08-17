@@ -1,0 +1,19 @@
+cilla-ws-client
+===============
+
+A web service client for Cilla.
+
+It is used by the administration frontend. However, it is also helpful if you want to access the Cilla web service API in your own projects.
+
+How to Use
+----------
+
+Add this snippet to your `pom.xml`:
+
+```xml
+<dependency>
+  <groupId>${project.groupId}</groupId>
+  <artifactId>${project.artifactId}</artifactId>
+  <version>${project.version}</version>
+</dependency>
+```

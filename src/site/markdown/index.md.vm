@@ -1,0 +1,27 @@
+Cilla
+=====
+
+_Cilla_ is a weblog written in Java.
+
+The source code can be found at [GitHub](https://github.com/shred/cilla) and is distributed under the terms of [GNU Affero General Public License Version 3](http://www.gnu.org/licenses/agpl-3.0.html).
+
+Quick Start
+-----------
+
+_Cilla_ does not come with fancy installers and a large pool of themes. At least, not yet...
+
+The best way to get to know _Cilla_ is to read the [Getting Started](./setup.html) document, and set up the _xample_ blog. You are going to need Java skills for that, though.
+
+Modules
+-------
+
+Cilla consists of these modules:
+
+* [cilla-admin](./cilla-admin/index.html) - Administration web frontend
+* [cilla-core](./cilla-core/index.html) - The Core: Data repository, search, event handling.
+* [cilla-service](./cilla-service/index.html) - High level services.
+* [cilla-view](./cilla-view/index.html) - All web views required for a standard blog.
+* [cilla-web](./cilla-web/index.html) - Everything for the web: tab library, content handlers, renderers etc.
+* [cilla-ws](./cilla-ws/index.html) - Web services provider.
+* [cilla-ws-client](./cilla-ws-client/index.html) - Client for accessing the web services.
+* [cilla-xample](./cilla-xample/index.html) - An example blog implementation. A good starting point for your own blog.
