@@ -30,8 +30,11 @@ public interface MapService {
     /**
      * Gets a JavaScript code for initialization. The code must not be wrapped with
      * &lt;script&gt; tags.
+     *
+     * @param key
+     *            API key, may be {@code null}
      */
-    String getInitJs();
+    String getInitJs(String key);
 
     /**
      * Builds a HTML fragment for rendering the given {@link MapModel}.

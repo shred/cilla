@@ -29,11 +29,15 @@ import org.shredzone.cilla.core.model.embed.Geolocation;
 public class GoogleMapServiceImpl implements MapService {
 
     @Override
-    public String getInitJs() {
+    public String getInitJs(String key) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("var maploader = {");
-        sb.append("url:'//maps.google.com/maps/api/js?sensor=false&callback=maploader.start',");
+        sb.append("url:'//maps.googleapis.com/maps/api/js?");
+        if (key != null) {
+            sb.append("key=").append(escapeJs(key)).append('&');
+        }
+        sb.append("callback=maploader.start',");
         sb.append("setup:false,");
         sb.append("callback:null,");
         sb.append("show:function(callback){if(this.setup){callback()}else{this.callback=callback;this.init()}},");

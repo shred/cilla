@@ -28,6 +28,7 @@ import org.shredzone.cilla.web.header.DocumentHeaderManager;
 import org.shredzone.cilla.web.header.tag.JavaScriptTag;
 import org.shredzone.cilla.web.map.MapService;
 import org.shredzone.commons.taglib.annotation.TagInfo;
+import org.shredzone.commons.taglib.annotation.TagParameter;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -49,10 +50,15 @@ public class MapInitTag extends BodyTagSupport {
     private @Resource MapService mapService;
     private @Resource DocumentHeaderManager documentHeaderManager;
 
+    private String key;
+
+    @TagParameter
+    public void setKey(String key)              { this.key = key; }
+
     @Override
     public int doEndTag() throws JspException {
         JavaScriptTag js = new JavaScriptTag();
-        js.append(mapService.getInitJs());
+        js.append(mapService.getInitJs(key));
         documentHeaderManager.getDocumentHeader().add(js);
         return EVAL_PAGE;
     }

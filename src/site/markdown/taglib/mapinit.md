@@ -6,4 +6,4 @@ Can be used anywhere in the JSP page, but must not be used more than once per pa
 
 ## Parameters
 
-None.
+* `key`: An API key that is passed to the init JavaScript. Optional, may be left out or `null` if not required by the underlying implementation.
