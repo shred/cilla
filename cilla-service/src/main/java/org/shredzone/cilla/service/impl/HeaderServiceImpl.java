@@ -27,6 +27,7 @@ import java.util.List;
 import javax.activation.DataSource;
 import javax.annotation.Resource;
 
+import org.shredzone.cilla.core.datasource.MimeTypeAnalyzer;
 import org.shredzone.cilla.core.datasource.ResourceDataSource;
 import org.shredzone.cilla.core.event.Event;
 import org.shredzone.cilla.core.event.EventService;
@@ -64,6 +65,7 @@ public class HeaderServiceImpl implements HeaderService {
     private @Resource EventService eventService;
     private @Resource SecurityService securityService;
     private @Resource CommentService commentService;
+    private @Resource MimeTypeAnalyzer mimeTypeAnalyzer;
 
     @Override
     public Header createNew() {
@@ -86,12 +88,12 @@ public class HeaderServiceImpl implements HeaderService {
             Date now = new Date();
 
             Store headerStore = header.getHeaderImage();
-            headerStore.setContentType(headerImg.getContentType());
+            headerStore.setContentType(mimeTypeAnalyzer.analyze(headerImg));
             headerStore.setName(headerImg.getName());
             headerStore.setLastModified(now);
 
             Store fullStore = header.getFullImage();
-            fullStore.setContentType(fullImg.getContentType());
+            fullStore.setContentType(mimeTypeAnalyzer.analyze(fullImg));
             fullStore.setName(fullImg.getName());
             fullStore.setLastModified(now);
 
@@ -135,7 +137,7 @@ public class HeaderServiceImpl implements HeaderService {
 
             if (headerImg != null) {
                 Store headerStore = header.getHeaderImage();
-                headerStore.setContentType(headerImg.getContentType());
+                headerStore.setContentType(mimeTypeAnalyzer.analyze(headerImg));
                 headerStore.setName(headerImg.getName());
                 headerStore.setLastModified(now);
 
@@ -154,7 +156,7 @@ public class HeaderServiceImpl implements HeaderService {
 
             if (fullImg != null) {
                 Store fullStore = header.getFullImage();
-                fullStore.setContentType(fullImg.getContentType());
+                fullStore.setContentType(mimeTypeAnalyzer.analyze(fullImg));
                 fullStore.setName(fullImg.getName());
                 fullStore.setLastModified(now);
 

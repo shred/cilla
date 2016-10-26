@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 import javax.activation.DataSource;
 import javax.annotation.Resource;
 
+import org.shredzone.cilla.core.datasource.MimeTypeAnalyzer;
 import org.shredzone.cilla.core.datasource.ResourceDataSource;
 import org.shredzone.cilla.core.event.Event;
 import org.shredzone.cilla.core.event.EventService;
@@ -72,6 +73,7 @@ public class PageServiceImpl implements PageService {
     private @Resource EventService eventService;
     private @Resource SecurityService securityService;
     private @Resource SectionFacade sectionFacade;
+    private @Resource MimeTypeAnalyzer mimeTypeAnalyzer;
 
     @Override
     public Page createNew() {
@@ -161,7 +163,7 @@ public class PageServiceImpl implements PageService {
             medium.setPage(page);
 
             Store store = medium.getImage();
-            store.setContentType(source.getContentType());
+            store.setContentType(mimeTypeAnalyzer.analyze(source));
             store.setLastModified(new Date());
 
             mediumDao.persist(medium);
@@ -183,7 +185,7 @@ public class PageServiceImpl implements PageService {
         if (source != null) {
             try {
                 Store store = medium.getImage();
-                store.setContentType(source.getContentType());
+                store.setContentType(mimeTypeAnalyzer.analyze(source));
                 store.setName(source.getName());
                 store.setLastModified(new Date());
 

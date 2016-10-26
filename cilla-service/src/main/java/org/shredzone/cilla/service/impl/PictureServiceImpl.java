@@ -27,6 +27,7 @@ import java.util.TimeZone;
 import javax.activation.DataSource;
 import javax.annotation.Resource;
 
+import org.shredzone.cilla.core.datasource.MimeTypeAnalyzer;
 import org.shredzone.cilla.core.datasource.ResourceDataSource;
 import org.shredzone.cilla.core.event.Event;
 import org.shredzone.cilla.core.event.EventService;
@@ -64,6 +65,7 @@ public class PictureServiceImpl implements PictureService {
     private @Resource PictureDao pictureDao;
     private @Resource ImageTools imageProcessor;
     private @Resource CommentService commentService;
+    private @Resource MimeTypeAnalyzer mimeTypeAnalyzer;
 
     @Override
     public Picture createNew() {
@@ -86,7 +88,7 @@ public class PictureServiceImpl implements PictureService {
 
         try {
             Store store = picture.getImage();
-            store.setContentType(source.getContentType());
+            store.setContentType(mimeTypeAnalyzer.analyze(source));
             store.setName(source.getName());
             store.setLastModified(new Date());
 
@@ -134,7 +136,7 @@ public class PictureServiceImpl implements PictureService {
         if (source != null) {
             try {
                 Store store = picture.getImage();
-                store.setContentType(source.getContentType());
+                store.setContentType(mimeTypeAnalyzer.analyze(source));
                 store.setName(source.getName());
                 store.setLastModified(new Date());
 
