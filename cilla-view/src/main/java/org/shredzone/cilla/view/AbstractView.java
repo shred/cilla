@@ -34,6 +34,7 @@ import org.shredzone.cilla.service.link.LinkService;
 import org.shredzone.cilla.web.page.ResourceLockManager;
 import org.shredzone.commons.view.exception.ErrorResponseException;
 import org.shredzone.commons.view.exception.ViewException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
@@ -44,6 +45,8 @@ import org.springframework.util.FileCopyUtils;
  */
 @Component
 public abstract class AbstractView {
+
+    private @Value("${resource.expires}") long cacheExpirySeconds;
 
     private @Resource PageService pageService;
     private @Resource ResourceLockManager unlockService;
@@ -129,6 +132,20 @@ public abstract class AbstractView {
     }
 
     /**
+     * Sets a properly formatted Last-Modified header.
+     *
+     * @param resp
+     *            {@link HttpServletResponse} to use
+     * @param date
+     *            Last modification date, or {@code null} to set no header
+     */
+    protected void setLastModifiedHeader(HttpServletResponse resp, Date date) {
+        if (date != null) {
+            resp.setDateHeader("Last-Modified", date.getTime());
+        }
+    }
+
+    /**
      * Checks that the request sent an "If-Modified-Since" header, and the date matches
      * the given date.
      *
@@ -149,6 +166,44 @@ public abstract class AbstractView {
         return (modifiedSinceTs >= 0 && (modifiedSinceTs / 1000) == (date.getTime() / 1000));
     }
 
+
+    /**
+     * Sets a properly formatted ETag header.
+     *
+     * @param resp
+     *            {@link HttpServletResponse} to use
+     * @param etag
+     *            Etag to set
+     */
+    protected void setEtagHeader(HttpServletResponse resp, String etag) {
+        resp.setHeader("ETag", '"' + etag + '"');
+    }
+
+    /**
+     * Checks that the request sent an "If-None-Match" header, and the content matches the
+     * given etag.
+     *
+     * @param req
+     *            {@link HttpServletRequest} to use
+     * @param etag
+     *            Etag to match
+     * @return {@code true}: Resource has not changed since it was last delivered
+     */
+    protected boolean isEtagMatching(HttpServletRequest req, String etag) {
+        String inm = req.getHeader("If-None-Match");
+        return (inm != null && inm.contains('"' + etag + '"'));
+    }
+
+    /**
+     * Sets an "Expires" header with standard timeout for rarely changing resources.
+     *
+     * @param resp
+     *            {@link HttpServletResponse} to use
+     */
+    protected void setExpiresHeader(HttpServletResponse resp) {
+        resp.setDateHeader("Expires", System.currentTimeMillis() + (cacheExpirySeconds * 1000L));
+    }
+
     /**
      * Streams a {@link ResourceDataSource}. Also cares about setting proper HTTP response
      * headers.
@@ -167,6 +222,11 @@ public abstract class AbstractView {
                 throw new ErrorResponseException(HttpServletResponse.SC_NOT_MODIFIED);
             }
 
+            String etag = ds.getEtag();
+            if (isEtagMatching(req, etag)) {
+                throw new ErrorResponseException(HttpServletResponse.SC_NOT_MODIFIED);
+            }
+
             Long length = ds.getLength();
             if (length != null && length <= Integer.MAX_VALUE) {
                 // Converting long to int is safe here...
@@ -174,7 +234,14 @@ public abstract class AbstractView {
             }
 
             resp.setContentType(ds.getContentType());
-            resp.setDateHeader("Last-Modified", ds.getLastModified().getTime());
+
+            if (etag != null && !etag.isEmpty()) {
+                setEtagHeader(resp, etag);
+            } else {
+                setLastModifiedHeader(resp, ds.getLastModified());
+            }
+
+            setExpiresHeader(resp);
 
             try (InputStream in = ds.getInputStream()) {
                 FileCopyUtils.copy(in, resp.getOutputStream());

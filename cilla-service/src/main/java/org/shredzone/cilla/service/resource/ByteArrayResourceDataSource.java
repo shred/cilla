@@ -37,6 +37,7 @@ import org.shredzone.cilla.core.datasource.ResourceDataSource;
 public class ByteArrayResourceDataSource implements ResourceDataSource {
 
     private final ResourceDataSource origin;
+    private final String etag;
     private final String contentType;
     private final byte[] data;
 
@@ -45,15 +46,20 @@ public class ByteArrayResourceDataSource implements ResourceDataSource {
      *
      * @param origin
      *            {@link ResourceDataSource} that is referenced by this instance
+     * @param type
+     *            A type string describing the kind of data (e.g. "thumbnail")
      * @param contentType
      *            Content type of the data
      * @param data
      *            data
      */
-    public ByteArrayResourceDataSource(ResourceDataSource origin, String contentType, byte[] data) {
+    public ByteArrayResourceDataSource(ResourceDataSource origin, String type,
+            String contentType, byte[] data) {
         this.origin = origin;
         this.contentType = contentType;
         this.data = data;
+
+        this.etag = String.format("%s-%08X", origin.getEtag(), type.hashCode());
     }
 
     /**
@@ -109,6 +115,11 @@ public class ByteArrayResourceDataSource implements ResourceDataSource {
     @Override
     public Date getLastModified() {
         return origin.getLastModified();
+    }
+
+    @Override
+    public String getEtag() {
+        return etag;
     }
 
     /**

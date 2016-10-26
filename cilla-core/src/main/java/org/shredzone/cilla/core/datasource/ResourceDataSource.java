@@ -57,4 +57,14 @@ public interface ResourceDataSource extends DataSource {
      */
     void delete();
 
+    /**
+     * Returns an entity tag. It is guaranteed that the tag will change if the resource
+     * content changes. However, it is not guarateed that the tag will not change if the
+     * resource is unchanged. The calculation of the tag should be either very fast, or
+     * the result should be cached.
+     *
+     * @return Etag, or {@code null} if it is not possible to generate an entity tag.
+     */
+    String getEtag();
+
 }

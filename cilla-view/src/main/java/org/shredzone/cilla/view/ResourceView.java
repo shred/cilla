@@ -51,12 +51,13 @@ import org.springframework.util.FileCopyUtils;
 @Component
 public class ResourceView extends AbstractView {
 
-    private final Date lastModified = new Date();
-    private final Map<String, String> etagMap = new HashMap<String, String>();
-    private final Map<String, Integer> sizeMap = new HashMap<String, Integer>();
+    private final Date lastModified = new Date();   // startup date
+
+    private final Map<String, String> etagMap = new HashMap<>();
+    private final Map<String, Integer> sizeMap = new HashMap<>();
 
     /**
-     * Streams a resource.
+     * Streams a static resource.
      */
     @View(pattern = "/resource/${#package}/${#name}", name="resource")
     public void resourceView(
@@ -71,13 +72,9 @@ public class ResourceView extends AbstractView {
 
         try {
             String key = setup(pack, name);
-
             String resourceEtag = etagMap.get(key);
-            resp.setHeader("ETag", resourceEtag);
 
-            String headerEtag = req.getHeader("If-None-Match");
-
-            if (headerEtag != null && headerEtag.equals(resourceEtag)) {
+            if (isEtagMatching(req, resourceEtag)) {
                 throw new ErrorResponseException(HttpServletResponse.SC_NOT_MODIFIED);
             }
 
@@ -86,7 +83,9 @@ public class ResourceView extends AbstractView {
             }
 
             resp.setContentLength(sizeMap.get(key));
-            resp.setDateHeader("Last-Modified", lastModified.getTime());
+            setEtagHeader(resp, resourceEtag);
+            setLastModifiedHeader(resp, lastModified);
+            setExpiresHeader(resp);
 
             try (InputStream in = ResourceView.class.getResourceAsStream("/public/" + pack + '/' + name)) {
                 FileCopyUtils.copy(in, resp.getOutputStream());
@@ -126,7 +125,7 @@ public class ResourceView extends AbstractView {
                 byte[] digest = md5.digest();
                 etagMap.put(key, IntStream.range(0, digest.length)
                         .mapToObj(ix -> String.format("%02x", digest[ix] & 0xFF))
-                        .collect(joining("", "\"", "\"")));
+                        .collect(joining("")));
 
                 sizeMap.put(key, counter);
             } catch (NoSuchAlgorithmException ex) {

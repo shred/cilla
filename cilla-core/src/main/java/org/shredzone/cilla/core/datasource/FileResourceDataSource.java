@@ -106,4 +106,11 @@ public class FileResourceDataSource implements ResourceDataSource {
         }
     }
 
+    @Override
+    public String getEtag() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(store.getId()).append('-').append(store.getVersion());
+        return String.format("%08X", sb.toString().hashCode());
+    }
+
 }

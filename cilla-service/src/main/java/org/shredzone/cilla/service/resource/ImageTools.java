@@ -60,7 +60,7 @@ public class ImageTools {
 
         try {
             ImageProcessorResult result = imageProcessor.process(src, src.getId(), process);
-            return new ByteArrayResourceDataSource(src, result.getContentType(), result.getData());
+            return new ByteArrayResourceDataSource(src, process.toString(), result.getContentType(), result.getData());
         } catch (IOException ex) {
             throw new CillaServiceException(ex);
         }
