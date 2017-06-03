@@ -49,6 +49,7 @@ public class FilterModel implements Linkable, Serializable {
     private String query;
     private Locale locale;
     private PageOrder order;
+    private boolean ascending;
 
     public FilterModel() {
         // Default constructor
@@ -69,6 +70,7 @@ public class FilterModel implements Linkable, Serializable {
         this.query = model.query;
         this.locale = model.locale;
         this.order = model.order;
+        this.ascending = model.ascending;
     }
 
     /**
@@ -119,6 +121,12 @@ public class FilterModel implements Linkable, Serializable {
      */
     public PageOrder getOrder()                 { return order; }
     public void setOrder(PageOrder order)       { this.order = order; }
+
+    /**
+     * Ascending result order. If not set, the default descending order is used.
+     */
+    public boolean isAscending()                { return ascending; }
+    public void setAscending(boolean ascending) { this.ascending = ascending; }
 
     @Override
     public void transfer(LinkBuilder builder) {

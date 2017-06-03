@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 import javax.annotation.Resource;
 
@@ -176,13 +177,19 @@ public abstract class AbstractSearchStrategy implements SearchStrategy {
     protected Criteria createPaginatedCriteria(SearchResultImpl result) throws CillaServiceException {
         Criteria crit = createCriteria(result);
 
-        crit.addOrder(Order.desc("sticky"));
+        crit.addOrder(Order.desc("sticky")); // Sticky always come first!
 
         FilterModel filter = result.getFilter();
+
+        Function<String, Order> orderMode = Order::desc;
+        if (filter != null && filter.isAscending()) {
+            orderMode = Order::asc;
+        }
+
         if (filter != null && filter.getOrder() != null) {
-            crit.addOrder(Order.desc(filter.getOrder().getColumn()));
+            crit.addOrder(orderMode.apply(filter.getOrder().getColumn()));
         } else {
-            crit.addOrder(Order.desc(pageOrder.getColumn()));
+            crit.addOrder(orderMode.apply(pageOrder.getColumn()));
         }
 
         if (result.getPaginator() != null) {
