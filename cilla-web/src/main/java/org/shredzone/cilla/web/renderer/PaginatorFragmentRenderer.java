@@ -54,6 +54,7 @@ public class PaginatorFragmentRenderer {
     public void paginatorFragment(
         PaginatorModel model,
         @FragmentValue("#filter") FilterModel filter,
+        @FragmentValue("#qualifier") String qualifier,
         Locale locale,
         HttpServletResponse resp,
         JspWriter out
@@ -71,13 +72,13 @@ public class PaginatorFragmentRenderer {
         if (model.isFirstPage()) {
             strategy.previousLink(out, null);
         } else {
-            strategy.previousLink(out, getUrl(resp, filter, selected - 1));
+            strategy.previousLink(out, getUrl(resp, filter, selected - 1, qualifier));
         }
 
         // page links
         int current = 0, last;
         do {
-            strategy.pageLink(out, getUrl(resp, filter, current), current, selected);
+            strategy.pageLink(out, getUrl(resp, filter, current, qualifier), current, selected);
             last = current;
             current = strategy.computeNextPage(model, current);
         } while (current >= 0 && current != last);
@@ -86,7 +87,7 @@ public class PaginatorFragmentRenderer {
         if (model.isLastPage()) {
             strategy.nextLink(out, null);
         } else {
-            strategy.nextLink(out, getUrl(resp, filter, selected + 1));
+            strategy.nextLink(out, getUrl(resp, filter, selected + 1, qualifier));
         }
 
         // Close the paginator container
@@ -103,12 +104,17 @@ public class PaginatorFragmentRenderer {
      *            {@link FilterModel} for the contents
      * @param page
      *            page number
+     * @param qualifier
+     *            Qualifier for link generation, or {@code null}
      * @return URL of the page
      */
-    private String getUrl(HttpServletResponse resp, FilterModel filter, int page) {
+    private String getUrl(HttpServletResponse resp, FilterModel filter, int page, String qualifier) {
         LinkBuilder lb = linkService.linkTo().ref(filter);
         if (page != 0) {
             lb.query("p", String.valueOf(page));
+        }
+        if (qualifier != null) {
+            lb.qualifier(qualifier);
         }
         return HtmlUtils.htmlEscape(resp.encodeURL(lb.toString()));
     }
