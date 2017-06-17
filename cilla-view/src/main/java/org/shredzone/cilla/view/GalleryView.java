@@ -33,8 +33,8 @@ import org.shredzone.cilla.service.PictureService;
 import org.shredzone.cilla.view.annotation.Framed;
 import org.shredzone.cilla.view.model.PictureInfoModel;
 import org.shredzone.cilla.web.comment.CommentFormHandler;
-import org.shredzone.cilla.web.image.ImageProvider;
 import org.shredzone.cilla.web.image.ImageOrigin;
+import org.shredzone.cilla.web.image.ImageProvider;
 import org.shredzone.cilla.web.page.ResourceLockManager;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.commons.view.annotation.Optional;
@@ -45,6 +45,7 @@ import org.shredzone.commons.view.annotation.ViewHandler;
 import org.shredzone.commons.view.exception.ErrorResponseException;
 import org.shredzone.commons.view.exception.PageNotFoundException;
 import org.shredzone.commons.view.exception.ViewException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 /**
@@ -55,6 +56,8 @@ import org.springframework.stereotype.Component;
 @ViewHandler
 @Component
 public class GalleryView extends AbstractView {
+
+    private @Value("${resource.deepLinkingProtection}") boolean deepLinkingProtection;
 
     private @Resource PageService pageService;
     private @Resource PictureService pictureService;
@@ -149,7 +152,7 @@ public class GalleryView extends AbstractView {
             throw new ErrorResponseException(HttpServletResponse.SC_FORBIDDEN);
         }
 
-        if (!resourceLockManager.isUnlocked(req.getSession(), picture)) {
+        if (deepLinkingProtection && !resourceLockManager.isUnlocked(req.getSession(), picture)) {
             throw new ErrorResponseException(HttpServletResponse.SC_FORBIDDEN);
         }
 

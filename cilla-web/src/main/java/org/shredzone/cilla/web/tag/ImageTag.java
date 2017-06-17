@@ -37,6 +37,7 @@ import org.shredzone.cilla.web.page.ResourceLockManagerImpl;
 import org.shredzone.cilla.web.util.TagUtils;
 import org.shredzone.commons.taglib.annotation.TagInfo;
 import org.shredzone.commons.taglib.annotation.TagParameter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -59,6 +60,9 @@ public class ImageTag extends BodyTagSupport {
 
     @Resource
     private transient ResourceLockManagerImpl unlockService;
+
+    @Value("${resource.deepLinkingProtection}")
+    private boolean deepLinkingProtection;
 
     private String var;
     private String scope;
@@ -116,7 +120,9 @@ public class ImageTag extends BodyTagSupport {
 
         if (picture != null) {
             lb.view("picture").picture(picture);
-            unlockService.unlockStore(request.getSession(), picture);
+            if (deepLinkingProtection) {
+                unlockService.unlockStore(request.getSession(), picture);
+            }
             if (type != null) {
                 lb.param("type", type);
             } else {
