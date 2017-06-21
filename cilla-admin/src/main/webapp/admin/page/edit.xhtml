@@ -30,7 +30,7 @@
             <p:commandButton type="submit" id="submit" ajax="false" action="#{pageBean.commit}" value="#{msg['page.edit.commit']}" icon="ui-icon-check" />
             <p:commandButton type="submit" id="save" ajax="false" action="#{pageBean.save}" value="#{msg['page.edit.save']}" icon="ui-icon-disk" />
             <p:commandButton type="submit" id="cancel" ajax="false" action="#{pageBean.cancelEdit}" value="#{msg['page.edit.cancel']}" immediate="true" icon="ui-icon-cancel" />
-            <p:button id="preview" onclick="window.open('${pageBean.pageUrl}', 'cilla-preview')" value="#{msg['page.edit.preview']}" rendered="#{pageBean.page.id ne 0}" icon="ui-icon-extlink" />
+            <p:button id="preview" onclick="window.open('${pageBean.pageUrl}', 'cilla-preview'); return false;" value="#{msg['page.edit.preview']}" rendered="#{pageBean.page.id ne 0}" icon="ui-icon-extlink" />
           </p:toolbarGroup>
         </p:toolbar>
 
