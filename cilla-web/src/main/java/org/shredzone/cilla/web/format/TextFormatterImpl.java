@@ -28,10 +28,9 @@ import javax.annotation.Resource;
 
 import org.shredzone.cilla.core.model.embed.FormattedText;
 import org.shredzone.cilla.service.link.LinkBuilder;
-import org.shredzone.cilla.web.plugin.PostProcessingTextFilter;
+import org.shredzone.cilla.web.plugin.PostProcessingTextFormatter;
 import org.shredzone.cilla.web.plugin.manager.PriorityComparator;
 import org.shredzone.cilla.ws.TextFormat;
-import org.shredzone.commons.text.TextFilter;
 import org.shredzone.commons.text.filter.HtmlEscapeFilter;
 import org.shredzone.commons.text.filter.KeepFilter;
 import org.shredzone.commons.text.filter.MarkdownFilter;
@@ -57,17 +56,17 @@ public class TextFormatterImpl implements TextFormatter {
 
     private @Resource ApplicationContext applicationContext;
 
-    private Function<CharSequence, CharSequence> postProcessingTextFilters = KEEP_FILTER;
+    private PostProcessingTextFormatter postProcessingTextFormatters = (t, r) -> t;
 
     /**
      * Initializes the text formatter.
      */
     @PostConstruct
     protected void setup() {
-        applicationContext.getBeansOfType(PostProcessingTextFilter.class).values().stream()
-                .sorted(new PriorityComparator<>(TextFilter.class))
+        applicationContext.getBeansOfType(PostProcessingTextFormatter.class).values().stream()
+                .sorted(new PriorityComparator<>(PostProcessingTextFormatter.class))
                 .forEachOrdered(filter -> {
-                    postProcessingTextFilters = postProcessingTextFilters.andThen(filter);
+                    postProcessingTextFormatters = postProcessingTextFormatters.andThen(filter);
                 });
     }
 
@@ -115,16 +114,16 @@ public class TextFormatterImpl implements TextFormatter {
             case PLAIN:
                 return HTML_ESCAPE_FILTER
                         .andThen(PARAGRAPH_FILTER)
-                        .andThen(postProcessingTextFilters);
+                        .andThen(curryFormatters(linkBuilderSupplier));
 
             case SIMPLIFIED:
                 return HTML_SIMPLIFY_FILTER
                         .andThen(PARAGRAPH_FILTER)
-                        .andThen(postProcessingTextFilters);
+                        .andThen(curryFormatters(linkBuilderSupplier));
 
             case PARAGRAPHED:
                 return PARAGRAPH_FILTER
-                        .andThen(postProcessingTextFilters);
+                        .andThen(curryFormatters(linkBuilderSupplier));
 
             case PREFORMATTED:
                 return HTML_ESCAPE_FILTER
@@ -137,7 +136,7 @@ public class TextFormatterImpl implements TextFormatter {
                 TextileFilter tf = new TextileFilter();
                 tf.setAnalyzer(rr);
 
-                return tf.andThen(postProcessingTextFilters);
+                return tf.andThen(curryFormatters(linkBuilderSupplier));
 
             case MARKDOWN:
                 ReferenceResolver rrmd = applicationContext.getBean(ReferenceResolver.class);
@@ -146,11 +145,26 @@ public class TextFormatterImpl implements TextFormatter {
                 MarkdownFilter mf = new MarkdownFilter();
                 mf.setAnalyzer(rrmd);
 
-                return mf.andThen(postProcessingTextFilters);
+                return mf.andThen(curryFormatters(linkBuilderSupplier));
 
             default:
                 throw new IllegalArgumentException("Cannot handle format " + format);
         }
+    }
+
+    /**
+     * Curries the postProcessingTextFormatters to use the {@link LinkBuilder}.
+     *
+     * @param linkBuilderSupplier
+     *            {@link LinkBuilder} to be used, may be {@code null}
+     * @return A filter that applies all postProcessingTextFormatters using the given
+     *         linkBuilderSupplier
+     */
+    private Function<CharSequence, CharSequence> curryFormatters(Supplier<LinkBuilder> linkBuilderSupplier) {
+        ReferenceResolver rr = applicationContext.getBean(ReferenceResolver.class);
+        rr.setLinkBuilderSupplier(linkBuilderSupplier);
+
+        return t -> postProcessingTextFormatters.apply(t, rr);
     }
 
 }
