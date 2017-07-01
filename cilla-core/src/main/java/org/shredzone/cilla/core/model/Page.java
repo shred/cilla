@@ -75,6 +75,7 @@ public class Page extends BaseModel implements Commentable {
     private String name;
     private String subject;
     private String title;
+    private String description;
     private FormattedText teaser;
     private User creator;
     private Date creation;
@@ -157,6 +158,12 @@ public class Page extends BaseModel implements Commentable {
     @Column(nullable = false)
     public String getTitle()                    { return title; }
     public void setTitle(String title)          { this.title = title; }
+
+    /**
+     * A short description. It will be used as metadata and for social media plugins.
+     */
+    public String getDescription()              { return description; }
+    public void setDescription(String description) { this.description = description; }
 
     /**
      * Page teaser. The teaser is the main text of the page, which is also shown in page

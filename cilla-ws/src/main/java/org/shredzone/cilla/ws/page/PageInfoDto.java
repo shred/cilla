@@ -38,6 +38,7 @@ public class PageInfoDto extends BaseDto {
 
     private String name;
     private String title;
+    private String description;
     private String subject;
     private long languageId;
     private long creatorId;
@@ -61,6 +62,10 @@ public class PageInfoDto extends BaseDto {
     @Size(min = 1, max = 255)
     public String getTitle()                        { return title; }
     public void setTitle(String title)              { this.title = title; }
+
+    @Size(min = 0, max = 255)
+    public String getDescription()                  { return description; }
+    public void setDescription(String description)  { this.description = description; }
 
     @Size(min = 0, max = 255)
     public String getSubject()                      { return subject; }

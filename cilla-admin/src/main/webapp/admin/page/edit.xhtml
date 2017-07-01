@@ -159,6 +159,12 @@
                 <p:message for="pageName" />
               </h:panelGroup>
 
+              <h:outputLabel for="pageDescription" value="#{msg['page.edit.description']}:" />
+              <h:panelGroup>
+                <p:inputText id="pageDescription" value="#{pageBean.page.description}" size="60" />
+                <p:message for="pageDescription" />
+              </h:panelGroup>
+
               <h:outputLabel for="pageCreator" value="#{msg['page.edit.creator']}:" />
               <h:panelGroup>
                 <h:selectOneMenu id="pageCreator" value="#{pageBean.page.creatorId}">

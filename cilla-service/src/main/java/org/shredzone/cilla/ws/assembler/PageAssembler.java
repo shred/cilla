@@ -54,6 +54,7 @@ public class PageAssembler extends AbstractAssembler<Page, PageDto> {
         dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setTitle(entity.getTitle());
+        dto.setDescription(entity.getDescription());
         dto.setSubject(entity.getSubject());
         dto.setLanguageId(entity.getLanguage().getId());
         dto.setCreatorId(entity.getCreator().getId());
@@ -85,6 +86,7 @@ public class PageAssembler extends AbstractAssembler<Page, PageDto> {
 
         entity.setName(dto.getName());
         entity.setTitle(dto.getTitle());
+        entity.setDescription(dto.getDescription());
         entity.setSubject(dto.getSubject());
         entity.setLanguage(languageDao.fetch(dto.getLanguageId()));
         entity.setCreator(userDao.fetch(dto.getCreatorId()));
@@ -125,6 +127,7 @@ public class PageAssembler extends AbstractAssembler<Page, PageDto> {
         projection.add(Projections.id(), "id");
         projection.add(Property.forName("name")        .as("name"));
         projection.add(Property.forName("title")       .as("title"));
+        projection.add(Property.forName("description") .as("description"));
         projection.add(Property.forName("subject")     .as("subject"));
         projection.add(Property.forName("creation")    .as("creation"));
         projection.add(Property.forName("modification").as("modification"));
