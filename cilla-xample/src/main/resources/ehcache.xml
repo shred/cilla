@@ -56,6 +56,12 @@
         eternal="false"
         overflowToDisk="true" />
 
+    <!-- Cache for Tag Cloud -->
+    <cache name="tagCloud"
+        maxElementsInMemory="500"
+        eternal="false"
+        overflowToDisk="false" />
+
     <!-- Domain Objects -->
     <cache name="org.shredzone.cilla.core.model.Authority"
         maxElementsInMemory="300"
