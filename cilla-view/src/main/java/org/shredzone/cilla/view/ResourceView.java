@@ -39,6 +39,8 @@ import org.shredzone.commons.view.annotation.ViewHandler;
 import org.shredzone.commons.view.exception.ErrorResponseException;
 import org.shredzone.commons.view.exception.PageNotFoundException;
 import org.shredzone.commons.view.exception.ViewException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
@@ -50,6 +52,8 @@ import org.springframework.util.FileCopyUtils;
 @ViewHandler
 @Component
 public class ResourceView extends AbstractView {
+
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final Date lastModified = new Date();   // startup date
 
@@ -92,6 +96,7 @@ public class ResourceView extends AbstractView {
             }
 
         } catch (IOException ex) {
+            log.debug("resource {}/{} was requested, but does not exist", pack, name, ex);
             throw new PageNotFoundException("resource '" + pack + '/' + name + "' not found");
         }
     }
@@ -130,7 +135,7 @@ public class ResourceView extends AbstractView {
                 sizeMap.put(key, counter);
             } catch (NoSuchAlgorithmException ex) {
                 // we expect no exception, since MD5 is a standard digester
-                throw new InternalError();
+                throw new InternalError(ex);
             }
         }
 

@@ -196,7 +196,7 @@ public class CommentThreadServiceImpl implements CommentThreadService {
             return digest.toString();
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
             // we expect no exception, since MD5 and UTF-8 are standards
-            throw new InternalError(ex.getMessage());
+            throw new InternalError(ex);
         }
     }
 

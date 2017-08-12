@@ -19,6 +19,8 @@
  */
 package org.shredzone.cilla.core.model.is;
 
+import java.io.Serializable;
+
 import org.shredzone.cilla.core.model.CommentThread;
 
 /**
@@ -26,7 +28,7 @@ import org.shredzone.cilla.core.model.CommentThread;
  *
  * @author Richard "Shred" Körber
  */
-public interface Commentable {
+public interface Commentable extends Serializable {
 
     /**
      * Gets the {@link CommentThread} where the comments are collected.

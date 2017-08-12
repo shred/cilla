@@ -115,4 +115,14 @@ public class HeaderDto extends BaseDto implements Geolocated {
     public DataHandler getUploadFullFile()      { return uploadFullFile; }
     public void setUploadFullFile(DataHandler uploadFullFile) { this.uploadFullFile = uploadFullFile; }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof HeaderDto && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

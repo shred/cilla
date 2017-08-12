@@ -21,7 +21,6 @@ package org.shredzone.cilla.web.page;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
@@ -43,7 +42,7 @@ public class ResourceLockManagerImpl implements ResourceLockManager {
     @SuppressWarnings("unchecked")
     public void unlockStore(HttpSession session, BaseModel entity) {
         String entityName = getEntityName(entity);
-        Map<String, Set<Long>> unlockMap = (Map<String, Set<Long>>) session.getAttribute(STORE_UNLOCK_ATTRIBUTE);
+        HashMap<String, Set<Long>> unlockMap = (HashMap<String, Set<Long>>) session.getAttribute(STORE_UNLOCK_ATTRIBUTE);
 
         if (unlockMap == null) {
             unlockMap = new HashMap<String, Set<Long>>();
@@ -62,7 +61,7 @@ public class ResourceLockManagerImpl implements ResourceLockManager {
     @Override
     @SuppressWarnings("unchecked")
     public boolean isUnlocked(HttpSession session, BaseModel entity) {
-        Map<String, Set<Long>> unlockMap = (Map<String, Set<Long>>) session.getAttribute(STORE_UNLOCK_ATTRIBUTE);
+        HashMap<String, Set<Long>> unlockMap = (HashMap<String, Set<Long>>) session.getAttribute(STORE_UNLOCK_ATTRIBUTE);
 
         if (unlockMap != null) {
             Set<Long> unlockSet = unlockMap.get(getEntityName(entity));

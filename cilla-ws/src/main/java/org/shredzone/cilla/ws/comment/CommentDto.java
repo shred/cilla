@@ -89,4 +89,14 @@ public class CommentDto extends BaseDto {
     public String getUrl()                  { return url; }
     public void setUrl(String url)          { this.url = url; }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof CommentDto && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

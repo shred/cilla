@@ -34,6 +34,8 @@ import org.shredzone.cilla.service.link.LinkService;
 import org.shredzone.cilla.web.page.ResourceLockManager;
 import org.shredzone.commons.view.exception.ErrorResponseException;
 import org.shredzone.commons.view.exception.ViewException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
@@ -45,6 +47,8 @@ import org.springframework.util.FileCopyUtils;
  */
 @Component
 public abstract class AbstractView {
+
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private @Value("${resource.expires}") long cacheExpirySeconds;
 
@@ -161,6 +165,7 @@ public abstract class AbstractView {
             modifiedSinceTs = req.getDateHeader("If-Modified-Since");
         } catch (IllegalArgumentException ex) {
             // As stated in RFC2616 Sec. 14.25, an invalid date will just be ignored.
+            log.debug("Ignore bad If-Modified-Since header", ex);
         }
 
         return (modifiedSinceTs >= 0 && (modifiedSinceTs / 1000) == (date.getTime() / 1000));

@@ -79,7 +79,7 @@ public class ImageTools {
         } catch (IOException ex) {
             throw new CillaServiceException(ex);
         }
-    };
+    }
 
     /**
      * Analyzes the dimension of the given image {@link DataSource}.

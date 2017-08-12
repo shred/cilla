@@ -277,7 +277,7 @@ public class LinkBuilder {
         try {
             return URLEncoder.encode(url, "utf-8");
         } catch (UnsupportedEncodingException ex) {
-            throw new InternalError("no utf-8");
+            throw new InternalError(ex);
         }
     }
 

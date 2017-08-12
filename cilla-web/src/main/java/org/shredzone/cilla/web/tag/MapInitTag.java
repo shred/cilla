@@ -47,8 +47,11 @@ import org.springframework.stereotype.Component;
 public class MapInitTag extends BodyTagSupport {
     private static final long serialVersionUID = 8309606103271334513L;
 
-    private @Resource MapService mapService;
-    private @Resource DocumentHeaderManager documentHeaderManager;
+    @Resource
+    private transient MapService mapService;
+
+    @Resource
+    private transient DocumentHeaderManager documentHeaderManager;
 
     private String key;
 

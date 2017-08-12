@@ -37,8 +37,11 @@ import org.springframework.stereotype.Component;
 public class ThumbImageProcessing extends ImageProcessing {
     private static final long serialVersionUID = -5044472227028566292L;
 
-    private @Value("${thumbWidth}") int thumbWidth;
-    private @Value("${thumbHeight}") int thumbHeight;
+    @Value("${thumbWidth}")
+    private transient int thumbWidth;
+
+    @Value("${thumbHeight}")
+    private transient int thumbHeight;
 
     @PostConstruct
     protected void setup() {

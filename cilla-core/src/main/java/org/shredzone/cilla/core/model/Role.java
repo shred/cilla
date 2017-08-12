@@ -56,4 +56,14 @@ public class Role extends BaseModel {
     public Collection<Authority> getAuthorities() { return authorities; }
     public void setAuthorities(Collection<Authority> authorities) { this.authorities = authorities; }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof Role && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

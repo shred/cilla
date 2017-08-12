@@ -52,4 +52,14 @@ public class Setting extends BaseModel {
     public String getValue()                    { return value; }
     public void setValue(String value)          { this.value = value; }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof Setting && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

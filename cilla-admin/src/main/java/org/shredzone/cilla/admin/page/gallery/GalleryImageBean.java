@@ -42,9 +42,14 @@ import org.springframework.stereotype.Component;
 public class GalleryImageBean extends AbstractImageBean {
     private static final long serialVersionUID = -620675494847533591L;
 
-    private @Resource GalleryBean galleryBean;
-    private @Resource PageWs pageWs;
-    private @Resource @Qualifier("thumb") ImageProcessing thumbIp;
+    @Resource
+    private transient GalleryBean galleryBean;
+
+    @Resource
+    private transient PageWs pageWs;
+
+    @Resource @Qualifier("thumb")
+    private transient ImageProcessing thumbIp;
 
     /**
      * Gets the thumbnail of a gallery image. It is selected by its index in the current

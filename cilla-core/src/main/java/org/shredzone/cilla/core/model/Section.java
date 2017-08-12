@@ -70,4 +70,14 @@ public abstract class Section extends BaseModel {
     @Transient
     public abstract String getType();
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof Section && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

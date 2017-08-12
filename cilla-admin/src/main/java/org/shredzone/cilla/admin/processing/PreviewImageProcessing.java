@@ -37,8 +37,11 @@ import org.springframework.stereotype.Component;
 public class PreviewImageProcessing extends ImageProcessing {
     private static final long serialVersionUID = 2010301450928852803L;
 
-    private @Value("${previewWidth}") int previewWidth;
-    private @Value("${previewHeight}") int previewHeight;
+    @Value("${previewWidth}")
+    private transient int previewWidth;
+
+    @Value("${previewHeight}")
+    private transient int previewHeight;
 
     @PostConstruct
     protected void setup() {

@@ -56,4 +56,14 @@ public class Store extends BaseModel {
     public Date getLastModified()               { return DateUtils.cloneDate(lastModified); }
     public void setLastModified(Date lastModified) { this.lastModified = DateUtils.cloneDate(lastModified); }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof Store && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

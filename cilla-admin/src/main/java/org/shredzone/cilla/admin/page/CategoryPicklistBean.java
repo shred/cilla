@@ -44,7 +44,8 @@ import org.springframework.stereotype.Component;
 public class CategoryPicklistBean implements PageSelectionObserver, Serializable {
     private static final long serialVersionUID = 6950844548268914797L;
 
-    private @Resource CategoryWs categoryWs;
+    @Resource
+    private transient CategoryWs categoryWs;
 
     private PageDto page;
     private List<CategoryDto> allCategories;
@@ -57,7 +58,7 @@ public class CategoryPicklistBean implements PageSelectionObserver, Serializable
         if (page != null) {
             try {
                 allCategories = categoryWs.list();
-                selectedCategories = new ArrayList<CategoryDto>(page.getCategories());
+                selectedCategories = new ArrayList<>(page.getCategories());
                 allCategories.removeAll(selectedCategories);
             } catch (CillaServiceException ex) {
                 throw new WrappedCillaException(ex);

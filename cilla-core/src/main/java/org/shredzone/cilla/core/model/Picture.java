@@ -172,4 +172,14 @@ public class Picture extends BaseModel implements Commentable {
     public CommentThread getThread()            { return thread; }
     public void setThread(CommentThread thread) { this.thread = thread; }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof Picture && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

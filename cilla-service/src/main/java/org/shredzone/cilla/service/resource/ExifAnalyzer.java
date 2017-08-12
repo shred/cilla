@@ -166,7 +166,7 @@ public class ExifAnalyzer {
 
         Rational altitude = readRational(GpsDirectory.class, GpsDirectory.TAG_GPS_ALTITUDE);
         if (altitude != null) {
-            BigDecimal altDec = new BigDecimal(altitude.doubleValue()).setScale(3, RoundingMode.HALF_DOWN);
+            BigDecimal altDec = BigDecimal.valueOf(altitude.doubleValue()).setScale(3, RoundingMode.HALF_DOWN);
 
             String altRef = readString(GpsDirectory.class, GpsDirectory.TAG_GPS_ALTITUDE_REF);
             if ("1".equals(altRef)) {
@@ -186,9 +186,7 @@ public class ExifAnalyzer {
      * @return Date and time, or {@code null} if the information could not be retrieved
      */
     public Date getDateTime(TimeZone tz) {
-        Date date = null;
-
-        date = readDate(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, tz);
+        Date date = readDate(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, tz);
 
         if (date == null) {
             date = readDate(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_DATETIME_DIGITIZED, tz);
@@ -333,7 +331,7 @@ public class ExifAnalyzer {
 
             Integer equiv = readInteger(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_35MM_FILM_EQUIV_FOCAL_LENGTH);
             if (equiv != null && focal.intValue() != equiv.intValue()) {
-                result += String.format(Locale.ENGLISH, " (= %d mm)", equiv.intValue());
+                result += String.format(Locale.ENGLISH, " (= %d mm)", equiv);
             }
 
             return result;
@@ -506,7 +504,7 @@ public class ExifAnalyzer {
                 case  3: return "manual";
                 case  4: return "single";
                 case  5: return "continuous";
-                case  6: return "manual";
+                case  6: return "manual"; //NOSONAR
                 case 16: return "pan";
             }
         }
@@ -711,7 +709,7 @@ public class ExifAnalyzer {
                     result = (result / 60d) + data[ix].doubleValue();
                 }
 
-                return new BigDecimal(result).setScale(6, RoundingMode.HALF_DOWN);
+                return BigDecimal.valueOf(result).setScale(6, RoundingMode.HALF_DOWN);
             }
         }
 

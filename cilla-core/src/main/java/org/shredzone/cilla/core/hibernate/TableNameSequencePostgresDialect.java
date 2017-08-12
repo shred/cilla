@@ -54,7 +54,7 @@ public class TableNameSequencePostgresDialect extends PostgreSQL82Dialect {
             }
 
             super.configure(type, params, dialect);
-        };
+        }
 
     }
 

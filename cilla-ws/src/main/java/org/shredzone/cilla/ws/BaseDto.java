@@ -60,10 +60,9 @@ public abstract class BaseDto implements Serializable {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) return false;
-        if (! this.getClass().isAssignableFrom(obj.getClass())) return false;
-
-        assert obj instanceof BaseDto;
+        if (obj == null || !(obj instanceof BaseDto)) {
+            return false;
+        }
 
         BaseDto cmp = (BaseDto) obj;
         if (id == cmp.id){

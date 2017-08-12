@@ -44,7 +44,8 @@ import org.springframework.stereotype.Component;
 public class HeaderDataModel extends LazyDataModel<HeaderDto> {
     private static final long serialVersionUID = 6396579014639216274L;
 
-    private @Resource HeaderWs headerWs;
+    @Resource
+    private transient HeaderWs headerWs;
 
     @Override
     public List<HeaderDto> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {

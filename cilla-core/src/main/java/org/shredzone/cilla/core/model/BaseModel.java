@@ -64,10 +64,9 @@ public abstract class BaseModel implements Serializable {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) return false;
-        if (! this.getClass().isAssignableFrom(obj.getClass())) return false;
-
-        assert obj instanceof BaseModel;
+        if (obj == null || !(obj instanceof BaseModel)) {
+            return false;
+        }
 
         return ((BaseModel) obj).getId() == this.getId();
     }

@@ -20,6 +20,9 @@
 package org.shredzone.cilla.web.tag;
 
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.jsp.JspException;
@@ -48,20 +51,21 @@ import org.springframework.stereotype.Component;
 public class RenderTag extends BodyTagSupport implements Parameterizable {
     private static final long serialVersionUID = -23348027985991513L;
 
-    private @Resource FragmentService fragmentService;
+    @Resource
+    private transient FragmentService fragmentService;
+
+    private final transient Map<String, Object> parameters = new HashMap<>();
 
     private String fragment;
-    private Object item;
+    private Serializable item;
     private Boolean rendered;
     private Boolean optional;
-
-    private FragmentContext context;
 
     @TagParameter(required = true)
     public void setFragment(String fragment)    { this.fragment = fragment; }
 
     @TagParameter
-    public void setItem(Object item)            { this.item = item; }
+    public void setItem(Serializable item)      { this.item = item; }
 
     @TagParameter
     public void setRendered(Boolean rendered)   { this.rendered = rendered; }
@@ -71,49 +75,49 @@ public class RenderTag extends BodyTagSupport implements Parameterizable {
 
     @Override
     public int doStartTag() throws JspException {
-        try {
-            context = fragmentService.createContext(pageContext);
-            context.setRootObject(item);
-        } catch (CillaServiceException ex) {
-            throw new JspException("Could not generate FragmentContext", ex);
-        }
-
         return EVAL_BODY_INCLUDE;
     }
 
     @Override
     public int doEndTag() throws JspException {
+        FragmentContext context;
         try {
-            if (rendered != null && rendered.booleanValue() == false) {
+            context = fragmentService.createContext(pageContext);
+        } catch (CillaServiceException ex) {
+            throw new JspException("Could not generate FragmentContext", ex);
+        }
+
+        context.setRootObject(item);
+
+        parameters.forEach(context::setVariable);
+
+        if (rendered != null && rendered.booleanValue() == false) {
+            return EVAL_PAGE;
+        }
+
+        if (optional != null && optional.booleanValue() == true) {
+            if (!fragmentService.hasFragment(fragment)) {
+                // Fragment is optional and does not exist
                 return EVAL_PAGE;
             }
-
-            if (optional != null && optional.booleanValue() == true) {
-                if (!fragmentService.hasFragment(fragment)) {
-                    // Fragment is optional and does not exist
-                    return EVAL_PAGE;
-                }
-            }
-
-            String result;
-            try {
-                result = fragmentService.renderFragment(fragment, context);
-                if (result != null) {
-                    pageContext.getOut().print(result);
-                }
-            } catch (CillaServiceException | IOException ex) {
-                throw new JspException("Failed to render fragment " + fragment, ex);
-            }
-
-            return EVAL_PAGE;
-        } finally {
-            context = null;
         }
+
+        String result;
+        try {
+            result = fragmentService.renderFragment(fragment, context);
+            if (result != null) {
+                pageContext.getOut().print(result);
+            }
+        } catch (CillaServiceException | IOException ex) {
+            throw new JspException("Failed to render fragment " + fragment, ex);
+        }
+
+        return EVAL_PAGE;
     }
 
     @Override
     public void addParam(String name, Object value) {
-        context.setVariable(name, value);
+        parameters.put(name, value);
     }
 
 }

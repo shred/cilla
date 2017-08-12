@@ -50,4 +50,14 @@ public class Authority extends BaseModel {
     public String getName()                     { return name; }
     public void setName(String name)            { this.name = name; }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof Authority && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

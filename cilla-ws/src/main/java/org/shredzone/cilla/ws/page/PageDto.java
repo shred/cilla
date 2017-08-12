@@ -76,4 +76,14 @@ public class PageDto extends PageInfoDto {
     public List<String> getTags()                   { return tags; }
     public void setTags(List<String> tags)          { this.tags = tags; }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof PageDto && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

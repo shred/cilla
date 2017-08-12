@@ -39,7 +39,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class CategoryConverter extends LongConverter {
 
-    private @Resource CategoryWs categoryWs;
+    @Resource
+    private CategoryWs categoryWs;
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
@@ -47,7 +48,7 @@ public class CategoryConverter extends LongConverter {
             Long id = (Long) super.getAsObject(context, component, value);
             return categoryWs.fetch(id);
         } catch (CillaServiceException ex) {
-            throw new IllegalArgumentException("could not fetch category with id " + value);
+            throw new IllegalArgumentException("could not fetch category with id " + value, ex);
         }
     }
 

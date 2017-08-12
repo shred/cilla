@@ -116,4 +116,14 @@ public class PageInfoDto extends BaseDto {
         return isPublished() && (expiration == null || expiration.after(new Date()));
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof PageInfoDto && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

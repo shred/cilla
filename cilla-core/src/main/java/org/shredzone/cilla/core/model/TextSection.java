@@ -54,4 +54,14 @@ public class TextSection extends Section {
     @Transient
     public String getType()                     { return "text"; }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof TextSection && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

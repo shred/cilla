@@ -59,4 +59,14 @@ public class CategoryDto extends BaseDto {
     public TextFormat getCaptionFormat()        { return captionFormat; }
     public void setCaptionFormat(TextFormat captionFormat) { this.captionFormat = captionFormat; }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof CategoryDto && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

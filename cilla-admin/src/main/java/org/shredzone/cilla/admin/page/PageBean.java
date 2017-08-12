@@ -29,6 +29,8 @@ import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.cilla.ws.page.PageDto;
 import org.shredzone.cilla.ws.page.PageInfoDto;
 import org.shredzone.cilla.ws.page.PageWs;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -43,10 +45,16 @@ import org.springframework.stereotype.Component;
 public class PageBean implements Serializable {
     private static final long serialVersionUID = -9163614036429183023L;
 
-    private @Value("${maxProposedSubjects}") int maxProposedSubjects;
+    @Value("${maxProposedSubjects}")
+    private int maxProposedSubjects;
 
-    private @Resource PageWs pageWs;
-    private @Resource Collection<PageSelectionObserver> pageSelectionObservers;
+    @Resource
+    private transient PageWs pageWs;
+
+    @Resource
+    private transient Collection<PageSelectionObserver> pageSelectionObservers;
+
+    private final transient Logger log = LoggerFactory.getLogger(getClass());
 
     private PageDto page;
 
@@ -70,6 +78,7 @@ public class PageBean implements Serializable {
             try {
                 setPage(pageWs.fetch(dto.getId()));
             } catch (CillaServiceException ex) {
+                log.debug("Could not fetch page id {}", dto.getId(), ex);
                 setPage(null);
             }
         } else {

@@ -290,4 +290,14 @@ public class Page extends BaseModel implements Commentable {
         return (challenge != null && responsePattern != null);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof Page && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

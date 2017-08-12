@@ -23,6 +23,7 @@ import javax.annotation.Resource;
 
 import org.shredzone.cilla.core.model.TextSection;
 import org.shredzone.cilla.core.repository.SectionDao;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;
 
 /**
@@ -39,6 +40,7 @@ public class StringToTextSection implements Converter<String, TextSection> {
         try {
             return (TextSection) sectionDao.fetch(Long.parseLong(string));
         } catch (NumberFormatException | ClassCastException ex) {
+            LoggerFactory.getLogger(getClass()).debug("no valid text section id '{}'", string, ex);
             return null;
         }
     }

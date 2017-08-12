@@ -42,10 +42,13 @@ import org.springframework.stereotype.Component;
 public class PageSectionBean implements Serializable {
     private static final long serialVersionUID = 9023901491882118139L;
 
-    private @Resource PageWs pageWs;
-    private @Resource PageBean pageBean;
+    @Resource
+    private transient PageWs pageWs;
 
-    private UIInput sectionUi;
+    @Resource
+    private transient PageBean pageBean;
+
+    private transient UIInput sectionUi;
 
     /**
      * UI Binding for the section type selector.

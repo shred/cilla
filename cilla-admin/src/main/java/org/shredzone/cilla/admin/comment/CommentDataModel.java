@@ -43,7 +43,8 @@ import org.springframework.stereotype.Component;
 public class CommentDataModel extends LazyDataModel<CommentDto> {
     private static final long serialVersionUID = -1053634121748988416L;
 
-    private @Resource CommentWs commentWs;
+    @Resource
+    private transient CommentWs commentWs;
 
     @Override
     public List<CommentDto> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {

@@ -20,6 +20,7 @@
 package org.shredzone.cilla.web.tag;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.annotation.Resource;
 import javax.servlet.jsp.JspException;
@@ -51,11 +52,14 @@ import org.springframework.stereotype.Component;
 public class FormatTag extends BodyTagSupport {
     private static final long serialVersionUID = -1870489798167703697L;
 
-    private @Resource TextFormatter textFormatter;
-    private @Resource LinkService linkService;
+    @Resource
+    private transient TextFormatter textFormatter;
 
-    private Object text;
-    private Object format;
+    @Resource
+    private transient LinkService linkService;
+
+    private Serializable text;
+    private Serializable format;
     private Page page;
     private boolean stripHtml;
     private Integer truncate;
@@ -63,10 +67,10 @@ public class FormatTag extends BodyTagSupport {
     private String scope;
 
     @TagParameter
-    public void setText(Object text)            { this.text = text; }
+    public void setText(Serializable text)      { this.text = text; }
 
     @TagParameter
-    public void setFormat(Object format)        { this.format = format; }
+    public void setFormat(Serializable format)  { this.format = format; }
 
     @TagParameter
     public void setPage(Page page)              { this.page = page; }

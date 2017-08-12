@@ -114,4 +114,14 @@ public class User extends BaseModel {
     public Map<String, String> getProperties()  { return properties; }
     public void setProperties(Map<String, String> properties) { this.properties = properties; }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof User && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

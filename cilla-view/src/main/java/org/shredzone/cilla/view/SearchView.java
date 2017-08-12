@@ -37,6 +37,8 @@ import org.shredzone.commons.view.annotation.PathPart;
 import org.shredzone.commons.view.annotation.View;
 import org.shredzone.commons.view.annotation.ViewHandler;
 import org.shredzone.commons.view.exception.ViewException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -48,6 +50,8 @@ import org.springframework.stereotype.Component;
 @ViewHandler
 @Component
 public class SearchView extends AbstractView {
+
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private @Value("${search.maxEntries}") int maxEntries;
 
@@ -78,10 +82,11 @@ public class SearchView extends AbstractView {
             locale = Locale.ENGLISH;
         }
 
-        if (paginator == null) {
-            paginator = new PaginatorModel();
+        PaginatorModel usePaginator = paginator;
+        if (usePaginator == null) {
+            usePaginator = new PaginatorModel();
         }
-        paginator.setPerPage(maxEntries);
+        usePaginator.setPerPage(maxEntries);
 
         FilterModel filter = new FilterModel();
         filter.setLocale(locale);
@@ -89,15 +94,16 @@ public class SearchView extends AbstractView {
 
         try {
             SearchResult result = searchService.search(filter);
-            paginator.setCount(result.getCount());
-            result.setPaginator(paginator);
+            usePaginator.setCount(result.getCount());
+            result.setPaginator(usePaginator);
             req.setAttribute("result", result);
         } catch (CillaServiceException ex) {
+            log.debug("search for '{}' failed", query, ex);
             req.setAttribute("message", "search.msg.failed");
             req.setAttribute("details", ex.getCause().getLocalizedMessage());
         }
 
-        req.setAttribute("paginator", paginator);
+        req.setAttribute("paginator", usePaginator);
         req.setAttribute("query", query);
 
         return "view/search.jsp";

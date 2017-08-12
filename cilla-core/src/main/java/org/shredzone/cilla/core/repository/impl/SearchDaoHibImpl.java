@@ -111,7 +111,7 @@ public class SearchDaoHibImpl implements SearchDao {
         if (crit != null && crit instanceof CriteriaImpl) {
             CriteriaImpl impl = (CriteriaImpl) crit;
             String entity = impl.getEntityOrClassName();
-            if (!(Page.class.getName().equals(entity))) {
+            if (!(Page.class.getName().equals(entity))) { //NOSONAR: false positive
                 throw new IllegalArgumentException("Criteria not bound to Page, but " + entity);
             }
         }

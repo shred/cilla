@@ -44,7 +44,8 @@ import org.springframework.stereotype.Component;
 public class PageMediaBean implements PageSelectionObserver, Serializable {
     private static final long serialVersionUID = -2129654079218797869L;
 
-    private @Resource PageWs pageWs;
+    @Resource
+    private transient PageWs pageWs;
 
     private PageDto page;
     private MediumDto[] selection;

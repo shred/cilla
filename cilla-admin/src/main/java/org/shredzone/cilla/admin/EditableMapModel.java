@@ -85,8 +85,8 @@ public class EditableMapModel extends DefaultMapModel {
      * Commits the position, writing it to the {@link Geolocated}.
      */
     public void commit() {
-        BigDecimal lat = new BigDecimal(marker.getLatlng().getLat(), CONTEXT);
-        BigDecimal lng = new BigDecimal(marker.getLatlng().getLng(), CONTEXT);
+        BigDecimal lat = new BigDecimal(Double.toString(marker.getLatlng().getLat()), CONTEXT);
+        BigDecimal lng = new BigDecimal(Double.toString(marker.getLatlng().getLng()), CONTEXT);
 
         model.setLatitude(lat);
         model.setLongitude(lng);

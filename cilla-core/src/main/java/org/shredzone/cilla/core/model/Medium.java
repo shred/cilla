@@ -64,4 +64,14 @@ public class Medium extends BaseModel {
     public Store getImage()                     { return image; }
     public void setImage(Store image)           { this.image = image; }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof Medium && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

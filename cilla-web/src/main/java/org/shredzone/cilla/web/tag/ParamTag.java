@@ -19,6 +19,8 @@
  */
 package org.shredzone.cilla.web.tag;
 
+import java.io.Serializable;
+
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTag;
 import javax.servlet.jsp.tagext.BodyTagSupport;
@@ -43,13 +45,13 @@ public class ParamTag extends BodyTagSupport {
     private static final long serialVersionUID = 3127696613728198638L;
 
     private String name;
-    private Object value;
+    private Serializable value;
 
     @TagParameter(required = true)
     public void setName(String name)            { this.name = name; }
 
     @TagParameter
-    public void setValue(Object value)          { this.value = value; }
+    public void setValue(Serializable value)    { this.value = value; }
 
     @Override
     public int doStartTag() throws JspException {

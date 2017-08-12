@@ -92,7 +92,7 @@ public class PaginatorFragmentRenderer {
         // Close the paginator container
         strategy.closeContainer(out);
         out.println();
-    };
+    }
 
     /**
      * Creates the URL to a page of the paginator.

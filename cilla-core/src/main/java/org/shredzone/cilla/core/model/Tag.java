@@ -45,8 +45,18 @@ public class Tag extends BaseModel implements Comparable<Tag> {
     public void setName(String name)            { this.name = name; }
 
     @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof Tag && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
+    @Override
     public int compareTo(Tag o) {
-        // Note: There is no need to override the equals() method. Since the name property
+        // There is no compare the name in the equals() method. Since the name property
         // is unique, it is ensured that for all persisted Tags with t1.id == t2.id,
         // t1.name also == t2.name.
         return name.compareTo(o.name);

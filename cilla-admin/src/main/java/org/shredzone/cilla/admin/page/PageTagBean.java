@@ -40,9 +40,11 @@ import org.springframework.stereotype.Component;
 public class PageTagBean implements PageSelectionObserver, Serializable {
     private static final long serialVersionUID = -3041416451833181722L;
 
-    private @Value("${maxProposedTags}") int maxProposedTags;
+    @Value("${maxProposedTags}")
+    private transient int maxProposedTags;
 
-    private @Resource TagWs tagWs;
+    @Resource
+    private transient TagWs tagWs;
 
     private String tag = "";
 

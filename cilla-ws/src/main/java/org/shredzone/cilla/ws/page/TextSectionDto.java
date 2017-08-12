@@ -47,4 +47,14 @@ public class TextSectionDto extends SectionDto {
     public TextFormat getTextFormat()           { return textFormat; }
     public void setTextFormat(TextFormat textFormat) { this.textFormat = textFormat; }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof TextSectionDto && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

@@ -100,4 +100,14 @@ public class PictureDto extends BaseDto implements Geolocated {
     public DataHandler getUploadFile()          { return uploadFile; }
     public void setUploadFile(DataHandler uploadFile) { this.uploadFile = uploadFile; }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof PictureDto && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

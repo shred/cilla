@@ -94,7 +94,6 @@ public class TimeZoneBean implements Converter {
                     .findFirst()
                     .orElse(TimeZone.getTimeZone(string));
         } catch (Exception ex) {
-            ex.printStackTrace();
             throw new ConverterException(ex);
         }
     }

@@ -36,7 +36,7 @@ import org.springframework.stereotype.Controller;
 public class GalleryGridBean implements Serializable {
     private static final long serialVersionUID = 5676997413214057854L;
 
-    private UIComponent uiGrid;
+    private transient UIComponent uiGrid;
 
     /**
      * Reference to the {@link UIComponent} of the data grid showing the pictures of the

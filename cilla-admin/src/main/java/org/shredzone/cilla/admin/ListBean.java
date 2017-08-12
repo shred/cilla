@@ -47,9 +47,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class ListBean {
 
-    private @Resource PageWs pageWs;
-    private @Resource SystemWs systemWs;
-    private @Resource UserWs userWs;
+    @Resource
+    private PageWs pageWs;
+
+    @Resource
+    private SystemWs systemWs;
+
+    @Resource
+    private UserWs userWs;
 
     /**
      * Returns a list of available text format types.

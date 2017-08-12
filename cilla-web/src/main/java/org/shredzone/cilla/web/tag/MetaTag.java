@@ -46,7 +46,8 @@ import org.springframework.stereotype.Component;
 public class MetaTag extends BodyTagSupport {
     private static final long serialVersionUID = 1155264881573999741L;
 
-    private @Resource DocumentHeaderManager documentHeaderManager;
+    @Resource
+    private transient DocumentHeaderManager documentHeaderManager;
 
     private String name;
     private String content;

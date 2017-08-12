@@ -54,7 +54,8 @@ import org.springframework.web.util.HtmlUtils;
 public class FeedTag extends TagSupport {
     private static final long serialVersionUID = -8820686144322884700L;
 
-    private @Resource LinkService linkService;
+    @Resource
+    private transient LinkService linkService;
 
     private String type;
     private String var;

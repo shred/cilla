@@ -39,7 +39,8 @@ import org.springframework.stereotype.Component;
 public class CommentBean implements Serializable {
     private static final long serialVersionUID = -8895372030013381321L;
 
-    private @Resource CommentWs commentWs;
+    @Resource
+    private transient CommentWs commentWs;
 
     private CommentDto comment;
 

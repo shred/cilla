@@ -39,9 +39,11 @@ import org.springframework.stereotype.Component;
 public class PictureTagBean implements Serializable {
     private static final long serialVersionUID = 8977985147635121824L;
 
-    private @Value("${maxProposedTags}") int maxProposedTags;
+    @Value("${maxProposedTags}")
+    private transient int maxProposedTags;
 
-    private @Resource TagWs tagWs;
+    @Resource
+    private transient TagWs tagWs;
 
     private String tag = "";
 

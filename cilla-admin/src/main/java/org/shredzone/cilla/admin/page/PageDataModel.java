@@ -44,7 +44,8 @@ import org.springframework.stereotype.Component;
 public class PageDataModel extends LazyDataModel<PageInfoDto> {
     private static final long serialVersionUID = -6563621904935828762L;
 
-    private @Resource PageWs pageWs;
+    @Resource
+    private transient PageWs pageWs;
 
     @Override
     public List<PageInfoDto> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {

@@ -19,6 +19,7 @@
  */
 package org.shredzone.cilla.ws;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -26,7 +27,7 @@ import java.math.BigDecimal;
  *
  * @author Richard "Shred" Körber
  */
-public interface Geolocated {
+public interface Geolocated extends Serializable {
 
     BigDecimal getLongitude();
     void setLongitude(BigDecimal longitude);

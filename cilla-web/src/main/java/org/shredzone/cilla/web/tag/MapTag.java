@@ -52,7 +52,8 @@ import org.springframework.stereotype.Component;
 public class MapTag extends BodyTagSupport implements Parameterizable {
     private static final long serialVersionUID = 7313809751943580566L;
 
-    private @Resource MapService mapService;
+    @Resource
+    private transient MapService mapService;
 
     private Geolocation location;
     private boolean satellite;

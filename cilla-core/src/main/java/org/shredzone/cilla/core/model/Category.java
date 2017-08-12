@@ -106,4 +106,14 @@ public class Category extends BaseModel {
     public FormattedText getCaption()           { return caption; }
     public void setCaption(FormattedText caption) { this.caption = caption; }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof Category && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

@@ -337,7 +337,7 @@ public class FeedView extends AbstractView {
         try {
             return prefix + type + '-' + URLEncoder.encode(id, "utf-8");
         } catch (UnsupportedEncodingException ex) {
-            throw new InternalError("utf-8 missing");
+            throw new InternalError(ex);
         }
     }
 

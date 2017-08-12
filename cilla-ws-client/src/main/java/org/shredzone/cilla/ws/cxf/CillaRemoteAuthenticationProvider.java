@@ -70,7 +70,7 @@ public class CillaRemoteAuthenticationProvider implements AuthenticationProvider
 
             return new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
         } catch (SOAPFaultException ex) {
-            throw new BadCredentialsException(ex.getMessage());
+            throw new BadCredentialsException("login rejected", ex);
         } catch (CillaServiceException ex) {
             throw new AuthenticationServiceException("couldn't get user details", ex);
         }

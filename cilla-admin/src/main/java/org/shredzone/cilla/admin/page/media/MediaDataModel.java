@@ -41,7 +41,8 @@ import org.springframework.stereotype.Component;
 public class MediaDataModel extends LazyDataModel<MediumDto> {
     private static final long serialVersionUID = 76347037561090724L;
 
-    private @Resource PageMediaBean pageMediaBean;
+    @Resource
+    private PageMediaBean pageMediaBean;
 
     @Override
     public List<MediumDto> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, String> filters) {

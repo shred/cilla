@@ -46,7 +46,8 @@ import org.springframework.stereotype.Component;
 public class CommentThreadTag extends BodyTagSupport {
     private static final long serialVersionUID = -7835017044001110609L;
 
-    private @Resource CommentThreadService commentThreadService;
+    @Resource
+    private transient CommentThreadService commentThreadService;
 
     private String var;
     private String scope;

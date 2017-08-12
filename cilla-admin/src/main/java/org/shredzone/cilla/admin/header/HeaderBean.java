@@ -47,8 +47,11 @@ import org.springframework.stereotype.Component;
 public class HeaderBean implements Serializable {
     private static final long serialVersionUID = 6288999431849895025L;
 
-    private @Resource HeaderWs headerWs;
-    private @Resource MapModelFactory mapModelFactory;
+    @Resource
+    private transient HeaderWs headerWs;
+
+    @Resource
+    private transient MapModelFactory mapModelFactory;
 
     private HeaderDto header;
     private EditableMapModel headerMapModel;
@@ -128,7 +131,6 @@ public class HeaderBean implements Serializable {
                 );
                 ctx.addMessage("editForm:headerFullPicture", message);
                 missing = true;
-                return null;
             }
 
             if (missing) {

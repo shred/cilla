@@ -25,6 +25,8 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.shredzone.cilla.core.model.Section;
 import org.shredzone.cilla.core.repository.SectionDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +38,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository("sectionDao")
 @Transactional
 public class SectionDaoHibImpl extends BaseDaoHibImpl<Section> implements SectionDao {
+
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Transactional(readOnly = true)
     @Override
@@ -78,6 +82,7 @@ public class SectionDaoHibImpl extends BaseDaoHibImpl<Section> implements Sectio
         try {
             return clazz.cast(result);
         } catch (ClassCastException ex) {
+            log.warn("Section id {} type mismatch", id, ex);
             return null;
         }
     }

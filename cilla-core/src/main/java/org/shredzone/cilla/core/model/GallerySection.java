@@ -86,4 +86,14 @@ public class GallerySection extends Section {
     @Transient
     public String getType()                     { return "gallery"; }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof GallerySection && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

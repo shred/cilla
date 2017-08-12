@@ -60,4 +60,14 @@ public class MediumDto extends BaseDto {
     public DataHandler getUploadMediumFile()    { return uploadMediumFile; }
     public void setUploadMediumFile(DataHandler uploadMediumFile) { this.uploadMediumFile = uploadMediumFile; }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof MediumDto && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

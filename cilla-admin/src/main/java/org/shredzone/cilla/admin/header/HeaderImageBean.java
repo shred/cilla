@@ -40,10 +40,17 @@ import org.springframework.stereotype.Component;
 public class HeaderImageBean extends AbstractImageBean {
     private static final long serialVersionUID = 2122584473681755274L;
 
-    private @Resource HeaderBean headerBean;
-    private @Resource HeaderWs headerWs;
-    private @Resource @Qualifier("preview") ImageProcessing previewIp;
-    private @Resource @Qualifier("thumb") ImageProcessing thumbIp;
+    @Resource
+    private transient HeaderBean headerBean;
+
+    @Resource
+    private transient HeaderWs headerWs;
+
+    @Resource @Qualifier("preview")
+    private transient ImageProcessing previewIp;
+
+    @Resource @Qualifier("thumb")
+    private transient ImageProcessing thumbIp;
 
     /**
      * Returns a persisted header as a thumbnail image. The header is selected by a

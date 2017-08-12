@@ -53,11 +53,12 @@ import org.springframework.stereotype.Component;
 public abstract class AbstractImageBean implements Serializable {
     private static final long serialVersionUID = 3624378631087966758L;
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+    private final transient Logger log = LoggerFactory.getLogger(getClass());
 
-    private @Value("${previewImageMaxCache}") int maxCache;
+    @Value("${previewImageMaxCache}")
+    private transient int maxCache;
 
-    private final Map<DataHandler, byte[]> weakScaleCache = new WeakHashMap<>();
+    private final transient WeakHashMap<DataHandler, byte[]> weakScaleCache = new WeakHashMap<>();
 
     /**
      * Gets the "renderId" request parameter used for rendering images by their ID.
@@ -167,7 +168,7 @@ public abstract class AbstractImageBean implements Serializable {
     private BufferedImage scale(BufferedImage image, int width, int height) {
         ImageObserver observer = null;
 
-        Image scaled = null;
+        Image scaled;
         if (image.getWidth() > image.getHeight()) {
             scaled = image.getScaledInstance(width, -1, Image.SCALE_SMOOTH);
         } else {

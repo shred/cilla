@@ -93,7 +93,7 @@ public class TagServiceImpl implements TagService {
      * @return Map of {@link Tag} and its cloud map factor
      */
     protected Map<Tag, Float> computeTagCloud(List<Page> pages, long beginning, long limit) {
-        float max = 0f;
+        Float max = null;
 
         Map<Tag, Float> result = new HashMap<>();
 
@@ -106,13 +106,13 @@ public class TagServiceImpl implements TagService {
                     weight = result.get(tag) + weight;
                 }
                 result.put(tag, weight);
-                if (weight > max) {
+                if (max == null || weight > max) {
                     max = weight;
                 }
             }
         }
 
-        if (max != 0f) {
+        if (max != null) {
             for (Map.Entry<Tag, Float> entry : result.entrySet()) {
                 entry.setValue(entry.getValue() / max);
             }

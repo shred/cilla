@@ -137,17 +137,18 @@ public class PageListView extends AbstractView {
      */
     private String fetchPages(FilterModel filter, PaginatorModel paginator, ServletRequest req)
     throws CillaServiceException {
-        if (paginator == null) {
-            paginator = new PaginatorModel();
+        PaginatorModel usePaginator = paginator;
+        if (usePaginator == null) {
+            usePaginator = new PaginatorModel();
         }
-        paginator.setPerPage(maxEntries);
+        usePaginator.setPerPage(maxEntries);
 
         SearchResult result = searchService.search(filter);
-        paginator.setCount(result.getCount());
-        result.setPaginator(paginator);
+        usePaginator.setCount(result.getCount());
+        result.setPaginator(usePaginator);
 
         req.setAttribute("result", result);
-        req.setAttribute("paginator", paginator);
+        req.setAttribute("paginator", usePaginator);
         return "view/pageList.jsp";
     }
 

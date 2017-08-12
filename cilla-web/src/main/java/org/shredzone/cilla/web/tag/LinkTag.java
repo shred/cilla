@@ -20,6 +20,8 @@
 package org.shredzone.cilla.web.tag;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -59,7 +61,10 @@ import org.springframework.web.util.HtmlUtils;
 public class LinkTag extends BodyTagSupport implements Parameterizable {
     private static final long serialVersionUID = 5910446039930945197L;
 
-    private @Resource LinkService linkService;
+    @Resource
+    private transient LinkService linkService;
+
+    private final transient Map<String, Object> parameters = new HashMap<>();
 
     private String var;
     private String scope;
@@ -80,8 +85,6 @@ public class LinkTag extends BodyTagSupport implements Parameterizable {
     private Section section;
     private Picture picture;
     private Header header;
-
-    private LinkBuilder lb;
 
     @TagParameter
     public void setVar(String var)              { this.var = var; }
@@ -143,23 +146,17 @@ public class LinkTag extends BodyTagSupport implements Parameterizable {
 
     @Override
     public void addParam(String key, Object value) {
-        if (key.startsWith("#")) {
-            lb.param(key.substring(1), value);
-        } else {
-            lb.query(key, value != null ? value.toString() : "");
-        }
+        parameters.put(key, value);
     }
 
     @Override
     public int doStartTag() throws JspException {
-        lb = linkService.linkTo();
         return EVAL_BODY_BUFFERED;
     }
 
     @Override
     public int doEndTag() throws JspException {
-        String url = null;
-        String useTitle = null;
+        LinkBuilder lb = linkService.linkTo();
 
         lb.view(view);
         lb.author(author);
@@ -173,6 +170,7 @@ public class LinkTag extends BodyTagSupport implements Parameterizable {
         lb.qualifier(qualifier);
         lb.commentable(commentable);
 
+        String useTitle = null;
         if (title != null) {
             useTitle = title;
         } else if (page != null) {
@@ -187,8 +185,15 @@ public class LinkTag extends BodyTagSupport implements Parameterizable {
             lb.anchor(anchor);
         }
 
-        url = lb.toString();
+        parameters.forEach((key, value) -> {
+            if (key.startsWith("#")) {
+                lb.param(key.substring(1), value);
+            } else {
+                lb.query(key, value != null ? value.toString() : "");
+            }
+        });
 
+        String url = lb.toString();
         if (url == null) {
             throw new JspException("Cannot link to view '" + view + "'");
         }

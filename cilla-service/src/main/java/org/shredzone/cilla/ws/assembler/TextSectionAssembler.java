@@ -63,7 +63,7 @@ public class TextSectionAssembler extends AbstractSectionAssembler<TextSection, 
         } else {
             entity.setText(null);
         }
-    };
+    }
 
     @Override
     public TextSection persistSection(TextSectionDto dto, Page page) throws CillaServiceException {

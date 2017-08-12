@@ -48,9 +48,14 @@ import org.springframework.stereotype.Controller;
 public class GalleryBean implements PageSelectionObserver, Serializable {
     private static final long serialVersionUID = -3929497320724267152L;
 
-    private @Resource PageWs pageWs;
-    private @Resource PictureTagBean pictureTagBean;
-    private @Resource MapModelFactory mapModelFactory;
+    @Resource
+    private transient PageWs pageWs;
+
+    @Resource
+    private transient PictureTagBean pictureTagBean;
+
+    @Resource
+    private transient MapModelFactory mapModelFactory;
 
     private GallerySectionDto section;
     private PictureDto selectedImage;

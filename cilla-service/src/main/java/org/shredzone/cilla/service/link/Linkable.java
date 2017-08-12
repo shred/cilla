@@ -19,13 +19,15 @@
  */
 package org.shredzone.cilla.service.link;
 
+import java.io.Serializable;
+
 /**
  * Implementing classes can be passed to the {@link LinkBuilder} in order to transfer its
  * state to the link.
  *
  * @author Richard "Shred" Körber
  */
-public interface Linkable {
+public interface Linkable extends Serializable {
 
     /**
      * Transfers the link target to the given {@link LinkBuilder}.

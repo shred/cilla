@@ -42,9 +42,14 @@ import org.springframework.stereotype.Component;
 public class MediaImageBean extends AbstractImageBean {
     private static final long serialVersionUID = -2877063300749565451L;
 
-    private @Resource PageWs pageWs;
-    private @Resource PageMediaBean pageMediaBean;
-    private @Resource @Qualifier("thumb") ImageProcessing thumbIp;
+    @Resource
+    private transient PageWs pageWs;
+
+    @Resource
+    private transient PageMediaBean pageMediaBean;
+
+    @Resource @Qualifier("thumb")
+    private transient ImageProcessing thumbIp;
 
     /**
      * Streams the page media image as thumbnail. It is selected by its index in the

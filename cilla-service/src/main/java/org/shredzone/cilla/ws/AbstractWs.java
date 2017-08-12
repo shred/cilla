@@ -42,12 +42,15 @@ public abstract class AbstractWs {
      *            {@link Criteria} to apply to
      */
     protected void applyListRange(ListRange lr, String order, boolean desc, Criteria crit) {
+        String useOrder = order;
+        boolean useDesc = desc;
+
         if (lr != null && lr.getOrder() != null && lr.isDescending() != null) {
-            order = lr.getOrder();
-            desc = lr.isDescending();
+            useOrder = lr.getOrder();
+            useDesc = lr.isDescending();
         }
 
-        crit.addOrder(desc ? Order.desc(order) : Order.asc(order));
+        crit.addOrder(useDesc ? Order.desc(useOrder) : Order.asc(useOrder));
 
         if (lr != null && lr.getFirst() != null && lr.getLimit() != null) {
             crit.setFirstResult(lr.getFirst());

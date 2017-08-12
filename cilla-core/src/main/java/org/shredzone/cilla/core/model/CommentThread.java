@@ -60,4 +60,14 @@ public class CommentThread extends BaseModel {
     public boolean isCommentable()              { return commentable; }
     public void setCommentable(boolean commentable) { this.commentable = commentable; }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof CommentThread && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

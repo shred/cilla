@@ -75,4 +75,14 @@ public class UserDto extends BaseDto {
     public TimeZone getTimeZone()               { return timeZone; }
     public void setTimeZone(TimeZone timeZone)  { this.timeZone = timeZone; }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof UserDto && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

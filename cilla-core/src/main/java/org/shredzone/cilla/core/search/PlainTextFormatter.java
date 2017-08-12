@@ -63,6 +63,7 @@ public final class PlainTextFormatter {
                 return STRIP_HTML_FILTER;
 
             case PLAIN:
+            case PREFORMATTED:
                 return KEEP_FILTER;
 
             case SIMPLIFIED:
@@ -73,9 +74,6 @@ public final class PlainTextFormatter {
             case PARAGRAPHED:
                 return PARAGRAPH_FILTER
                         .andThen(STRIP_HTML_FILTER);
-
-            case PREFORMATTED:
-                return KEEP_FILTER;
 
             case TEXTILE:
                 return TEXTILE_FILTER

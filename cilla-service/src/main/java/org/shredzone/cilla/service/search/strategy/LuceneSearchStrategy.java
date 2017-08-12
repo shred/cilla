@@ -42,6 +42,8 @@ import org.shredzone.cilla.service.search.FilterModel;
 import org.shredzone.cilla.service.search.impl.SearchResultImpl;
 import org.shredzone.cilla.service.search.renderer.SearchResultRenderer;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -52,6 +54,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class LuceneSearchStrategy extends AbstractSearchStrategy {
+
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private @Resource SearchDao searchDao;
     private @Resource SearchResultRenderer searchResultRenderer;
@@ -139,6 +143,8 @@ public class LuceneSearchStrategy extends AbstractSearchStrategy {
             sb.append(searchResultRenderer.getFooter());
             return sb.toString();
         } catch (Exception ex) {
+            // Just ignore the error and return the unhighlighted text
+            log.warn("highlighting failed", ex);
             return content;
         }
     }

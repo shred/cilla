@@ -49,4 +49,14 @@ public class LanguageDto extends BaseDto {
     public Locale getLocale()                   { return locale; }
     public void setLocale(Locale locale)        { this.locale = locale; }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof LanguageDto && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
+
 }

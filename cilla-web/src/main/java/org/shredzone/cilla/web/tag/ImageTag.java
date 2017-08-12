@@ -54,8 +54,11 @@ import org.springframework.web.util.HtmlUtils;
 public class ImageTag extends BodyTagSupport {
     private static final long serialVersionUID = 5910446039930945197L;
 
-    private @Resource LinkService linkService;
-    private @Resource ResourceLockManagerImpl unlockService;
+    @Resource
+    private transient LinkService linkService;
+
+    @Resource
+    private transient ResourceLockManagerImpl unlockService;
 
     private String var;
     private String scope;
@@ -122,20 +125,20 @@ public class ImageTag extends BodyTagSupport {
             }
             url = lb.toString();
 
-        } else if (header != null && (uncropped == null || uncropped == false)) {
-            lb.view("headerImage").header(header).toString();
-            if (type != null) {
-                lb.param("type", type);
+        } else if (header != null) {
+            if (Boolean.TRUE.equals(uncropped)) {
+                lb.view("headerUncropped").header(header);
+                if (type != null) {
+                    lb.param("type", type);
+                }
             } else {
-                outWidth = header.getWidth();
-                outHeight = header.getHeight();
-            }
-            url = lb.toString();
-
-        } else if (header != null && uncropped != null && uncropped == true) {
-            lb.view("headerUncropped").header(header);
-            if (type != null) {
-                lb.param("type", type);
+                lb.view("headerImage").header(header);
+                if (type != null) {
+                    lb.param("type", type);
+                } else {
+                    outWidth = header.getWidth();
+                    outHeight = header.getHeight();
+                }
             }
             url = lb.toString();
 

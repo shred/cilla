@@ -71,6 +71,7 @@ public class PriorityComparator<T> implements Comparator<T> {
                 } catch (NoSuchMethodException ex) {
                     // Should never happen because obj is an implementation of T and
                     // thus must have all methods of T.
+                    throw new InternalError(ex);
                 }
             }
         }

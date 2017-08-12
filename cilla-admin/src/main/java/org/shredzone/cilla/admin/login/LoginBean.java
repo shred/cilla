@@ -49,9 +49,10 @@ import org.springframework.stereotype.Component;
 public class LoginBean implements Serializable {
     private static final long serialVersionUID = -191823661450034450L;
 
-    private final Logger log = LoggerFactory.getLogger(getClass());
+    private final transient Logger log = LoggerFactory.getLogger(getClass());
 
-    private @Resource RemoteLoginService remoteLoginService;
+    @Resource
+    private transient RemoteLoginService remoteLoginService;
 
     private String userName;
     private String password;
