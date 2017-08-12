@@ -43,12 +43,10 @@
 
     <jaxws:client id="headerWs" address="${remoteWsUrl}/HeaderWs" serviceClass="org.shredzone.cilla.ws.header.HeaderWs">
         <jaxws:outInterceptors><ref bean="securityOutInterceptor"/></jaxws:outInterceptors>
-        <jaxws:properties><entry key="mtom-enabled" value="true"/></jaxws:properties>
     </jaxws:client>
 
     <jaxws:client id="pageWs" address="${remoteWsUrl}/PageWs" serviceClass="org.shredzone.cilla.ws.page.PageWs">
         <jaxws:outInterceptors><ref bean="securityOutInterceptor"/></jaxws:outInterceptors>
-        <jaxws:properties><entry key="mtom-enabled" value="true"/></jaxws:properties>
     </jaxws:client>
 
     <jaxws:client id="systemWs" address="${remoteWsUrl}/SystemWs" serviceClass="org.shredzone.cilla.ws.system.SystemWs">
