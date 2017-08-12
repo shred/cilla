@@ -26,14 +26,15 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
                         http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <http create-session="never" use-expressions="false">
-        <intercept-url pattern="/cilla/login*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>  
-        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+    <http create-session="never">
+        <intercept-url pattern="/cilla/login*" access="permitAll()"/>
+        <intercept-url pattern="/**" access="permitAll()"/>
         <form-login login-page="/cilla/login" authentication-failure-url="/cilla/login?failed=1"/>
         <logout logout-url="/logout" logout-success-url="/index.jsp"/>
         <anonymous/>
         <http-basic/>
         <remember-me/>
+        <csrf disabled="true"/>
     </http>
 
 </beans:beans>

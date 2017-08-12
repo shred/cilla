@@ -54,7 +54,7 @@
     <cilla:link commentable="${item}" anchor="comment-${comment.id}"><fmt:message key="comment.link"/></cilla:link>
     ${", "}
     <cilla:link commentable="${item}" anchor="postcomment" onclick="commentform.setReplyTo('${comment.id}')"><fmt:message key="comment.reply"/></cilla:link>
-    <sec:authorize ifAllGranted="ROLE_MODERATOR">
+    <sec:authorize access="hasRole('ROLE_MODERATOR')">
       ${", "}
       <cilla:link commentable="${item}" anchor="postcomment"><cilla:param name="cmtDelete" value="${comment.id}"/><fmt:message key="comment.delete"/></cilla:link>
     </sec:authorize>

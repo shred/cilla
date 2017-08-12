@@ -37,13 +37,13 @@
           <td><fmt:message key="${commentMessageKey}"/></td>
         </tr>
       </c:if>
-      <sec:authorize ifAllGranted="ROLE_COMMENTER">
+      <sec:authorize access="hasRole('ROLE_COMMENTER')">
         <tr>
           <td><fmt:message key="comment.user"/></td>
           <td><sec:authentication property="principal" var="user" scope="request"/><c:out value="${user.username}"/></td>
         </tr>
       </sec:authorize>
-      <sec:authorize ifNotGranted="ROLE_COMMENTER">
+      <sec:authorize access="not hasRole('ROLE_COMMENTER')">
         <tr>
           <td><label for="cmtName"><fmt:message key="comment.name"/></label></td>
           <td><input type="text" name="cmtName" value="<c:out value="${commentName}"/>" /></td>

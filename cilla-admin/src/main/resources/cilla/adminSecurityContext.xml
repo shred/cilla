@@ -27,12 +27,13 @@
                         http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
     <http>
-        <intercept-url pattern="/admin/**" access="ROLE_MODERATOR"/>
-        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <intercept-url pattern="/admin/**" access="isAuthenticated()"/>
+        <intercept-url pattern="/**" access="permitAll()"/>
         <form-login login-page="/login.xhtml"/>
         <logout logout-url="/logout" logout-success-url="/logout.xhtml"/>
         <anonymous/>
         <http-basic/>
+        <csrf disabled="true"/>
     </http>
 
     <global-method-security secured-annotations="enabled"/>
