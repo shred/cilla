@@ -66,12 +66,12 @@ INSERT INTO category (id, version, name, parent_id, title, icon, caption, captio
     (nextval('Category_SEQ'), 0, 'Articles', NULL, 'My blog articles', 'book', NULL, 0, 1);
 
 -- Finally, create the administator user.
---   Change as needed. The default login is: "admin" - password "admin"
---   The password is currently an unsalted sha256 hash.
+--   Change as needed. The default login is: "admin" - password "nimda"
+--   The password is currently a sha256 hash salted with the login name (e.g. "admin{nimda}").
 --   bcrypt is on the todo list!
 INSERT INTO login (id, version, login, mail, name, password, role_id, language_id, timezone) VALUES
     (nextval('User_SEQ'), 0, 'admin', 'me@example.com', 'Administrator',
-        '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918',
+        '917b134dbb76e6c92e25342b683c770330eae9af830a33428ff7cfdc7c48c79f',
         2, 1, 'UTC');
 
 
