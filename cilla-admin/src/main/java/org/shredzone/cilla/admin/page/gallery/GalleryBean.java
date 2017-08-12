@@ -23,7 +23,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.faces.component.UIComponent;
 
 import org.primefaces.event.FileUploadEvent;
 import org.shredzone.cilla.admin.EditableMapModel;
@@ -56,7 +55,6 @@ public class GalleryBean implements PageSelectionObserver, Serializable {
     private GallerySectionDto section;
     private PictureDto selectedImage;
     private EditableMapModel selectedMapModel;
-    private UIComponent uiGrid;
     private boolean timeOverride;
 
     /**
@@ -87,13 +85,6 @@ public class GalleryBean implements PageSelectionObserver, Serializable {
      * {@link EditableMapModel} of the currently selected image.
      */
     public EditableMapModel getSelectedMapModel() { return selectedMapModel; }
-
-    /**
-     * Reference to the {@link UIComponent} of the data grid showing the pictures of the
-     * gallery.
-     */
-    public UIComponent getUiGrid()              { return uiGrid; }
-    public void setUiGrid(UIComponent uiGrid)   { this.uiGrid = uiGrid; }
 
     /**
      * List of all {@link PictureDto} of the selected gallery.
