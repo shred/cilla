@@ -34,9 +34,8 @@ import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.interceptor.InterceptorChain;
 import org.apache.cxf.phase.Phase;
 import org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor;
-import org.apache.ws.security.WSConstants;
-import org.apache.ws.security.WSSecurityEngine;
-import org.apache.ws.security.handler.WSHandlerConstants;
+import org.apache.wss4j.dom.WSConstants;
+import org.apache.wss4j.dom.handler.WSHandlerConstants;
 import org.springframework.stereotype.Component;
 
 /**
@@ -59,7 +58,7 @@ public class SecurityInInterceptor extends AbstractSoapInterceptor {
     @PostConstruct
     protected void setup() {
         Map<QName, Object> validator = new HashMap<>();
-        validator.put(WSSecurityEngine.USERNAME_TOKEN, cillaUsernameTokenValidator);
+        validator.put(WSConstants.USERNAME_TOKEN, cillaUsernameTokenValidator);
 
         Map<String, Object> properties = new HashMap<>();
         properties.put(WSHandlerConstants.ACTION, WSConstants.USERNAME_TOKEN_LN);

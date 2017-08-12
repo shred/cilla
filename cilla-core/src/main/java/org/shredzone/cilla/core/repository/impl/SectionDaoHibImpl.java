@@ -22,7 +22,7 @@ package org.shredzone.cilla.core.repository.impl;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.shredzone.cilla.core.model.Section;
 import org.shredzone.cilla.core.repository.SectionDao;
 import org.slf4j.Logger;
@@ -44,15 +44,15 @@ public class SectionDaoHibImpl extends BaseDaoHibImpl<Section> implements Sectio
     @Transactional(readOnly = true)
     @Override
     public Section fetch(long id) {
-        return (Section) getCurrentSession().get(Section.class, id);
+        return getCurrentSession().get(Section.class, id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public long countAll() {
-        Query q = getCurrentSession()
-                .createQuery("SELECT COUNT(*) FROM Section");
-        return ((Number) q.uniqueResult()).longValue();
+        Query<Number> q = getCurrentSession()
+                .createQuery("SELECT COUNT(*) FROM Section", Number.class);
+        return q.uniqueResult().longValue();
     }
 
     @SuppressWarnings("unchecked")

@@ -23,10 +23,10 @@ import java.util.List;
 import java.util.Random;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.shredzone.cilla.core.model.Header;
 import org.shredzone.cilla.core.repository.HeaderDao;
 import org.springframework.stereotype.Repository;
@@ -46,15 +46,15 @@ public class HeaderDaoHibImpl extends BaseDaoHibImpl<Header> implements HeaderDa
     @Transactional(readOnly = true)
     @Override
     public Header fetch(long id) {
-        return (Header) getCurrentSession().get(Header.class, id);
+        return getCurrentSession().get(Header.class, id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public long countAll() {
-        Query q = getCurrentSession()
-                .createQuery("SELECT COUNT(*) FROM Header");
-        return ((Number) q.uniqueResult()).longValue();
+        Query<Number> q = getCurrentSession()
+                .createQuery("SELECT COUNT(*) FROM Header", Number.class);
+        return q.uniqueResult().longValue();
     }
 
     @Transactional(readOnly = true)

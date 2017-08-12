@@ -57,20 +57,20 @@ import org.shredzone.commons.view.exception.ViewException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.sun.syndication.feed.synd.SyndCategory;
-import com.sun.syndication.feed.synd.SyndCategoryImpl;
-import com.sun.syndication.feed.synd.SyndContent;
-import com.sun.syndication.feed.synd.SyndContentImpl;
-import com.sun.syndication.feed.synd.SyndEntry;
-import com.sun.syndication.feed.synd.SyndEntryImpl;
-import com.sun.syndication.feed.synd.SyndFeed;
-import com.sun.syndication.feed.synd.SyndFeedImpl;
-import com.sun.syndication.feed.synd.SyndLink;
-import com.sun.syndication.feed.synd.SyndLinkImpl;
-import com.sun.syndication.feed.synd.SyndPerson;
-import com.sun.syndication.feed.synd.SyndPersonImpl;
-import com.sun.syndication.io.FeedException;
-import com.sun.syndication.io.SyndFeedOutput;
+import com.rometools.rome.feed.synd.SyndCategory;
+import com.rometools.rome.feed.synd.SyndCategoryImpl;
+import com.rometools.rome.feed.synd.SyndContent;
+import com.rometools.rome.feed.synd.SyndContentImpl;
+import com.rometools.rome.feed.synd.SyndEntry;
+import com.rometools.rome.feed.synd.SyndEntryImpl;
+import com.rometools.rome.feed.synd.SyndFeed;
+import com.rometools.rome.feed.synd.SyndFeedImpl;
+import com.rometools.rome.feed.synd.SyndLink;
+import com.rometools.rome.feed.synd.SyndLinkImpl;
+import com.rometools.rome.feed.synd.SyndPerson;
+import com.rometools.rome.feed.synd.SyndPersonImpl;
+import com.rometools.rome.io.FeedException;
+import com.rometools.rome.io.SyndFeedOutput;
 
 /**
  * Views for generating atom and rss feeds for categories, tags and users.
@@ -187,7 +187,6 @@ public class FeedView extends AbstractView {
      * @param type
      *            feed type, any type supported by ROME.
      */
-    @SuppressWarnings("unchecked")
     private void fetchPages(FilterModel filter, ViewContext context,
         HttpServletRequest req, HttpServletResponse resp,
         String selfUrl, String feedId, String type)
@@ -249,7 +248,6 @@ public class FeedView extends AbstractView {
      *            URI prefix for this website
      * @return {@link SyndEntry} that was created
      */
-    @SuppressWarnings("unchecked")
     private SyndEntry createEntry(Page page, String uriPrefix) {
         String pageUrl = linkService.linkTo().page(page).absolute().toString();
 

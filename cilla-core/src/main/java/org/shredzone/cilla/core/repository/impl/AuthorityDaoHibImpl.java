@@ -23,8 +23,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.shredzone.cilla.core.model.Authority;
 import org.shredzone.cilla.core.repository.AuthorityDao;
 import org.springframework.stereotype.Repository;
@@ -42,15 +42,15 @@ public class AuthorityDaoHibImpl extends BaseDaoHibImpl<Authority> implements Au
     @Transactional(readOnly = true)
     @Override
     public Authority fetch(long id) {
-        return (Authority) getCurrentSession().get(Authority.class, id);
+        return getCurrentSession().get(Authority.class, id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public long countAll() {
-        Query q = getCurrentSession()
-                .createQuery("SELECT COUNT(*) FROM Authority");
-        return ((Number) q.uniqueResult()).longValue();
+        Query<Number> q = getCurrentSession()
+                .createQuery("SELECT COUNT(*) FROM Authority", Number.class);
+        return q.uniqueResult().longValue();
     }
 
     @SuppressWarnings("unchecked")
@@ -77,7 +77,7 @@ public class AuthorityDaoHibImpl extends BaseDaoHibImpl<Authority> implements Au
     @SuppressWarnings("unchecked")
     @Override
     public Collection<Authority> fetchByNames(Collection<String> names) {
-        return getCurrentSession().createCriteria(Authority.class)
+        return criteria()
                 .add(Restrictions.in("name", names))
                 .list();
     }

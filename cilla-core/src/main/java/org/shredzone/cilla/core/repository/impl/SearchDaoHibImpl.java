@@ -24,10 +24,9 @@ import java.util.Locale;
 
 import javax.annotation.Resource;
 
-import org.apache.lucene.queryParser.MultiFieldQueryParser;
-import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.util.Version;
 import org.hibernate.Criteria;
 import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
@@ -56,10 +55,10 @@ public class SearchDaoHibImpl implements SearchDao {
     private @Resource SessionFactory sessionFactory;
 
     @Override
-    public Query parseQuery(String query, Locale locale) throws ParseException {
+    public Query parseQuery(String query, Locale locale) throws ParseException{
         FullTextSession fullTextSession = getFullTextSession();
 
-        MultiFieldQueryParser parser = new MultiFieldQueryParser(Version.LUCENE_36,
+        MultiFieldQueryParser parser = new MultiFieldQueryParser(
                         new String[] {"text", "title"},
                         fullTextSession.getSearchFactory().getAnalyzer("content"));
 

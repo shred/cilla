@@ -23,7 +23,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.shredzone.cilla.core.model.Role;
 import org.shredzone.cilla.core.model.User;
 import org.shredzone.cilla.core.repository.UserDao;
@@ -42,15 +42,15 @@ public class UserDaoHibImpl extends BaseDaoHibImpl<User> implements UserDao {
     @Transactional(readOnly = true)
     @Override
     public User fetch(long id) {
-        return (User) getCurrentSession().get(User.class, id);
+        return getCurrentSession().get(User.class, id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public long countAll() {
-        Query q = getCurrentSession()
-                .createQuery("SELECT COUNT(*) FROM User");
-        return ((Number) q.uniqueResult()).longValue();
+        Query<Number> q = getCurrentSession()
+                .createQuery("SELECT COUNT(*) FROM User", Number.class);
+        return q.uniqueResult().longValue();
     }
 
     @Transactional(readOnly = true)

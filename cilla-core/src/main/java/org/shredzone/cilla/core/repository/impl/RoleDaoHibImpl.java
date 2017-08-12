@@ -22,7 +22,7 @@ package org.shredzone.cilla.core.repository.impl;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.shredzone.cilla.core.model.Role;
 import org.shredzone.cilla.core.repository.RoleDao;
 import org.springframework.stereotype.Repository;
@@ -40,15 +40,15 @@ public class RoleDaoHibImpl extends BaseDaoHibImpl<Role> implements RoleDao {
     @Transactional(readOnly = true)
     @Override
     public Role fetch(long id) {
-        return (Role) getCurrentSession().get(Role.class, id);
+        return getCurrentSession().get(Role.class, id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public long countAll() {
-        Query q = getCurrentSession()
-                .createQuery("SELECT COUNT(*) FROM Role");
-        return ((Number) q.uniqueResult()).longValue();
+        Query<Number> q = getCurrentSession()
+                .createQuery("SELECT COUNT(*) FROM Role", Number.class);
+        return q.uniqueResult().longValue();
     }
 
     @Transactional(readOnly = true)

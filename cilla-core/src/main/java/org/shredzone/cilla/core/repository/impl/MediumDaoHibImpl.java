@@ -22,7 +22,7 @@ package org.shredzone.cilla.core.repository.impl;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.shredzone.cilla.core.model.Medium;
 import org.shredzone.cilla.core.model.Page;
 import org.shredzone.cilla.core.repository.MediumDao;
@@ -41,15 +41,15 @@ public class MediumDaoHibImpl extends BaseDaoHibImpl<Medium> implements MediumDa
     @Transactional(readOnly = true)
     @Override
     public Medium fetch(long id) {
-        return (Medium) getCurrentSession().get(Medium.class, id);
+        return getCurrentSession().get(Medium.class, id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public long countAll() {
-        Query q = getCurrentSession()
-                .createQuery("SELECT COUNT(*) FROM Medium");
-        return ((Number) q.uniqueResult()).longValue();
+        Query<Number> q = getCurrentSession()
+                .createQuery("SELECT COUNT(*) FROM Medium", Number.class);
+        return q.uniqueResult().longValue();
     }
 
     @Transactional(readOnly = true)
@@ -70,10 +70,10 @@ public class MediumDaoHibImpl extends BaseDaoHibImpl<Medium> implements MediumDa
     @Transactional(readOnly = true)
     @Override
     public long countAll(Page page) {
-        Query q = getCurrentSession()
-                .createQuery("SELECT COUNT(*) FROM Medium WHERE page=:page")
+        Query<Number> q = getCurrentSession()
+                .createQuery("SELECT COUNT(*) FROM Medium WHERE page=:page", Number.class)
                 .setParameter("page", page);
-        return ((Number) q.uniqueResult()).longValue();
+        return q.uniqueResult().longValue();
     }
 
     @Transactional(readOnly = true)
@@ -89,11 +89,11 @@ public class MediumDaoHibImpl extends BaseDaoHibImpl<Medium> implements MediumDa
     @Transactional(readOnly = true)
     @Override
     public Medium fetchByName(Page page, String name) {
-        Query q = getCurrentSession()
-                .createQuery("FROM Medium WHERE page=:page AND image.name=:name")
+        Query<Medium> q = getCurrentSession()
+                .createQuery("FROM Medium WHERE page=:page AND image.name=:name", Medium.class)
                 .setParameter("page", page)
                 .setParameter("name", name);
-        return (Medium) q.uniqueResult();
+        return q.uniqueResult();
     }
 
 }

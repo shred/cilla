@@ -25,12 +25,12 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.shredzone.cilla.core.model.Page;
 import org.shredzone.cilla.core.repository.PageDao;
 import org.shredzone.cilla.core.util.DateUtils;
@@ -53,15 +53,15 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
     @Transactional(readOnly = true)
     @Override
     public Page fetch(long id) {
-        return (Page) getCurrentSession().get(Page.class, id);
+        return getCurrentSession().get(Page.class, id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public long countAll() {
-        Query q = getCurrentSession()
-                .createQuery("SELECT COUNT(*) FROM Page");
-        return ((Number) q.uniqueResult()).longValue();
+        Query<Number> q = getCurrentSession()
+                .createQuery("SELECT COUNT(*) FROM Page", Number.class);
+        return q.uniqueResult().longValue();
     }
 
     @Transactional(readOnly = true)
@@ -104,7 +104,7 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
     public Date[] fetchMinMaxModification() {
         Date now = new Date();
 
-        Criteria crit = getCurrentSession().createCriteria(Page.class);
+        Criteria crit = criteria();
 
         crit.add(Restrictions.and(
                     Restrictions.isNotNull("publication"),
@@ -240,7 +240,7 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
     @Override
     @Transactional(readOnly = true)
     public List<String> proposeSubjects(String query, int limit) {
-        return getCurrentSession().createCriteria(Page.class)
+        return criteria()
                 .add(Restrictions.like("subject", query, MatchMode.ANYWHERE))
                 .setMaxResults(limit)
                 .addOrder(Order.asc("subject"))

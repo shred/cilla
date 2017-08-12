@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.shredzone.cilla.core.model.Language;
 import org.shredzone.cilla.core.repository.LanguageDao;
 import org.springframework.stereotype.Repository;
@@ -41,15 +41,15 @@ public class LanguageDaoHibImpl extends BaseDaoHibImpl<Language> implements Lang
     @Transactional(readOnly = true)
     @Override
     public Language fetch(long id) {
-        return (Language) getCurrentSession().get(Language.class, id);
+        return getCurrentSession().get(Language.class, id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public long countAll() {
-        Query q = getCurrentSession()
-                .createQuery("SELECT COUNT(*) FROM Language");
-        return ((Number) q.uniqueResult()).longValue();
+        Query<Number> q = getCurrentSession()
+                .createQuery("SELECT COUNT(*) FROM Language", Number.class);
+        return q.uniqueResult().longValue();
     }
 
     @SuppressWarnings("unchecked")

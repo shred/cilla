@@ -22,10 +22,11 @@ package org.shredzone.cilla.ws.cxf;
 import javax.annotation.Resource;
 
 import org.apache.cxf.interceptor.security.AuthenticationException;
-import org.apache.ws.security.WSSecurityException;
-import org.apache.ws.security.handler.RequestData;
-import org.apache.ws.security.message.token.UsernameToken;
-import org.apache.ws.security.validate.UsernameTokenValidator;
+import org.apache.wss4j.common.ext.WSSecurityException;
+import org.apache.wss4j.common.ext.WSSecurityException.ErrorCode;
+import org.apache.wss4j.dom.handler.RequestData;
+import org.apache.wss4j.dom.message.token.UsernameToken;
+import org.apache.wss4j.dom.validate.UsernameTokenValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -57,7 +58,7 @@ public class CillaUsernameTokenValidator extends UsernameTokenValidator {
             log.debug("Successfully authenticated user {}", usernameToken.getName());
         } catch (AuthenticationException ex) {
             log.error("Unable to authenticate user {}", usernameToken.getName(), ex);
-            throw new WSSecurityException(WSSecurityException.FAILED_AUTHENTICATION);
+            throw new WSSecurityException(ErrorCode.FAILED_AUTHENTICATION);
         }
     }
 

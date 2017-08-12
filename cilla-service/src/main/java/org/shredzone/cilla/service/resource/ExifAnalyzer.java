@@ -26,11 +26,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.TimeZone;
 
 import org.shredzone.cilla.core.model.embed.ExifData;
 import org.shredzone.cilla.core.model.embed.Geolocation;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.drew.imaging.PhotographicConversions;
@@ -39,14 +39,12 @@ import com.drew.imaging.jpeg.JpegProcessingException;
 import com.drew.lang.Rational;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
-import com.drew.metadata.MetadataException;
-import com.drew.metadata.exif.CanonMakernoteDirectory;
-import com.drew.metadata.exif.CasioType2MakernoteDirectory;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
 import com.drew.metadata.exif.GpsDirectory;
-import com.drew.metadata.exif.PentaxMakernoteDirectory;
-import com.drew.metadata.xmp.XmpDirectory;
+import com.drew.metadata.exif.makernotes.CanonMakernoteDirectory;
+import com.drew.metadata.exif.makernotes.CasioType2MakernoteDirectory;
+import com.drew.metadata.exif.makernotes.PentaxMakernoteDirectory;
 
 /**
  * Analyzes the EXIF and GPS information of a JPEG image. It's a wrapper around the
@@ -56,8 +54,6 @@ import com.drew.metadata.xmp.XmpDirectory;
  * @see <a href="http://drewnoakes.com/code/exif/">Metadata Extractor</a>
  */
 public class ExifAnalyzer {
-    private final Logger log = LoggerFactory.getLogger(getClass());
-
     private final Metadata metadata;
 
     /**
@@ -146,33 +142,36 @@ public class ExifAnalyzer {
     public Geolocation getGeolocation() {
         Geolocation location = new Geolocation();
 
-        BigDecimal longitude = readAngle(GpsDirectory.class, GpsDirectory.TAG_GPS_LONGITUDE);
-        if (longitude != null) {
-            String longRef = readString(GpsDirectory.class, GpsDirectory.TAG_GPS_LONGITUDE_REF);
-            if ("W".equals(longRef)) {
-                longitude = longitude.negate();
+        Optional<BigDecimal> longitude = readAngle(GpsDirectory.class, GpsDirectory.TAG_LONGITUDE);
+        if (longitude.isPresent()) {
+            Optional<String> longRef = readString(GpsDirectory.class, GpsDirectory.TAG_LONGITUDE_REF);
+            if ("W".equals(longRef.orElse(null))) {
+                location.setLongitude(longitude.get().negate());
+            } else {
+                location.setLongitude(longitude.get());
             }
-            location.setLongitude(longitude);
         }
 
-        BigDecimal latitude = readAngle(GpsDirectory.class, GpsDirectory.TAG_GPS_LATITUDE);
-        if (latitude != null) {
-            String latRef = readString(GpsDirectory.class, GpsDirectory.TAG_GPS_LATITUDE_REF);
-            if ("S".equals(latRef)) {
-                latitude = latitude.negate();
+        Optional<BigDecimal> latitude = readAngle(GpsDirectory.class, GpsDirectory.TAG_LATITUDE);
+        if (latitude.isPresent()) {
+            Optional<String> latRef = readString(GpsDirectory.class, GpsDirectory.TAG_LATITUDE_REF);
+            if ("S".equals(latRef.orElse(null))) {
+                location.setLatitude(latitude.get().negate());
+            } else {
+                location.setLatitude(latitude.get());
             }
-            location.setLatitude(latitude);
         }
 
-        Rational altitude = readRational(GpsDirectory.class, GpsDirectory.TAG_GPS_ALTITUDE);
-        if (altitude != null) {
-            BigDecimal altDec = BigDecimal.valueOf(altitude.doubleValue()).setScale(3, RoundingMode.HALF_DOWN);
+        Optional<Rational> altitude = readRational(GpsDirectory.class, GpsDirectory.TAG_ALTITUDE);
+        if (altitude.isPresent()) {
+            BigDecimal altDec = BigDecimal.valueOf(altitude.get().doubleValue()).setScale(3, RoundingMode.HALF_DOWN);
 
-            String altRef = readString(GpsDirectory.class, GpsDirectory.TAG_GPS_ALTITUDE_REF);
-            if ("1".equals(altRef)) {
-                altDec = altDec.negate();
+            Optional<String> altRef = readString(GpsDirectory.class, GpsDirectory.TAG_ALTITUDE_REF);
+            if ("1".equals(altRef.orElse(null))) {
+                location.setAltitude(altDec.negate());
+            } else {
+                location.setAltitude(altDec);
             }
-            location.setAltitude(altDec);
         }
 
         return location;
@@ -186,25 +185,18 @@ public class ExifAnalyzer {
      * @return Date and time, or {@code null} if the information could not be retrieved
      */
     public Date getDateTime(TimeZone tz) {
-        Date date = readDate(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, tz);
+        // JDK9: use Optional.or()
+        Optional<Date> date = readDate(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_DATETIME_ORIGINAL, tz);
 
-        if (date == null) {
+        if (!date.isPresent()) {
             date = readDate(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_DATETIME_DIGITIZED, tz);
         }
 
-        if (date == null) {
+        if (!date.isPresent()) {
             date = readDate(ExifIFD0Directory.class, ExifIFD0Directory.TAG_DATETIME, tz);
         }
 
-        if (date == null) {
-            date = readDate(XmpDirectory.class, XmpDirectory.TAG_DATETIME_ORIGINAL, tz);
-        }
-
-        if (date == null) {
-            date = readDate(XmpDirectory.class, XmpDirectory.TAG_DATETIME_DIGITIZED, tz);
-        }
-
-        return date;
+        return date.orElse(null);
     }
 
     /**
@@ -214,24 +206,15 @@ public class ExifAnalyzer {
      *         retrieved
      */
     public String getCameraModel() {
-        String model = readString(ExifIFD0Directory.class, ExifIFD0Directory.TAG_MODEL);
-        if (model != null) {
-            return model;
+        // JDK9: use Optional.or()
+        Optional<String> model = readString(ExifIFD0Directory.class, ExifIFD0Directory.TAG_MODEL);
+        if (model.isPresent()) {
+            return model.get();
         }
 
         model = readString(ExifIFD0Directory.class, ExifIFD0Directory.TAG_MAKE);
-        if (model != null) {
-            return model;
-        }
-
-        model = readString(XmpDirectory.class, XmpDirectory.TAG_MODEL);
-        if (model != null) {
-            return model;
-        }
-
-        model = readString(XmpDirectory.class, XmpDirectory.TAG_MAKE);
-        if (model != null) {
-            return model;
+        if (model.isPresent()) {
+            return model.get();
         }
 
         return null;
@@ -243,14 +226,10 @@ public class ExifAnalyzer {
      * @return Aperture string, or {@code null} if the information could not be retrieved
      */
     public String getAperture() {
-        Rational aperture = readRational(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_APERTURE);
+        Optional<Rational> aperture = readRational(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_APERTURE);
 
-        if (aperture == null) {
-            aperture = readRational(XmpDirectory.class, XmpDirectory.TAG_APERTURE_VALUE);
-        }
-
-        if (aperture != null) {
-            double fstop = PhotographicConversions.apertureToFStop(aperture.doubleValue());
+        if (aperture.isPresent()) {
+            double fstop = PhotographicConversions.apertureToFStop(aperture.get().doubleValue());
             return String.format(Locale.ENGLISH, "f/%.1f", fstop);
         }
 
@@ -264,14 +243,10 @@ public class ExifAnalyzer {
      *         retrieved
      */
     public String getShutter() {
-        Rational shutter = readRational(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_SHUTTER_SPEED);
+        Optional<Rational> shutter = readRational(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_SHUTTER_SPEED);
 
-        if (shutter == null) {
-            shutter = readRational(XmpDirectory.class, XmpDirectory.TAG_SHUTTER_SPEED);
-        }
-
-        if (shutter != null) {
-            double speed = PhotographicConversions.shutterSpeedToExposureTime(shutter.doubleValue());
+        if (shutter.isPresent()) {
+            double speed = PhotographicConversions.shutterSpeedToExposureTime(shutter.get().doubleValue());
             if (speed <= .25d) {
                 return String.format(Locale.ENGLISH, "1/%.0f s", 1 / speed);
             } else {
@@ -288,9 +263,9 @@ public class ExifAnalyzer {
      * @return ISO string, or {@code null} if the information could not be retrieved
      */
     public String getIso() {
-        Integer iso = readInteger(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_ISO_EQUIVALENT);
-        if (iso != null) {
-            return String.format(Locale.ENGLISH, "%d", iso);
+        Optional<Integer> iso = readInteger(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_ISO_EQUIVALENT);
+        if (iso.isPresent()) {
+            return String.format(Locale.ENGLISH, "%d", iso.get());
         }
 
         return null;
@@ -304,9 +279,9 @@ public class ExifAnalyzer {
      *         retrieved
      */
     public String getExposureBias() {
-        Rational bias = readRational(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_EXPOSURE_BIAS);
-        if (bias != null) {
-            return String.format(Locale.ENGLISH, "%+.1f EV", bias.doubleValue());
+        Optional<Rational> bias = readRational(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_EXPOSURE_BIAS);
+        if (bias.isPresent()) {
+            return String.format(Locale.ENGLISH, "%+.1f EV", bias.get().doubleValue());
         }
 
         return null;
@@ -320,18 +295,14 @@ public class ExifAnalyzer {
      *         retrieved
      */
     public String getFocalLength() {
-        Rational focal = readRational(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_FOCAL_LENGTH);
+        Optional<Rational> focal = readRational(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_FOCAL_LENGTH);
 
-        if (focal == null) {
-            focal = readRational(XmpDirectory.class, XmpDirectory.TAG_FOCAL_LENGTH);
-        }
+        if (focal.isPresent()) {
+            String result = String.format(Locale.ENGLISH, "%.0f mm", focal.get().doubleValue());
 
-        if (focal != null) {
-            String result = String.format(Locale.ENGLISH, "%.0f mm", focal.doubleValue());
-
-            Integer equiv = readInteger(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_35MM_FILM_EQUIV_FOCAL_LENGTH);
-            if (equiv != null && focal.intValue() != equiv.intValue()) {
-                result += String.format(Locale.ENGLISH, " (= %d mm)", equiv);
+            Optional<Integer> equiv = readInteger(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_35MM_FILM_EQUIV_FOCAL_LENGTH);
+            if (equiv.isPresent() && focal.get().intValue() != equiv.get().intValue()) {
+                result += String.format(Locale.ENGLISH, " (= %d mm)", equiv.get());
             }
 
             return result;
@@ -348,38 +319,39 @@ public class ExifAnalyzer {
      *         retrieved
      */
     public String getFlash() {
-        Integer code;
+        Optional<Integer> code;
 
         code = readInteger(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_FLASH);
-        if (code != null) {
-            if (code == 0) return "no flash";
+        if (code.isPresent()) {
+            int value = code.get();
+            if (value == 0) return "no flash";
 
             StringBuilder sb = new StringBuilder();
-            switch (code & 0x18) {
+            switch (value & 0x18) {
                 case 0x08: sb.append("on"); break;
                 case 0x10: sb.append("off"); break;
                 case 0x18: sb.append("auto"); break;
             }
 
-            if ((code & 0x01) != 0) {
+            if ((value & 0x01) != 0) {
                 sb.append(",fired");
             }
 
-            if ((code & 0x06) == 0x06) {
+            if ((value & 0x06) == 0x06) {
                 sb.append(",return detected");
             }
 
             // Too much information for a mere gallery
-            // if ((code & 0x06) == 0x04) {
+            // if ((value & 0x06) == 0x04) {
             // sb.append(",return not detected");
             // }
 
             // Too much information for a mere gallery
-            // if ((code & 0x20) != 0) {
+            // if ((value & 0x20) != 0) {
             // sb.append(",no flash function");
             // }
 
-            if ((code & 0x40) != 0) {
+            if ((value & 0x40) != 0) {
                 sb.append(",red eye reduction");
             }
 
@@ -400,11 +372,11 @@ public class ExifAnalyzer {
      *         retrieved
      */
     public String getWhiteBalance() {
-        Integer code;
+        Optional<Integer> code;
 
         code = readInteger(CanonMakernoteDirectory.class, CanonMakernoteDirectory.FocalLength.TAG_WHITE_BALANCE);
-        if (code != null) {
-            switch (code) {
+        if (code.isPresent()) {
+            switch (code.get()) {
                 case 0: return "auto";
                 case 1: return "daylight";
                 case 2: return "cloudy";
@@ -415,9 +387,9 @@ public class ExifAnalyzer {
             }
         }
 
-        code = readInteger(CasioType2MakernoteDirectory.class, CasioType2MakernoteDirectory.TAG_CASIO_TYPE2_WHITE_BALANCE_1);
-        if (code != null) {
-            switch (code) {
+        code = readInteger(CasioType2MakernoteDirectory.class, CasioType2MakernoteDirectory.TAG_WHITE_BALANCE_1);
+        if (code.isPresent()) {
+            switch (code.get()) {
                 case 0: return "auto";
                 case 1: return "daylight";
                 case 2: return "cloudy";
@@ -427,9 +399,9 @@ public class ExifAnalyzer {
             }
         }
 
-        code = readInteger(PentaxMakernoteDirectory.class, PentaxMakernoteDirectory.TAG_PENTAX_WHITE_BALANCE);
-        if (code != null) {
-            switch (code) {
+        code = readInteger(PentaxMakernoteDirectory.class, PentaxMakernoteDirectory.TAG_WHITE_BALANCE);
+        if (code.isPresent()) {
+            switch (code.get()) {
                 case 0: return "auto";
                 case 1: return "daylight";
                 case 2: return "cloudy";
@@ -442,8 +414,8 @@ public class ExifAnalyzer {
         // Other makes are undocumented and thus not evaluated
 
         code = readInteger(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_WHITE_BALANCE);
-        if (code != null) {
-            switch (code) {
+        if (code.isPresent()) {
+            switch (code.get()) {
                 case 1: return "daylight";
                 case 2: return "fluorescent";
                 case 3: return "tungsten";
@@ -452,8 +424,8 @@ public class ExifAnalyzer {
         }
 
         code = readInteger(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_WHITE_BALANCE_MODE);
-        if (code != null) {
-            switch (code) {
+        if (code.isPresent()) {
+            switch (code.get()) {
                 case 0: return "auto";
                 case 1: return "manual";
             }
@@ -469,11 +441,11 @@ public class ExifAnalyzer {
      *         retrieved
      */
     public String getMeteringMode() {
-        Integer code;
+        Optional<Integer> code;
 
         code = readInteger(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_METERING_MODE);
-        if (code != null) {
-            switch (code) {
+        if (code.isPresent()) {
+            switch (code.get()) {
                 case 1: return "average";
                 case 2: return "center weighted average";
                 case 3: return "spot";
@@ -493,11 +465,11 @@ public class ExifAnalyzer {
      *         retrieved
      */
     public String getFocusMode() {
-        Integer code;
+        Optional<Integer> code;
 
         code = readInteger(CanonMakernoteDirectory.class, CanonMakernoteDirectory.CameraSettings.TAG_FOCUS_MODE_1);
-        if (code != null) {
-            switch (code) {
+        if (code.isPresent()) {
+            switch (code.get()) {
                 case  0: return "one shot";
                 case  1: return "ai servo";
                 case  2: return "ai focus";
@@ -509,9 +481,9 @@ public class ExifAnalyzer {
             }
         }
 
-        code = readInteger(CasioType2MakernoteDirectory.class, CasioType2MakernoteDirectory.TAG_CASIO_TYPE2_FOCUS_MODE_2);
-        if (code != null) {
-            switch (code) {
+        code = readInteger(CasioType2MakernoteDirectory.class, CasioType2MakernoteDirectory.TAG_FOCUS_MODE_2);
+        if (code.isPresent()) {
+            switch (code.get()) {
                 case 0: return "manual";
                 case 1: return "focus lock";
                 case 2: return "macro";
@@ -531,11 +503,11 @@ public class ExifAnalyzer {
      * @return Program string, or {@code null} if the information could not be retrieved
      */
     public String getProgram() {
-        Integer code;
+        Optional<Integer> code;
 
         code = readInteger(CanonMakernoteDirectory.class, CanonMakernoteDirectory.CameraSettings.TAG_EXPOSURE_MODE);
-        if (code != null) {
-            switch (code) {
+        if (code.isPresent()) {
+            switch (code.get()) {
                 case 1: return "program";
                 case 2: return "shutter speed priority";
                 case 3: return "aperture priority";
@@ -547,8 +519,8 @@ public class ExifAnalyzer {
         }
 
         code = readInteger(CanonMakernoteDirectory.class, CanonMakernoteDirectory.CameraSettings.TAG_EASY_SHOOTING_MODE);
-        if (code != null) {
-            switch (code) {
+        if (code.isPresent()) {
+            switch (code.get()) {
                 case   0: return "auto";
                 case   1: return "easy";
                 case   2: return "landscape";
@@ -586,9 +558,9 @@ public class ExifAnalyzer {
             }
         }
 
-        code = readInteger(CasioType2MakernoteDirectory.class, CasioType2MakernoteDirectory.TAG_CASIO_TYPE2_RECORD_MODE);
-        if (code != null) {
-            switch (code) {
+        code = readInteger(CasioType2MakernoteDirectory.class, CasioType2MakernoteDirectory.TAG_RECORD_MODE);
+        if (code.isPresent()) {
+            switch (code.get()) {
                 case  2: return "program";
                 case  3: return "shutter priority";
                 case  4: return "aperture priority";
@@ -609,17 +581,13 @@ public class ExifAnalyzer {
      *            Directory to read from
      * @param tag
      *            Tag to be read
-     * @return String that was read, or {@code null} if there was no such information
+     * @return String that was read
      */
-    protected <T extends Directory> String readString(Class<T> directory, int tag) {
-        if (metadata.containsDirectory(directory)) {
-            T dir = metadata.getDirectory(directory);
-            if (dir.containsTag(tag)) {
-                return dir.getString(tag);
-            }
-        }
-
-        return null;
+    protected <T extends Directory> Optional<String> readString(Class<T> directory, final int tag) {
+        return metadata.getDirectoriesOfType(directory).stream()
+                .filter(dir -> dir.containsTag(tag))
+                .map(dir -> dir.getString(tag))
+                .findFirst();
     }
 
     /**
@@ -629,17 +597,13 @@ public class ExifAnalyzer {
      *            Directory to read from
      * @param tag
      *            Tag to be read
-     * @return Rational that was read, or {@code null} if there was no such information
+     * @return Rational that was read
      */
-    protected <T extends Directory> Rational readRational(Class<T> directory, int tag) {
-        if (metadata.containsDirectory(directory)) {
-            T dir = metadata.getDirectory(directory);
-            if (dir.containsTag(tag)) {
-                return dir.getRational(tag);
-            }
-        }
-
-        return null;
+    protected <T extends Directory> Optional<Rational> readRational(Class<T> directory, final int tag) {
+        return metadata.getDirectoriesOfType(directory).stream()
+                .filter(dir -> dir.containsTag(tag))
+                .map(dir -> dir.getRational(tag))
+                .findFirst();
     }
 
     /**
@@ -649,21 +613,13 @@ public class ExifAnalyzer {
      *            Directory to read from
      * @param tag
      *            Tag to be read
-     * @return Integer that was read, or {@code null} if there was no such information
+     * @return Integer that was read
      */
-    protected <T extends Directory> Integer readInteger(Class<T> directory, int tag) {
-        try {
-            if (metadata.containsDirectory(directory)) {
-                T dir = metadata.getDirectory(directory);
-                if (dir.containsTag(tag)) {
-                    return dir.getInt(tag);
-                }
-            }
-        } catch (MetadataException ex) {
-            log.warn("Exception while reading integer", ex);
-        }
-
-        return null;
+    protected <T extends Directory> Optional<Integer> readInteger(Class<T> directory, final int tag) {
+        return metadata.getDirectoriesOfType(directory).stream()
+                        .filter(dir -> dir.containsTag(tag))
+                        .map(dir -> dir.getInteger(tag))
+                        .findFirst();
     }
 
     /**
@@ -677,15 +633,11 @@ public class ExifAnalyzer {
      *            TimeZone the camera is configured to
      * @return Date that was read, or {@code null} if there was no such information
      */
-    protected <T extends Directory> Date readDate(Class<T> directory, int tag, TimeZone tz) {
-        if (metadata.containsDirectory(directory)) {
-            T dir = metadata.getDirectory(directory);
-            if (dir.containsTag(tag)) {
-                return dir.getDate(tag, tz);
-            }
-        }
-
-        return null;
+    protected <T extends Directory> Optional<Date> readDate(Class<T> directory, final int tag, final TimeZone tz) {
+        return metadata.getDirectoriesOfType(directory).stream()
+                .filter(dir -> dir.containsTag(tag))
+                .map(dir -> dir.getDate(tag, tz))
+                .findFirst();
     }
 
     /**
@@ -698,22 +650,20 @@ public class ExifAnalyzer {
      *            Tag to be read
      * @return BigDecimal containing the angle, probably rounded
      */
-    protected <T extends Directory> BigDecimal readAngle(Class<T> directory, int tag) {
-        if (metadata.containsDirectory(directory)) {
-            T dir = metadata.getDirectory(directory);
-            if (dir.containsTag(tag)) {
-                Rational[] data = dir.getRationalArray(tag);
+    protected <T extends Directory> Optional<BigDecimal> readAngle(Class<T> directory, final int tag) {
+        return metadata.getDirectoriesOfType(directory).stream()
+                .filter(dir -> dir.containsTag(tag))
+                .map(dir -> {
+                    Rational[] data = dir.getRationalArray(tag);
 
-                double result = 0d;
-                for (int ix = data.length - 1; ix >= 0; ix--) {
-                    result = (result / 60d) + data[ix].doubleValue();
-                }
+                    double result = 0d;
+                    for (int ix = data.length - 1; ix >= 0; ix--) {
+                        result = (result / 60d) + data[ix].doubleValue();
+                    }
 
-                return BigDecimal.valueOf(result).setScale(6, RoundingMode.HALF_DOWN);
-            }
-        }
-
-        return null;
+                    return BigDecimal.valueOf(result).setScale(6, RoundingMode.HALF_DOWN);
+                })
+                .findFirst();
     }
 
 }

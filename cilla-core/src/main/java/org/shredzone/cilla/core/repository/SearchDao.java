@@ -22,7 +22,7 @@ package org.shredzone.cilla.core.repository;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.Query;
 import org.hibernate.Criteria;
 import org.shredzone.cilla.core.model.Page;

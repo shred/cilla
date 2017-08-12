@@ -22,7 +22,7 @@ package org.shredzone.cilla.core.repository.impl;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.shredzone.cilla.core.model.Setting;
 import org.shredzone.cilla.core.repository.SettingDao;
 import org.springframework.stereotype.Repository;
@@ -40,15 +40,15 @@ public class SettingDaoHibImpl extends BaseDaoHibImpl<Setting> implements Settin
     @Transactional(readOnly = true)
     @Override
     public Setting fetch(long id) {
-        return (Setting) getCurrentSession().get(Setting.class, id);
+        return getCurrentSession().get(Setting.class, id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public long countAll() {
-        Query q = getCurrentSession()
-                .createQuery("SELECT COUNT(*) FROM Setting");
-        return ((Number) q.uniqueResult()).longValue();
+        Query<Number> q = getCurrentSession()
+                .createQuery("SELECT COUNT(*) FROM Setting", Number.class);
+        return q.uniqueResult().longValue();
     }
 
     @SuppressWarnings("unchecked")

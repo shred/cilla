@@ -25,15 +25,14 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
-import org.apache.lucene.analysis.SimpleAnalyzer;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.analysis.core.SimpleAnalyzer;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.highlight.Formatter;
 import org.apache.lucene.search.highlight.Fragmenter;
 import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.QueryScorer;
-import org.apache.lucene.util.Version;
 import org.hibernate.Criteria;
 import org.shredzone.cilla.core.model.Page;
 import org.shredzone.cilla.core.repository.SearchDao;
@@ -129,7 +128,7 @@ public class LuceneSearchStrategy extends AbstractSearchStrategy {
      * @return Highlighted content
      */
     private String highlight(String content, Highlighter hilighter) {
-        try (SimpleAnalyzer analyzer = new SimpleAnalyzer(Version.LUCENE_36)) {
+        try (SimpleAnalyzer analyzer = new SimpleAnalyzer()) {
             TokenStream tokenStream = analyzer.tokenStream("text", new StringReader(content));
 
             StringBuilder sb = new StringBuilder();

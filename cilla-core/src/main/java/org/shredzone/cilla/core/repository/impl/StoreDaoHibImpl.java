@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.shredzone.cilla.core.datasource.FileResourceDataSource;
 import org.shredzone.cilla.core.datasource.ResourceDataSource;
 import org.shredzone.cilla.core.model.Store;
@@ -47,15 +47,15 @@ public class StoreDaoHibImpl extends BaseDaoHibImpl<Store> implements StoreDao {
     @Transactional(readOnly = true)
     @Override
     public Store fetch(long id) {
-        return (Store) getCurrentSession().get(Store.class, id);
+        return getCurrentSession().get(Store.class, id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public long countAll() {
-        Query q = getCurrentSession()
-                .createQuery("SELECT COUNT(*) FROM Store");
-        return ((Number) q.uniqueResult()).longValue();
+        Query<Number> q = getCurrentSession()
+                .createQuery("SELECT COUNT(*) FROM Store", Number.class);
+        return q.uniqueResult().longValue();
     }
 
     @SuppressWarnings("unchecked")

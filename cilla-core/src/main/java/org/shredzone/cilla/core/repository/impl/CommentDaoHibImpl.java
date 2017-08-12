@@ -22,7 +22,7 @@ package org.shredzone.cilla.core.repository.impl;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.shredzone.cilla.core.model.Comment;
 import org.shredzone.cilla.core.model.CommentThread;
 import org.shredzone.cilla.core.model.Header;
@@ -48,7 +48,7 @@ public class CommentDaoHibImpl extends BaseDaoHibImpl<Comment> implements Commen
     @Transactional(readOnly = true)
     @Override
     public Comment fetch(long id) {
-        return (Comment) getCurrentSession().get(Comment.class, id);
+        return getCurrentSession().get(Comment.class, id);
     }
 
     @Transactional(readOnly = true)
@@ -57,11 +57,11 @@ public class CommentDaoHibImpl extends BaseDaoHibImpl<Comment> implements Commen
         return getCurrentSession().createCriteria(Comment.class);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public long countAll() {
-        Query q = getCurrentSession()
-                .getNamedQuery("countAllComments");
-        return ((Number) q.uniqueResult()).longValue();
+        Query<Number> q = getCurrentSession().getNamedQuery("countAllComments");
+        return q.uniqueResult().longValue();
     }
 
     @SuppressWarnings("unchecked")

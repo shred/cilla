@@ -21,9 +21,9 @@ package org.shredzone.cilla.core.search;
 
 import java.lang.annotation.ElementType;
 
+import org.apache.lucene.analysis.core.LowerCaseFilterFactory;
 import org.apache.lucene.analysis.de.GermanAnalyzer;
-import org.apache.solr.analysis.LowerCaseFilterFactory;
-import org.apache.solr.analysis.StandardTokenizerFactory;
+import org.apache.lucene.analysis.standard.StandardTokenizerFactory;
 import org.hibernate.search.annotations.Factory;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Store;

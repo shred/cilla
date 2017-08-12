@@ -22,7 +22,7 @@ package org.shredzone.cilla.core.repository.impl;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.shredzone.cilla.core.model.Picture;
 import org.shredzone.cilla.core.repository.PictureDao;
 import org.springframework.stereotype.Repository;
@@ -40,15 +40,15 @@ public class PictureDaoHibImpl extends BaseDaoHibImpl<Picture> implements Pictur
     @Transactional(readOnly = true)
     @Override
     public Picture fetch(long id) {
-        return (Picture) getCurrentSession().get(Picture.class, id);
+        return getCurrentSession().get(Picture.class, id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public long countAll() {
-        Query q = getCurrentSession()
-                .createQuery("SELECT COUNT(*) FROM Picture");
-        return ((Number) q.uniqueResult()).longValue();
+        Query<Number> q = getCurrentSession()
+                .createQuery("SELECT COUNT(*) FROM Picture", Number.class);
+        return q.uniqueResult().longValue();
     }
 
     @SuppressWarnings("unchecked")

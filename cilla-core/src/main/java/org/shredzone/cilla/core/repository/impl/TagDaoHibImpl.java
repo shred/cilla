@@ -22,7 +22,7 @@ package org.shredzone.cilla.core.repository.impl;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.shredzone.cilla.core.model.Tag;
 import org.shredzone.cilla.core.repository.TagDao;
 import org.springframework.stereotype.Repository;
@@ -40,15 +40,15 @@ public class TagDaoHibImpl extends BaseDaoHibImpl<Tag> implements TagDao {
     @Transactional(readOnly = true)
     @Override
     public Tag fetch(long id) {
-        return (Tag) getCurrentSession().get(Tag.class, id);
+        return getCurrentSession().get(Tag.class, id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public long countAll() {
-        Query q = getCurrentSession()
-                .createQuery("SELECT COUNT(*) FROM Tag");
-        return ((Number) q.uniqueResult()).longValue();
+        Query<Number> q = getCurrentSession()
+                .createQuery("SELECT COUNT(*) FROM Tag", Number.class);
+        return q.uniqueResult().longValue();
     }
 
     @Transactional(readOnly = true)

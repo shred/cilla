@@ -26,7 +26,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.shredzone.cilla.core.model.Category;
 import org.shredzone.cilla.core.model.Page;
 import org.shredzone.cilla.core.repository.CategoryDao;
@@ -45,7 +45,7 @@ public class CategoryDaoHibImpl extends BaseDaoHibImpl<Category> implements Cate
     @Transactional(readOnly = true)
     @Override
     public Category fetch(long id) {
-        return (Category) getCurrentSession().get(Category.class, id);
+        return getCurrentSession().get(Category.class, id);
     }
 
     @SuppressWarnings("unchecked")
@@ -58,8 +58,9 @@ public class CategoryDaoHibImpl extends BaseDaoHibImpl<Category> implements Cate
     @Transactional(readOnly = true)
     @Override
     public long countAll() {
-        Query q = getCurrentSession().createQuery("SELECT COUNT(*) FROM Category");
-        return ((Number) q.uniqueResult()).longValue();
+        Query<Number> q = getCurrentSession().createQuery("SELECT COUNT(*) FROM Category",
+                        Number.class);
+        return q.uniqueResult().longValue();
     }
 
     @Transactional(readOnly = true)

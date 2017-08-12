@@ -22,10 +22,10 @@ package org.shredzone.cilla.core.hibernate;
 import java.util.Properties;
 
 import org.hibernate.MappingException;
-import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.PostgreSQL82Dialect;
 import org.hibernate.id.PersistentIdentifierGenerator;
-import org.hibernate.id.SequenceGenerator;
+import org.hibernate.id.enhanced.SequenceStyleGenerator;
+import org.hibernate.service.ServiceRegistry;
 import org.hibernate.type.Type;
 
 /**
@@ -42,18 +42,18 @@ public class TableNameSequencePostgresDialect extends PostgreSQL82Dialect {
         return TableNameSequenceGenerator.class;
     }
 
-    public static class TableNameSequenceGenerator extends SequenceGenerator {
+    public static class TableNameSequenceGenerator extends SequenceStyleGenerator {
 
         @Override
-        public void configure(Type type, Properties params, Dialect dialect) throws MappingException {
-            if (params.getProperty(SEQUENCE) == null || params.getProperty(SEQUENCE).isEmpty()) {
+        public void configure(Type type, Properties params, ServiceRegistry serviceRegistry) throws MappingException {
+            if (params.getProperty(SEQUENCE_PARAM) == null || params.getProperty(SEQUENCE_PARAM).isEmpty()) {
                 String tableName = params.getProperty(PersistentIdentifierGenerator.TABLE);
                 if (tableName != null) {
-                    params.setProperty(SEQUENCE, "seq_" + tableName);
+                    params.setProperty(SEQUENCE_PARAM, "seq_" + tableName);
                 }
             }
 
-            super.configure(type, params, dialect);
+            super.configure(type, params, serviceRegistry);
         }
 
     }
