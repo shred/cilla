@@ -33,13 +33,13 @@ INSERT INTO authority (id, version, name) VALUES
     (5, 0, 'WEBSERVICE'),
     (6, 0, 'USERADMIN'),
     (7, 0, 'PREVIEW');
-SELECT setval('seq_authority', 7);
+SELECT setval('Authority_SEQ', 7);
 
 -- Create the basic set of roles. You can add more roles later if needed.
 INSERT INTO role (id, version, name) VALUES
     (1, 0, 'anonymous'),
     (2, 0, 'admin');
-SELECT setval('seq_role', 2);
+SELECT setval('Role_SEQ', 2);
 
 -- Associate the roles to the authorities
 --   'anonymous' (not logged in) is only allowed to comment.
@@ -53,7 +53,7 @@ INSERT INTO role_authority (role_id, authorities_id) VALUES
 -- Insert all the languages that will be available for blog articles.
 --   Add more if needed.
 INSERT INTO language (id, version, locale, name) VALUES
-    (nextval('seq_language'), 0, 'en_US', 'English');
+    (nextval('Language_SEQ'), 0, 'en_US', 'English');
 
 -- Insert the article categories and sub-categories.
 --   Please change as needed.
@@ -63,14 +63,14 @@ INSERT INTO language (id, version, locale, name) VALUES
 --   'parent_id' refers to the parent category of a sub-category
 --   'sequence' is the order of the categories within the same parent
 INSERT INTO category (id, version, name, parent_id, title, icon, caption, captionformat, sequence) VALUES
-    (nextval('seq_category'), 0, 'Articles', NULL, 'My blog articles', 'book', NULL, 0, 1);
+    (nextval('Category_SEQ'), 0, 'Articles', NULL, 'My blog articles', 'book', NULL, 0, 1);
 
 -- Finally, create the administator user.
 --   Change as needed. The default login is: "admin" - password "admin"
 --   The password is currently an unsalted sha256 hash.
 --   bcrypt is on the todo list!
 INSERT INTO login (id, version, login, mail, name, password, role_id, language_id, timezone) VALUES
-    (nextval('seq_login'), 0, 'admin', 'me@example.com', 'Administrator',
+    (nextval('User_SEQ'), 0, 'admin', 'me@example.com', 'Administrator',
         '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918',
         2, 1, 'UTC');
 

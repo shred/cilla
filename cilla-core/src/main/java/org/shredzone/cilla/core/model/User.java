@@ -41,7 +41,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  * @author Richard "Shred" Körber
  */
 @Entity
-@Table(name = "login") // "user" is a reserved word of some DBMS
+@Table(name = "Login") // "user" is a reserved word of some DBMS
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class User extends BaseModel {
     private static final long serialVersionUID = 5873021765092486197L;

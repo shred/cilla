@@ -25,7 +25,7 @@
 -->
 <hibernate-configuration>
     <session-factory>
-        <property name="dialect">org.shredzone.cilla.core.hibernate.TableNameSequencePostgresDialect</property>
+        <property name="dialect">org.hibernate.dialect.PostgreSQL9Dialect</property>
         <mapping class="org.shredzone.cilla.core.model.Authority"/>
         <mapping class="org.shredzone.cilla.core.model.Category"/>
         <mapping class="org.shredzone.cilla.core.model.Comment"/>

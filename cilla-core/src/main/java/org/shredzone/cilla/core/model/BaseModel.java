@@ -26,6 +26,10 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.id.enhanced.SequenceStyleGenerator;
+
 /**
  * Represents the superclass of all other entities. It contains the primary key and a
  * version for optimistic locking.
@@ -43,7 +47,12 @@ public abstract class BaseModel implements Serializable {
      * Primary key.
      */
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "per-entity-sequence")
+    @GenericGenerator(name = "per-entity-sequence",
+        strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+        parameters = {
+            @Parameter(name = SequenceStyleGenerator.CONFIG_PREFER_SEQUENCE_PER_ENTITY, value = "true")
+        })
     public long getId()                         { return id; }
     public void setId(long id)                  { this.id = id; }
 

@@ -39,7 +39,7 @@
   <New id="cillaDsProps" class="org.eclipse.jetty.plus.jndi.EnvEntry">
     <Arg>hibernate/CillaDS</Arg>
     <Arg type="java.lang.String">
-        hibernate.dialect      = org.shredzone.cilla.core.hibernate.TableNameSequencePostgresDialect
+        hibernate.dialect   = org.hibernate.dialect.PostgreSQL9Dialect
         hibernate.search.default.indexBase = /var/local/cilla/search
     </Arg>
   </New>

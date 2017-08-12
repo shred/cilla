@@ -36,7 +36,7 @@
             <plugin>
                 <groupId>de.juplo</groupId>
                 <artifactId>hibernate4-maven-plugin</artifactId>
-                <version>1.0.4</version>
+                <version>1.0.5</version>
                 <executions>
                     <execution>
                         <goals>
@@ -45,7 +45,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <hibernateDialect>org.hibernate.dialect.PostgreSQL82Dialect</hibernateDialect>
+                    <hibernateDialect>org.hibernate.dialect.PostgreSQL9Dialect</hibernateDialect>
                     <target>NONE</target><!-- only create schema.sql file -->
                     <type>CREATE</type>
                     <outputFile>${project.build.directory}/schema/schema.sql</outputFile>
