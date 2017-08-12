@@ -34,6 +34,7 @@ import org.shredzone.cilla.ws.TextFormat;
 import org.shredzone.commons.text.TextFilter;
 import org.shredzone.commons.text.filter.HtmlEscapeFilter;
 import org.shredzone.commons.text.filter.KeepFilter;
+import org.shredzone.commons.text.filter.MarkdownFilter;
 import org.shredzone.commons.text.filter.ParagraphFilter;
 import org.shredzone.commons.text.filter.SimplifyHtmlFilter;
 import org.shredzone.commons.text.filter.StripHtmlFilter;
@@ -137,6 +138,15 @@ public class TextFormatterImpl implements TextFormatter {
                 tf.setAnalyzer(rr);
 
                 return tf.andThen(postProcessingTextFilters);
+
+            case MARKDOWN:
+                ReferenceResolver rrmd = applicationContext.getBean(ReferenceResolver.class);
+                rrmd.setLinkBuilderSupplier(linkBuilderSupplier);
+
+                MarkdownFilter mf = new MarkdownFilter();
+                mf.setAnalyzer(rrmd);
+
+                return mf.andThen(postProcessingTextFilters);
 
             default:
                 throw new IllegalArgumentException("Cannot handle format " + format);

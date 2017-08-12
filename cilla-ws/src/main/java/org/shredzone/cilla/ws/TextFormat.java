@@ -62,7 +62,12 @@ public enum TextFormat {
     /**
      * Textile formatting.
      */
-    TEXTILE(false);
+    TEXTILE(false),
+
+    /**
+     * Markdown formatting.
+     */
+    MARKDOWN(true);
 
     private final boolean harmful;
 

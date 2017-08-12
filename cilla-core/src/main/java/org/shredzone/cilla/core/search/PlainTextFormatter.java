@@ -25,6 +25,7 @@ import java.util.function.Function;
 import org.shredzone.cilla.core.model.embed.FormattedText;
 import org.shredzone.cilla.ws.TextFormat;
 import org.shredzone.commons.text.filter.KeepFilter;
+import org.shredzone.commons.text.filter.MarkdownFilter;
 import org.shredzone.commons.text.filter.ParagraphFilter;
 import org.shredzone.commons.text.filter.SimplifyHtmlFilter;
 import org.shredzone.commons.text.filter.StripHtmlFilter;
@@ -42,6 +43,7 @@ public final class PlainTextFormatter {
     private static final SimplifyHtmlFilter HTML_SIMPLIFY_FILTER = new SimplifyHtmlFilter();
     private static final StripHtmlFilter STRIP_HTML_FILTER = new StripHtmlFilter();
     private static final TextileFilter TEXTILE_FILTER = new TextileFilter();
+    private static final MarkdownFilter MARKDOWN_FILTER = new MarkdownFilter();
 
     private PlainTextFormatter() {
         // Utility class without constructor
@@ -77,6 +79,10 @@ public final class PlainTextFormatter {
 
             case TEXTILE:
                 return TEXTILE_FILTER
+                        .andThen(STRIP_HTML_FILTER);
+
+            case MARKDOWN:
+                return MARKDOWN_FILTER
                         .andThen(STRIP_HTML_FILTER);
 
             default:
