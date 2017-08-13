@@ -51,11 +51,10 @@ public class SettingDaoHibImpl extends BaseDaoHibImpl<Setting> implements Settin
         return q.uniqueResult().longValue();
     }
 
-    @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
     @Override
     public List<Setting> fetchAll() {
-        return getCurrentSession().createQuery("FROM Setting ORDER BY key").list();
+        return getCurrentSession().createQuery("FROM Setting ORDER BY key", Setting.class).list();
     }
 
     @Transactional(readOnly = true)

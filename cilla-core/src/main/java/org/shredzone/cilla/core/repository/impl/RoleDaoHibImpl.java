@@ -57,11 +57,10 @@ public class RoleDaoHibImpl extends BaseDaoHibImpl<Role> implements RoleDao {
         return getCurrentSession().createCriteria(Role.class);
     }
 
-    @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
     @Override
     public List<Role> fetchAll() {
-        return getCurrentSession().createQuery("FROM Role ORDER BY name").list();
+        return getCurrentSession().createQuery("FROM Role ORDER BY name", Role.class).list();
     }
 
     @Override

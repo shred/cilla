@@ -58,12 +58,11 @@ public class StoreDaoHibImpl extends BaseDaoHibImpl<Store> implements StoreDao {
         return q.uniqueResult().longValue();
     }
 
-    @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
     @Override
     public List<Store> fetchAll() {
         return getCurrentSession()
-                .createQuery("FROM Store")
+                .createQuery("FROM Store", Store.class)
                 .list();
     }
 

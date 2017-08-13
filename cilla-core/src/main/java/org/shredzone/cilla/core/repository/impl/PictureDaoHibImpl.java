@@ -51,12 +51,11 @@ public class PictureDaoHibImpl extends BaseDaoHibImpl<Picture> implements Pictur
         return q.uniqueResult().longValue();
     }
 
-    @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
     @Override
     public List<Picture> fetchAll() {
         return getCurrentSession()
-                .createQuery("FROM Picture")
+                .createQuery("FROM Picture", Picture.class)
                 .list();
     }
 

@@ -57,26 +57,23 @@ public class CommentDaoHibImpl extends BaseDaoHibImpl<Comment> implements Commen
         return getCurrentSession().createCriteria(Comment.class);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public long countAll() {
-        Query<Number> q = getCurrentSession().getNamedQuery("countAllComments");
+        Query<Number> q = getCurrentSession().createNamedQuery("countAllComments", Number.class);
         return q.uniqueResult().longValue();
     }
 
-    @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
     @Override
     public List<Comment> fetchAll() {
-        return getCurrentSession().createQuery("FROM Comment ORDER BY creation").list();
+        return getCurrentSession().createQuery("FROM Comment ORDER BY creation", Comment.class).list();
     }
 
-    @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
     @Override
     public List<Comment> fetchReplies(Comment comment) {
         return getCurrentSession()
-                .createQuery("FROM Comment WHERE replyTo=:reply ORDER BY creation")
+                .createQuery("FROM Comment WHERE replyTo=:reply ORDER BY creation", Comment.class)
                 .setParameter("reply", comment)
                 .list();
     }

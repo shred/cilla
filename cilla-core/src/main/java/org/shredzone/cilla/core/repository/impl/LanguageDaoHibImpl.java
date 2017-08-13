@@ -52,11 +52,10 @@ public class LanguageDaoHibImpl extends BaseDaoHibImpl<Language> implements Lang
         return q.uniqueResult().longValue();
     }
 
-    @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
     @Override
     public List<Language> fetchAll() {
-        return getCurrentSession().createQuery("FROM Language ORDER BY locale").list();
+        return getCurrentSession().createQuery("FROM Language ORDER BY locale", Language.class).list();
     }
 
     @Transactional(readOnly = true)

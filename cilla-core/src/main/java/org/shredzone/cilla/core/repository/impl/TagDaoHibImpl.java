@@ -57,19 +57,18 @@ public class TagDaoHibImpl extends BaseDaoHibImpl<Tag> implements TagDao {
         return getCurrentSession().createCriteria(Tag.class);
     }
 
-    @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
     @Override
     public List<Tag> fetchAll() {
-        return getCurrentSession().createQuery("FROM Tag ORDER BY name")
+        return getCurrentSession().createQuery("FROM Tag ORDER BY name", Tag.class)
                 .list();
     }
 
     @Transactional(readOnly = true)
     @Override
     public Tag fetchByName(String name) {
-        return (Tag) getCurrentSession()
-                .createQuery("FROM Tag WHERE name=:name")
+        return getCurrentSession()
+                .createQuery("FROM Tag WHERE name=:name", Tag.class)
                 .setParameter("name", name)
                 .uniqueResult();
     }

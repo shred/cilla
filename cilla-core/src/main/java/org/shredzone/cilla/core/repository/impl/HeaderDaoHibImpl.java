@@ -64,20 +64,18 @@ public class HeaderDaoHibImpl extends BaseDaoHibImpl<Header> implements HeaderDa
     }
 
     @Transactional(readOnly = true)
-    @SuppressWarnings("unchecked")
     @Override
     public List<Header> fetchAll() {
         return getCurrentSession()
-                .createQuery("FROM Header ORDER BY creation DESC")
+                .createQuery("FROM Header ORDER BY creation DESC", Header.class)
                 .list();
     }
 
     @Transactional(readOnly = true)
-    @SuppressWarnings("unchecked")
     @Override
     public List<Header> fetchEnabled() {
         return getCurrentSession()
-                .createQuery("FROM Header WHERE enabled=:enabled ORDER BY creation DESC")
+                .createQuery("FROM Header WHERE enabled=:enabled ORDER BY creation DESC", Header.class)
                 .setParameter("enabled", Boolean.TRUE)
                 .list();
     }

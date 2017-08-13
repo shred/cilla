@@ -79,14 +79,12 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
                 .uniqueResult();
     }
 
-    @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
     @Override
     public List<Page> fetchAll() {
-        return getCurrentSession().createQuery("FROM Page").list();
+        return getCurrentSession().createQuery("FROM Page", Page.class).list();
     }
 
-    @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
     @Override
     public List<Page> fetchAllPublic() {
@@ -94,7 +92,7 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
                         " WHERE (publication IS NOT NULL AND publication<=:now)" +
                         " AND (expiration IS NULL OR expiration>:now)" +
                         " AND challenge IS NULL AND responsePattern IS NULL" +
-                        " ORDER BY sticky DESC, hidden ASC," + pageOrder.getColumn() + " DESC")
+                        " ORDER BY sticky DESC, hidden ASC," + pageOrder.getColumn() + " DESC", Page.class)
                 .setParameter("now", new Date())
                 .list();
     }
@@ -206,7 +204,6 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
                 .uniqueResult();
     }
 
-    @SuppressWarnings({ "unchecked", "cast" })
     @Transactional(readOnly = true)
     @Override
     public List<Page> fetchSameSubject(Page page) {
@@ -220,19 +217,18 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
                         " AND (publication IS NOT NULL AND publication<=:now)" +
                         " AND (expiration IS NULL OR expiration>:now)" +
                         " AND hidden=false" +
-                        " ORDER BY " + pageOrder.getColumn() + " ASC")
+                        " ORDER BY " + pageOrder.getColumn() + " ASC", Page.class)
                 .setParameter("subject", page.getSubject())
                 .setParameter("now", new Date())
                 .list();
     }
 
-    @SuppressWarnings({ "unchecked", "cast" })
     @Transactional(readOnly = true)
     @Override
     public List<String> fetchAllSubjects() {
         return getCurrentSession()
                 .createQuery("SELECT DISTINCT subject FROM Page" +
-                        " ORDER BY subject ASC")
+                        " ORDER BY subject ASC", String.class)
                 .list();
     }
 
@@ -248,7 +244,6 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
                 .list();
     }
 
-    @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
     @Override
     public List<Page> fetchBadPublishState() {
@@ -259,18 +254,17 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
                         " AND publishedState=false) OR" +
                         " (NOT ((publication IS NOT NULL AND publication<=:now)" +
                         " AND (expiration IS NULL OR expiration>:now))" +
-                        " AND publishedState=true)")
+                        " AND publishedState=true)", Page.class)
                 .setParameter("now", new Date())
                 .list();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<Page> fetchHavingProperty(String key, String value) {
         if (value != null) {
             return getCurrentSession()
                             .createQuery("FROM Page p" +
-                                    " WHERE p.properties[:key]=:value")
+                                    " WHERE p.properties[:key]=:value", Page.class)
                             .setParameter("key", key)
                             .setParameter("value", value)
                             .list();
@@ -278,7 +272,7 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
             return getCurrentSession()
                             .createQuery("SELECT p FROM Page p" +
                                     " JOIN p.properties o" +
-                                    " WHERE index(o)=:key")
+                                    " WHERE index(o)=:key", Page.class)
                             .setParameter("key", key)
                             .list();
         }

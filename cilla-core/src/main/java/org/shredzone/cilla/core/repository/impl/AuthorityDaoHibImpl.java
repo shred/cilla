@@ -53,11 +53,10 @@ public class AuthorityDaoHibImpl extends BaseDaoHibImpl<Authority> implements Au
         return q.uniqueResult().longValue();
     }
 
-    @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
     @Override
     public List<Authority> fetchAll() {
-        return getCurrentSession().getNamedQuery("authority.all").list();
+        return getCurrentSession().createNamedQuery("authority.all", Authority.class).list();
     }
 
     @Transactional(readOnly = true)

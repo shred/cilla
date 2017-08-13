@@ -59,39 +59,36 @@ public class UserDaoHibImpl extends BaseDaoHibImpl<User> implements UserDao {
         return getCurrentSession().createCriteria(User.class);
     }
 
-    @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
     @Override
     public List<User> fetchAll() {
         return getCurrentSession()
-                .createQuery("FROM User u ORDER BY u.login")
+                .createQuery("FROM User u ORDER BY u.login", User.class)
                 .list();
     }
 
     @Transactional(readOnly = true)
     @Override
     public User fetchByLogin(String login) {
-        return (User) getCurrentSession()
-                .createQuery("FROM User WHERE login=:login")
+        return getCurrentSession()
+                .createQuery("FROM User WHERE login=:login", User.class)
                 .setParameter("login", login)
                 .uniqueResult();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Collection<User> fetchAllWithRole(Role role) {
         return getCurrentSession()
-                .createQuery("FROM User WHERE role=:role")
+                .createQuery("FROM User WHERE role=:role", User.class)
                 .setParameter("role", role)
                 .list();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Collection<User> fetchAllWithAuthority(String authority) {
         return getCurrentSession()
                 .createQuery("SELECT u FROM User u, IN (u.role.authorities) a" +
-                       " WHERE a.name = :authority")
+                       " WHERE a.name = :authority", User.class)
                 .setParameter("authority", authority)
                 .list();
     }

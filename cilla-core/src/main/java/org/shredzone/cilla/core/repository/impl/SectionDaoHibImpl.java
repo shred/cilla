@@ -55,12 +55,11 @@ public class SectionDaoHibImpl extends BaseDaoHibImpl<Section> implements Sectio
         return q.uniqueResult().longValue();
     }
 
-    @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
     @Override
     public List<Section> fetchAll() {
         return getCurrentSession()
-                .createQuery("FROM Section")
+                .createQuery("FROM Section", Section.class)
                 .list();
     }
 

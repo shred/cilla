@@ -54,10 +54,9 @@ public class MediumDaoHibImpl extends BaseDaoHibImpl<Medium> implements MediumDa
 
     @Transactional(readOnly = true)
     @Override
-    @SuppressWarnings("unchecked")
     public List<Medium> fetchAll() {
         return getCurrentSession()
-                .createQuery("FROM Medium ORDER BY image.name")
+                .createQuery("FROM Medium ORDER BY image.name", Medium.class)
                 .list();
     }
 
@@ -78,10 +77,9 @@ public class MediumDaoHibImpl extends BaseDaoHibImpl<Medium> implements MediumDa
 
     @Transactional(readOnly = true)
     @Override
-    @SuppressWarnings("unchecked")
     public List<Medium> fetchAll(Page page) {
         return getCurrentSession()
-                .createQuery("FROM Medium WHERE page=:page ORDER BY image.name")
+                .createQuery("FROM Medium WHERE page=:page ORDER BY image.name", Medium.class)
                 .setParameter("page", page)
                 .list();
     }

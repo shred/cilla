@@ -48,11 +48,10 @@ public class CategoryDaoHibImpl extends BaseDaoHibImpl<Category> implements Cate
         return getCurrentSession().get(Category.class, id);
     }
 
-    @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
     @Override
     public List<Category> fetchAll() {
-        return getCurrentSession().createQuery("FROM Category ORDER BY name").list();
+        return getCurrentSession().createQuery("FROM Category ORDER BY name", Category.class).list();
     }
 
     @Transactional(readOnly = true)
@@ -78,11 +77,10 @@ public class CategoryDaoHibImpl extends BaseDaoHibImpl<Category> implements Cate
         return result;
     }
 
-    @SuppressWarnings("unchecked")
     @Transactional(readOnly = true)
     @Override
     public List<Category> fetchRootCategories() {
-        return getCurrentSession().createQuery("FROM Category WHERE parent_id IS NULL ORDER BY sequence").list();
+        return getCurrentSession().createQuery("FROM Category WHERE parent_id IS NULL ORDER BY sequence", Category.class).list();
     }
 
     @Transactional(readOnly = true)
