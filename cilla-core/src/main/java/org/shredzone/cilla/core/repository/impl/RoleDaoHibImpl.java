@@ -38,8 +38,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoleDaoHibImpl extends BaseDaoHibImpl<Role> implements RoleDao {
 
     @Override
-    public Role fetch(long id) {
-        return getCurrentSession().get(Role.class, id);
+    protected Class<Role> getType() {
+        return Role.class;
     }
 
     @Transactional(readOnly = true)

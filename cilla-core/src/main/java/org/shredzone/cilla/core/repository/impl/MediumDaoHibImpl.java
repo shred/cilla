@@ -39,8 +39,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class MediumDaoHibImpl extends BaseDaoHibImpl<Medium> implements MediumDao {
 
     @Override
-    public Medium fetch(long id) {
-        return getCurrentSession().get(Medium.class, id);
+    protected Class<Medium> getType() {
+        return Medium.class;
     }
 
     @Transactional(readOnly = true)

@@ -48,6 +48,18 @@ public abstract class BaseDaoHibImpl<T extends BaseModel> implements BaseDao<T> 
         return sessionFactory.getCurrentSession();
     }
 
+    /**
+     * Returns the type of this entity.
+     *
+     * @return Entity type
+     */
+    protected abstract Class<T> getType();
+
+    @Override
+    public T fetch(long id) {
+        return getCurrentSession().get(getType(), id);
+    }
+
     @Override
     public void persist(T data) {
         getCurrentSession().persist(data);

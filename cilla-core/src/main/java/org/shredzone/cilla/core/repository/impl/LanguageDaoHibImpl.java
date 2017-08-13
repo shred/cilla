@@ -39,8 +39,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class LanguageDaoHibImpl extends BaseDaoHibImpl<Language> implements LanguageDao {
 
     @Override
-    public Language fetch(long id) {
-        return getCurrentSession().get(Language.class, id);
+    protected Class<Language> getType() {
+        return Language.class;
     }
 
     @Transactional(readOnly = true)

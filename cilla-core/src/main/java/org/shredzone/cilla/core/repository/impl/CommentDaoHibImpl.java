@@ -41,13 +41,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentDaoHibImpl extends BaseDaoHibImpl<Comment> implements CommentDao {
 
     @Override
-    public void persist(Comment data) {
-        super.persist(data);
-    }
-
-    @Override
-    public Comment fetch(long id) {
-        return getCurrentSession().get(Comment.class, id);
+    protected Class<Comment> getType() {
+        return Comment.class;
     }
 
     @Transactional(readOnly = true)

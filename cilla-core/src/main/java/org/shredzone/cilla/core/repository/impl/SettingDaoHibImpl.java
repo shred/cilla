@@ -38,8 +38,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class SettingDaoHibImpl extends BaseDaoHibImpl<Setting> implements SettingDao {
 
     @Override
-    public Setting fetch(long id) {
-        return getCurrentSession().get(Setting.class, id);
+    protected Class<Setting> getType() {
+        return Setting.class;
     }
 
     @Transactional(readOnly = true)

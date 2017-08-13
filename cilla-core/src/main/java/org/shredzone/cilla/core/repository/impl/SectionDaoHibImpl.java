@@ -42,8 +42,8 @@ public class SectionDaoHibImpl extends BaseDaoHibImpl<Section> implements Sectio
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Override
-    public Section fetch(long id) {
-        return getCurrentSession().get(Section.class, id);
+    protected Class<Section> getType() {
+        return Section.class;
     }
 
     @Transactional(readOnly = true)

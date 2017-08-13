@@ -38,8 +38,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class PictureDaoHibImpl extends BaseDaoHibImpl<Picture> implements PictureDao {
 
     @Override
-    public Picture fetch(long id) {
-        return getCurrentSession().get(Picture.class, id);
+    protected Class<Picture> getType() {
+        return Picture.class;
     }
 
     @Transactional(readOnly = true)

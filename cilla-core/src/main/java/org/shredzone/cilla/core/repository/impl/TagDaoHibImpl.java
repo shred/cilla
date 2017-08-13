@@ -38,8 +38,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class TagDaoHibImpl extends BaseDaoHibImpl<Tag> implements TagDao {
 
     @Override
-    public Tag fetch(long id) {
-        return getCurrentSession().get(Tag.class, id);
+    protected Class<Tag> getType() {
+        return Tag.class;
     }
 
     @Transactional(readOnly = true)

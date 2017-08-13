@@ -40,8 +40,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthorityDaoHibImpl extends BaseDaoHibImpl<Authority> implements AuthorityDao {
 
     @Override
-    public Authority fetch(long id) {
-        return getCurrentSession().get(Authority.class, id);
+    protected Class<Authority> getType() {
+        return Authority.class;
     }
 
     @Transactional(readOnly = true)

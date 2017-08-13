@@ -40,8 +40,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserDaoHibImpl extends BaseDaoHibImpl<User> implements UserDao {
 
     @Override
-    public User fetch(long id) {
-        return getCurrentSession().get(User.class, id);
+    protected Class<User> getType() {
+        return User.class;
     }
 
     @Transactional(readOnly = true)

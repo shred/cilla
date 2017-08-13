@@ -45,8 +45,8 @@ public class StoreDaoHibImpl extends BaseDaoHibImpl<Store> implements StoreDao {
     private @Value("${resource.path}") String basePath;
 
     @Override
-    public Store fetch(long id) {
-        return getCurrentSession().get(Store.class, id);
+    protected Class<Store> getType() {
+        return Store.class;
     }
 
     @Transactional(readOnly = true)

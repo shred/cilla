@@ -51,8 +51,8 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
     private @Value("${page.order}") PageOrder pageOrder;
 
     @Override
-    public Page fetch(long id) {
-        return getCurrentSession().get(Page.class, id);
+    protected Class<Page> getType() {
+        return Page.class;
     }
 
     @Transactional(readOnly = true)

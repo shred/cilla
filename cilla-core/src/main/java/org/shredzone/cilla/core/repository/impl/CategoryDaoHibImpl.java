@@ -43,8 +43,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class CategoryDaoHibImpl extends BaseDaoHibImpl<Category> implements CategoryDao {
 
     @Override
-    public Category fetch(long id) {
-        return getCurrentSession().get(Category.class, id);
+    protected Class<Category> getType() {
+        return Category.class;
     }
 
     @Override

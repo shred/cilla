@@ -44,8 +44,8 @@ public class HeaderDaoHibImpl extends BaseDaoHibImpl<Header> implements HeaderDa
     private final Random rnd = new Random();  // no secure random generator required
 
     @Override
-    public Header fetch(long id) {
-        return getCurrentSession().get(Header.class, id);
+    protected Class<Header> getType() {
+        return Header.class;
     }
 
     @Transactional(readOnly = true)
