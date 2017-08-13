@@ -48,7 +48,6 @@ import org.shredzone.cilla.service.SecurityService;
 import org.shredzone.cilla.ws.SectionFacade;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
@@ -121,7 +120,6 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
-    @Scheduled(cron = "${cron.pagePublishEvent}")
     public void updatePublishedState() {
         for (Page page : pageDao.fetchBadPublishState()) {
             boolean before = page.isPublishedState();
