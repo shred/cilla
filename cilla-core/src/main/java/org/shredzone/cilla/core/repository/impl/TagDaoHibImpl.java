@@ -19,7 +19,10 @@
  */
 package org.shredzone.cilla.core.repository.impl;
 
+import java.util.Date;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.hibernate.Criteria;
 import org.hibernate.query.Query;
@@ -79,6 +82,48 @@ public class TagDaoHibImpl extends BaseDaoHibImpl<Tag> implements TagDao {
             persist(tag);
         }
         return tag;
+    }
+
+    @Override
+    public SortedSet<Tag> fetchAllUsedTags(boolean pagesOnly, boolean publicOnly) {
+        Date now = new Date();
+        SortedSet<Tag> result = new TreeSet<>();
+
+        if (publicOnly) {
+            result.addAll(getCurrentSession()
+                    .createQuery("SELECT DISTINCT t"
+                        + " FROM Page p JOIN p.tags t"
+                        + " WHERE (p.publication IS NOT NULL AND p.publication<=:now)"
+                        + " AND (p.expiration IS NULL OR p.expiration>:now)"
+                        + " AND p.challenge IS NULL AND p.responsePattern IS NULL", Tag.class)
+                    .setParameter("now", now)
+                    .getResultList());
+        } else {
+            result.addAll(getCurrentSession()
+                    .createQuery("SELECT DISTINCT t"
+                        + " FROM Page p JOIN p.tags t", Tag.class)
+                    .getResultList());
+        }
+
+        if (!pagesOnly) {
+            if (publicOnly) {
+                result.addAll(getCurrentSession()
+                        .createQuery("SELECT DISTINCT t"
+                            + " FROM Picture pi JOIN pi.tags t JOIN pi.gallery.page p"
+                            + " WHERE (p.publication IS NOT NULL AND p.publication<=:now)"
+                            + " AND (p.expiration IS NULL OR p.expiration>:now)"
+                            + " AND p.challenge IS NULL AND p.responsePattern IS NULL", Tag.class)
+                        .setParameter("now", now)
+                        .getResultList());
+            } else {
+                result.addAll(getCurrentSession()
+                        .createQuery("SELECT DISTINCT t"
+                            + " FROM Picture p JOIN p.tags t", Tag.class)
+                        .getResultList());
+            }
+        }
+
+        return result;
     }
 
 }

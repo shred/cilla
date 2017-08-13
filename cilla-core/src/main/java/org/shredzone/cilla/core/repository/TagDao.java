@@ -19,6 +19,10 @@
  */
 package org.shredzone.cilla.core.repository;
 
+import java.util.SortedSet;
+
+import org.shredzone.cilla.core.model.Page;
+import org.shredzone.cilla.core.model.Picture;
 import org.shredzone.cilla.core.model.Tag;
 
 /**
@@ -45,5 +49,21 @@ public interface TagDao extends BaseDao<Tag> {
      * @return {@link Tag}
      */
     Tag fetchOrCreate(String name);
+
+    /**
+     * Returns a list of all tags that are used at least once.
+     *
+     * @param pagesOnly
+     *            If {@code true}, only the tags used in {@link Page} entities are
+     *            collected. If {@code false}, all used tags are collected (also those
+     *            used in {@link Picture} entities).
+     * @param publicOnly
+     *            If {@code true}, only show tags of public content (published, not
+     *            expired, not hidden). If {@code false}, also show tabs of unpublished
+     *            content.
+     * @return List of {@link Tag}, alphabetically sorted. May be empty, but never
+     *         {@code null}.
+     */
+    SortedSet<Tag> fetchAllUsedTags(boolean pagesOnly, boolean publicOnly);
 
 }
