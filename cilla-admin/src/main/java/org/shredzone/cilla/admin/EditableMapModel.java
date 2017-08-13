@@ -62,7 +62,7 @@ public class EditableMapModel extends DefaultMapModel {
 
         double lat, lng;
 
-        if (model.getLatitude() != null && model.getLongitude() != null) {
+        if (model != null && model.getLatitude() != null && model.getLongitude() != null) {
             lat = model.getLatitude().doubleValue();
             lng = model.getLongitude().doubleValue();
         } else if (factory.getLastLatitude() != null && factory.getLastLongitude() != null) {
