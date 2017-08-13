@@ -32,9 +32,9 @@ import org.shredzone.cilla.core.repository.MediumDao;
 import org.shredzone.cilla.service.PageService;
 import org.shredzone.cilla.service.link.LinkBuilder;
 import org.shredzone.cilla.view.annotation.Framed;
+import org.shredzone.cilla.web.image.ImageProvider;
+import org.shredzone.cilla.web.image.ImageOrigin;
 import org.shredzone.cilla.web.plugin.LocalLinkResolver;
-import org.shredzone.cilla.web.plugin.manager.ImageProcessingManager;
-import org.shredzone.cilla.ws.ImageProcessing;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.commons.view.annotation.Optional;
 import org.shredzone.commons.view.annotation.PathPart;
@@ -56,7 +56,7 @@ public class MediaView extends AbstractView implements LocalLinkResolver {
 
     private @Resource PageService pageService;
     private @Resource MediumDao mediaDao;
-    private @Resource ImageProcessingManager imageProcessingManager;
+    private @Resource ImageProvider imageProvider;
 
     /**
      * Streams a medium of the given page.
@@ -78,15 +78,7 @@ public class MediaView extends AbstractView implements LocalLinkResolver {
             throw new PageNotFoundException();
         }
 
-        ImageProcessing ip = null;
-        if (type != null) {
-            ip = imageProcessingManager.createImageProcessing(type);
-            if (ip == null) {
-                throw new ErrorResponseException(HttpServletResponse.SC_NOT_FOUND);
-            }
-        }
-
-        ResourceDataSource ds = pageService.getMediumImage(media, ip);
+        ResourceDataSource ds = imageProvider.provide(media.getImage(), ImageOrigin.MEDIUM, type);
         streamDataSource(ds, req, resp);
     }
 

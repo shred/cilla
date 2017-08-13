@@ -64,10 +64,6 @@
             <artifactId>metadata-extractor</artifactId>
         </dependency>
         <dependency>
-            <groupId>net.coobird</groupId>
-            <artifactId>thumbnailator</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-core</artifactId>
         </dependency>

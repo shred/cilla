@@ -28,8 +28,8 @@ import org.shredzone.cilla.core.model.Header;
 import org.shredzone.cilla.service.HeaderService;
 import org.shredzone.cilla.view.annotation.Framed;
 import org.shredzone.cilla.web.comment.CommentFormHandler;
-import org.shredzone.cilla.web.plugin.manager.ImageProcessingManager;
-import org.shredzone.cilla.ws.ImageProcessing;
+import org.shredzone.cilla.web.image.ImageProvider;
+import org.shredzone.cilla.web.image.ImageOrigin;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.commons.view.annotation.Optional;
 import org.shredzone.commons.view.annotation.PathPart;
@@ -49,7 +49,7 @@ import org.springframework.stereotype.Component;
 public class HeaderView extends AbstractView {
 
     private @Resource HeaderService headerService;
-    private @Resource ImageProcessingManager imageProcessingManager;
+    private @Resource ImageProvider imageProvider;
     private @Resource CommentFormHandler commentFormHandler;
 
     /**
@@ -116,15 +116,7 @@ public class HeaderView extends AbstractView {
             throw new ErrorResponseException(HttpServletResponse.SC_FORBIDDEN);
         }
 
-        ImageProcessing ip = null;
-        if (type != null) {
-            ip = imageProcessingManager.createImageProcessing(type);
-            if (ip == null) {
-                throw new ErrorResponseException(HttpServletResponse.SC_NOT_FOUND);
-            }
-        }
-
-        ResourceDataSource ds = headerService.getHeaderImage(header, ip);
+        ResourceDataSource ds = imageProvider.provide(header.getHeaderImage(), ImageOrigin.HEADER, type);
         streamDataSource(ds, req, resp);
     }
 
@@ -142,15 +134,7 @@ public class HeaderView extends AbstractView {
             throw new ErrorResponseException(HttpServletResponse.SC_FORBIDDEN);
         }
 
-        ImageProcessing ip = null;
-        if (type != null) {
-            ip = imageProcessingManager.createImageProcessing(type);
-            if (ip == null) {
-                throw new ErrorResponseException(HttpServletResponse.SC_NOT_FOUND);
-            }
-        }
-
-        ResourceDataSource ds = headerService.getFullImage(header, ip);
+        ResourceDataSource ds = imageProvider.provide(header.getFullImage(), ImageOrigin.HEADER_FULL, type);
         streamDataSource(ds, req, resp);
     }
 

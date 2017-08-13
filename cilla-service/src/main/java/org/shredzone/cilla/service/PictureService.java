@@ -24,7 +24,6 @@ import javax.activation.DataSource;
 import org.shredzone.cilla.core.datasource.ResourceDataSource;
 import org.shredzone.cilla.core.model.GallerySection;
 import org.shredzone.cilla.core.model.Picture;
-import org.shredzone.cilla.ws.ImageProcessing;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 
 /**
@@ -98,10 +97,8 @@ public interface PictureService {
      *
      * @param picture
      *            {@link Picture} to stream
-     * @param process
-     *            {@link ImageProcessing} for processing images, {@code null} for original
      * @return {@link ResourceDataSource} of that picture
      */
-    ResourceDataSource getImage(Picture picture, ImageProcessing process) throws CillaServiceException;
+    ResourceDataSource getImage(Picture picture) throws CillaServiceException;
 
 }

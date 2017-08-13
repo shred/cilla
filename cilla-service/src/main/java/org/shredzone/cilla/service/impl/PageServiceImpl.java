@@ -45,8 +45,6 @@ import org.shredzone.cilla.core.repository.UserDao;
 import org.shredzone.cilla.service.CommentService;
 import org.shredzone.cilla.service.PageService;
 import org.shredzone.cilla.service.SecurityService;
-import org.shredzone.cilla.service.resource.ImageTools;
-import org.shredzone.cilla.ws.ImageProcessing;
 import org.shredzone.cilla.ws.SectionFacade;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.springframework.cache.annotation.CacheEvict;
@@ -68,7 +66,6 @@ public class PageServiceImpl implements PageService {
     private @Resource PageDao pageDao;
     private @Resource MediumDao mediumDao;
     private @Resource StoreDao storeDao;
-    private @Resource ImageTools imageProcessor;
     private @Resource CommentService commentService;
     private @Resource EventService eventService;
     private @Resource SecurityService securityService;
@@ -94,14 +91,14 @@ public class PageServiceImpl implements PageService {
     @CacheEvict(value = "tagCloud", allEntries = true)
     public void create(Page page) {
         pageDao.persist(page);
-        eventService.fireEvent(new Event<Page>(EventType.PAGE_NEW, page));
+        eventService.fireEvent(new Event<>(EventType.PAGE_NEW, page));
     }
 
     @Override
     @CacheEvict(value = "tagCloud", allEntries = true)
     public void update(Page page) {
         page.setModification(new Date());
-        eventService.fireEvent(new Event<Page>(EventType.PAGE_UPDATE, page));
+        eventService.fireEvent(new Event<>(EventType.PAGE_UPDATE, page));
     }
 
     @Override
@@ -109,18 +106,18 @@ public class PageServiceImpl implements PageService {
     public void remove(Page page) throws CillaServiceException {
         commentService.removeAll(page);
 
-        Set<Section> removables = new HashSet<Section>(page.getSections());
+        Set<Section> removables = new HashSet<>(page.getSections());
         for (Section section : removables) {
             sectionFacade.deleteSection(section);
         }
 
-        Set<Medium> removableMedia = new HashSet<Medium>(mediumDao.fetchAll(page));
+        Set<Medium> removableMedia = new HashSet<>(mediumDao.fetchAll(page));
         for (Medium medium : removableMedia) {
             removeMedium(page, medium);
         }
 
         pageDao.delete(page);
-        eventService.fireEvent(new Event<Page>(EventType.PAGE_DELETE, page));
+        eventService.fireEvent(new Event<>(EventType.PAGE_DELETE, page));
     }
 
     @Override
@@ -132,7 +129,7 @@ public class PageServiceImpl implements PageService {
 
             if (before != after) {
                 EventType type = (after ? EventType.PAGE_PUBLISH : EventType.PAGE_UNPUBLISH);
-                eventService.fireEvent(new Event<Page>(type, page));
+                eventService.fireEvent(new Event<>(type, page));
                 page.setPublishedState(after);
             }
         }
@@ -220,13 +217,9 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
-    public ResourceDataSource getMediumImage(Medium medium, ImageProcessing process) throws CillaServiceException {
+    public ResourceDataSource getMediumImage(Medium medium) throws CillaServiceException {
         try {
-            ResourceDataSource ds = storeDao.access(medium.getImage());
-            if (process != null) {
-                ds = imageProcessor.processImage(ds, process);
-            }
-            return ds;
+            return storeDao.access(medium.getImage());
         } catch (IOException ex) {
             throw new CillaServiceException(ex);
         }

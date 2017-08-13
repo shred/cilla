@@ -25,7 +25,6 @@ import javax.activation.DataHandler;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
-import org.shredzone.cilla.ws.ImageProcessing;
 import org.shredzone.cilla.ws.ListRange;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 
@@ -89,23 +88,17 @@ public interface HeaderWs {
      *
      * @param headerId
      *            Header ID to read the image for
-     * @param process
-     *            {@link ImageProcessing} for post processing, {@code null} for original
      * @return {@link DataHandler} containing the header image
      */
-    DataHandler getHeaderImage(@WebParam(name = "headerId") long headerId,
-            @WebParam(name = "process") ImageProcessing process) throws CillaServiceException;
+    DataHandler getHeaderImage(@WebParam(name = "headerId") long headerId) throws CillaServiceException;
 
     /**
      * Returns the full-scaled image shown at the header's detail page.
      *
      * @param headerId
      *            Header ID to read the full-scale image for
-     * @param process
-     *            {@link ImageProcessing} for post processing, {@code null} for original
      * @return {@link DataHandler} containing the header image
      */
-    DataHandler getFullImage(@WebParam(name = "headerId") long headerId,
-            @WebParam(name = "process") ImageProcessing process) throws CillaServiceException;
+    DataHandler getFullImage(@WebParam(name = "headerId") long headerId) throws CillaServiceException;
 
 }

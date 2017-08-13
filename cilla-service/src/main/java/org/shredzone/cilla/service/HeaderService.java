@@ -26,7 +26,6 @@ import javax.activation.DataSource;
 
 import org.shredzone.cilla.core.datasource.ResourceDataSource;
 import org.shredzone.cilla.core.model.Header;
-import org.shredzone.cilla.ws.ImageProcessing;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 
 /**
@@ -84,22 +83,18 @@ public interface HeaderService {
      *
      * @param header
      *            {@link Header} to get the image of
-     * @param process
-     *            {@link ImageProcessing} for processing images, {@code null} for original
      * @return {@link ResourceDataSource} of the image
      */
-    ResourceDataSource getHeaderImage(Header header, ImageProcessing process) throws CillaServiceException;
+    ResourceDataSource getHeaderImage(Header header) throws CillaServiceException;
 
     /**
      * Gets a scaled instance of the full sized header image.
      *
      * @param header
      *            {@link Header} to get the image of
-     * @param process
-     *            {@link ImageProcessing} for processing images, {@code null} for original
      * @return {@link ResourceDataSource} of the image
      */
-    ResourceDataSource getFullImage(Header header, ImageProcessing process) throws CillaServiceException;
+    ResourceDataSource getFullImage(Header header) throws CillaServiceException;
 
     /**
      * Removes a header, deleting its resources.

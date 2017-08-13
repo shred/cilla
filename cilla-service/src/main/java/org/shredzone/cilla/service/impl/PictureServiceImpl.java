@@ -41,7 +41,6 @@ import org.shredzone.cilla.service.CommentService;
 import org.shredzone.cilla.service.PictureService;
 import org.shredzone.cilla.service.resource.ExifAnalyzer;
 import org.shredzone.cilla.service.resource.ImageTools;
-import org.shredzone.cilla.ws.ImageProcessing;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +62,6 @@ public class PictureServiceImpl implements PictureService {
     private @Resource StoreDao storeDao;
     private @Resource EventService eventService;
     private @Resource PictureDao pictureDao;
-    private @Resource ImageTools imageProcessor;
     private @Resource CommentService commentService;
     private @Resource MimeTypeAnalyzer mimeTypeAnalyzer;
 
@@ -92,13 +90,13 @@ public class PictureServiceImpl implements PictureService {
             store.setName(source.getName());
             store.setLastModified(new Date());
 
-            Dimension dim = imageProcessor.analyzeDimension(source);
+            Dimension dim = ImageTools.analyzeDimension(source);
             if (dim != null) {
                 picture.setWidth(dim.width);
                 picture.setHeight(dim.height);
             }
 
-            ExifAnalyzer exif = imageProcessor.createExifAnalyzer(source);
+            ExifAnalyzer exif = ImageTools.createExifAnalyzer(source);
             if (exif != null) {
                 TimeZone tz = picture.getCreateTimeZone();
                 if (tz == null) {
@@ -123,7 +121,7 @@ public class PictureServiceImpl implements PictureService {
             throw new CillaServiceException("Could not read medium", ex);
         }
 
-        eventService.fireEvent(new Event<Picture>(EventType.GALLERY_PICTURE_NEW, picture));
+        eventService.fireEvent(new Event<>(EventType.GALLERY_PICTURE_NEW, picture));
     }
 
     @Override
@@ -140,13 +138,13 @@ public class PictureServiceImpl implements PictureService {
                 store.setName(source.getName());
                 store.setLastModified(new Date());
 
-                Dimension dim = imageProcessor.analyzeDimension(source);
+                Dimension dim = ImageTools.analyzeDimension(source);
                 if (dim != null) {
                     picture.setWidth(dim.width);
                     picture.setHeight(dim.height);
                 }
 
-                ExifAnalyzer exif = imageProcessor.createExifAnalyzer(source);
+                ExifAnalyzer exif = ImageTools.createExifAnalyzer(source);
                 if (exif != null) {
                     picture.setCreateDate(exif.getDateTime(picture.getCreateTimeZone()));
                     picture.setExifData(exif.getExifData());
@@ -164,7 +162,7 @@ public class PictureServiceImpl implements PictureService {
             }
         }
 
-        eventService.fireEvent(new Event<Picture>(EventType.GALLERY_PICTURE_UPDATE, picture));
+        eventService.fireEvent(new Event<>(EventType.GALLERY_PICTURE_UPDATE, picture));
     }
 
     @Override
@@ -190,7 +188,7 @@ public class PictureServiceImpl implements PictureService {
 
         try {
             pictureDao.delete(picture);
-            eventService.fireEvent(new Event<Picture>(EventType.GALLERY_PICTURE_DELETE, picture));
+            eventService.fireEvent(new Event<>(EventType.GALLERY_PICTURE_DELETE, picture));
         } catch (RuntimeException ex) {
             log.warn("Rolling back transaction, but medium of picture id {} is already deleted.", picture.getId());
             throw ex;
@@ -198,13 +196,9 @@ public class PictureServiceImpl implements PictureService {
     }
 
     @Override
-    public ResourceDataSource getImage(Picture picture, ImageProcessing process) throws CillaServiceException {
+    public ResourceDataSource getImage(Picture picture) throws CillaServiceException {
         try {
-            ResourceDataSource ds = storeDao.access(picture.getImage());
-            if (process != null) {
-                ds = imageProcessor.processImage(ds, process);
-            }
-            return ds;
+            return storeDao.access(picture.getImage());
         } catch (IOException ex) {
             throw new CillaServiceException(ex);
         }

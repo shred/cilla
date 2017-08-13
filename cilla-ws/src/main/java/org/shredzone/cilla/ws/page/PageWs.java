@@ -26,7 +26,6 @@ import javax.activation.DataHandler;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
-import org.shredzone.cilla.ws.ImageProcessing;
 import org.shredzone.cilla.ws.ListRange;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 
@@ -130,24 +129,18 @@ public interface PageWs {
      *
      * @param mediumId
      *            ID of the Medium
-     * @param process
-     *            {@link ImageProcessing} for post processing, {@code null} for original
      * @return {@link DataHandler} returning the medium
      */
-    DataHandler getMediumImage(@WebParam(name = "mediumId") long mediumId,
-            @WebParam(name = "process") ImageProcessing process) throws CillaServiceException;
+    DataHandler getMediumImage(@WebParam(name = "mediumId") long mediumId) throws CillaServiceException;
 
     /**
      * Returns the gallery picture.
      *
      * @param pictureId
      *            ID of the Picture
-     * @param process
-     *            {@link ImageProcessing} for post processing, {@code null} for original
      * @return {@link DataHandler} returning the picture
      */
-    DataHandler getGalleryImage(@WebParam(name = "pictureId") long pictureId,
-            @WebParam(name = "process") ImageProcessing process) throws CillaServiceException;
+    DataHandler getGalleryImage(@WebParam(name = "pictureId") long pictureId) throws CillaServiceException;
 
     /**
      * Proposes a list of subjects for the given text. No more than limit subjects will be

@@ -35,7 +35,7 @@ import javax.imageio.ImageIO;
 
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-import org.shredzone.cilla.ws.ImageProcessing;
+import org.shredzone.cilla.admin.processing.ImageProcessing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -86,24 +86,6 @@ public abstract class AbstractImageBean implements Serializable {
      */
     protected StreamedContent createEmptyStreamedContent() {
         return new DefaultStreamedContent(new ByteArrayInputStream(new byte[0]), "image/png");
-    }
-
-    /**
-     * Creates a {@link StreamedContent} for the given {@link DataHandler}.
-     *
-     * @param dh
-     *            {@link DataHandler} to stream
-     * @return {@link StreamedContent} containing that image
-     */
-    protected StreamedContent createStreamedContent(DataHandler dh) {
-        if (dh != null) {
-            try {
-                return new DefaultStreamedContent(dh.getInputStream(), dh.getContentType());
-            } catch (IOException ex) {
-                log.error("Exception while streaming content", ex);
-            }
-        }
-        return createEmptyStreamedContent();
     }
 
     /**

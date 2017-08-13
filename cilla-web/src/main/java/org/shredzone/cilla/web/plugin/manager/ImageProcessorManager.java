@@ -1,7 +1,7 @@
 /*
  * cilla - Blog Management System
  *
- * Copyright (C) 2012 Richard "Shred" Körber
+ * Copyright (C) 2017 Richard "Shred" Körber
  *   http://cilla.shredzone.org
  *
  * This program is free software: you can redistribute it and/or modify
@@ -26,47 +26,39 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
-import org.shredzone.cilla.web.plugin.ImageProcessingFactory;
-import org.shredzone.cilla.ws.ImageProcessing;
+import org.shredzone.cilla.web.plugin.ImageProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 /**
- * Manages {@link ImageProcessingFactory}.
+ * Manages all available image processors.
  *
  * @author Richard "Shred" Körber
  */
 @Component
-public class ImageProcessingManager {
+public class ImageProcessorManager {
 
     private @Resource ApplicationContext applicationContext;
 
-    private List<ImageProcessingFactory> factories;
+    private List<ImageProcessor> processors;
 
     /**
      * Sets up the manager.
      */
     @PostConstruct
     protected void setup() {
-        factories = Collections.unmodifiableList(
-                applicationContext.getBeansOfType(ImageProcessingFactory.class).values().stream()
-                    .sorted(new PriorityComparator<>(ImageProcessingFactory.class))
+        processors = Collections.unmodifiableList(
+                applicationContext.getBeansOfType(ImageProcessor.class).values().stream()
+                    .sorted(new PriorityComparator<>(ImageProcessor.class))
                     .collect(Collectors.toList()));
     }
 
     /**
-     * Creates an {@link ImageProcessing} of the given type.
-     *
-     * @param type
-     *            {@link ImageProcessing} type
-     * @return {@link ImageProcessing}, or {@code null} if there is no such type
+     * Gets a list of all {@link ImageProcessor} instances, in the order of their
+     * priority.
      */
-    public ImageProcessing createImageProcessing(String type) {
-        return factories.stream()
-                .map(ipf -> ipf.createImageProcessing(type))
-                .filter(it -> it != null)
-                .findFirst()
-                .orElse(null);
+    public List<ImageProcessor> getImageProcessors() {
+        return processors;
     }
 
 }

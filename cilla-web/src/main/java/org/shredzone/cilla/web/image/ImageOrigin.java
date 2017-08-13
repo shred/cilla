@@ -1,7 +1,7 @@
 /*
  * cilla - Blog Management System
  *
- * Copyright (C) 2012 Richard "Shred" Körber
+ * Copyright (C) 2017 Richard "Shred" Körber
  *   http://cilla.shredzone.org
  *
  * This program is free software: you can redistribute it and/or modify
@@ -17,31 +17,37 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.shredzone.cilla.service.resource;
+package org.shredzone.cilla.web.image;
 
-import java.io.Serializable;
+import org.shredzone.cilla.core.model.Header;
+import org.shredzone.cilla.core.model.Medium;
+import org.shredzone.cilla.core.model.Picture;
 
 /**
- * A serializable result of the {@link ImageProcessor}.
+ * Describes the image origin.
  *
  * @author Richard "Shred" Körber
  */
-public class ImageProcessorResult implements Serializable {
-    private static final long serialVersionUID = 3434161370077020102L;
-
-    private byte[] data;
-    private String contentType;
+public enum ImageOrigin {
 
     /**
-     * Processed image, as byte array.
+     * A {@link Picture} image.
      */
-    public byte[] getData()                     { return data; }
-    public void setData(byte[] data)            { this.data = data; }
+    PICTURE,
 
     /**
-     * Image's content type.
+     * A {@link Header} image ({@link Header#getHeaderImage()}).
      */
-    public String getContentType()              { return contentType; }
-    public void setContentType(String contentType) { this.contentType = contentType; }
+    HEADER,
+
+    /**
+     * A {@link Header} image ({@link Header#getFullImage()}).
+     */
+    HEADER_FULL,
+
+    /**
+     * A {@link Medium} image.
+     */
+    MEDIUM;
 
 }

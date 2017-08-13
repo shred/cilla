@@ -42,7 +42,6 @@ import org.shredzone.cilla.service.HeaderService;
 import org.shredzone.cilla.service.SecurityService;
 import org.shredzone.cilla.service.resource.ExifAnalyzer;
 import org.shredzone.cilla.service.resource.ImageTools;
-import org.shredzone.cilla.ws.ImageProcessing;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -61,7 +60,6 @@ public class HeaderServiceImpl implements HeaderService {
     private @Resource UserDao userDao;
     private @Resource HeaderDao headerDao;
     private @Resource StoreDao storeDao;
-    private @Resource ImageTools imageProcessor;
     private @Resource EventService eventService;
     private @Resource SecurityService securityService;
     private @Resource CommentService commentService;
@@ -97,13 +95,13 @@ public class HeaderServiceImpl implements HeaderService {
             fullStore.setName(fullImg.getName());
             fullStore.setLastModified(now);
 
-            Dimension dim = imageProcessor.analyzeDimension(headerImg);
+            Dimension dim = ImageTools.analyzeDimension(headerImg);
             if (dim != null) {
                 header.setWidth(dim.width);
                 header.setHeight(dim.height);
             }
 
-            ExifAnalyzer fullExif = imageProcessor.createExifAnalyzer(fullImg);
+            ExifAnalyzer fullExif = ImageTools.createExifAnalyzer(fullImg);
             header.setLocation(fullExif != null ? fullExif.getGeolocation() : null);
 
             headerDao.persist(header);
@@ -117,12 +115,12 @@ public class HeaderServiceImpl implements HeaderService {
             throw new CillaServiceException("Could not read medium", ex);
         }
 
-        eventService.fireEvent(new Event<Header>(EventType.HEADER_NEW, header));
+        eventService.fireEvent(new Event<>(EventType.HEADER_NEW, header));
     }
 
     @Override
     public void update(Header header) throws CillaServiceException {
-        eventService.fireEvent(new Event<Header>(EventType.HEADER_UPDATE, header));
+        eventService.fireEvent(new Event<>(EventType.HEADER_UPDATE, header));
     }
 
     @Override
@@ -141,7 +139,7 @@ public class HeaderServiceImpl implements HeaderService {
                 headerStore.setName(headerImg.getName());
                 headerStore.setLastModified(now);
 
-                Dimension dim = imageProcessor.analyzeDimension(headerImg);
+                Dimension dim = ImageTools.analyzeDimension(headerImg);
                 if (dim != null) {
                     header.setWidth(dim.width);
                     header.setHeight(dim.height);
@@ -160,14 +158,14 @@ public class HeaderServiceImpl implements HeaderService {
                 fullStore.setName(fullImg.getName());
                 fullStore.setLastModified(now);
 
-                ExifAnalyzer fullExif = imageProcessor.createExifAnalyzer(fullImg);
+                ExifAnalyzer fullExif = ImageTools.createExifAnalyzer(fullImg);
                 header.setLocation(fullExif != null ? fullExif.getGeolocation() : null);
 
                 ResourceDataSource fullDs = storeDao.access(header.getFullImage());
                 FileCopyUtils.copy(fullImg.getInputStream(), fullDs.getOutputStream());
             }
 
-            eventService.fireEvent(new Event<Header>(EventType.HEADER_UPDATE, header));
+            eventService.fireEvent(new Event<>(EventType.HEADER_UPDATE, header));
         } catch (IOException ex) {
             throw new CillaServiceException("Could not read medium", ex);
         }
@@ -182,7 +180,7 @@ public class HeaderServiceImpl implements HeaderService {
             storeDao.access(header.getFullImage()).delete();
             storeDao.access(header.getHeaderImage()).delete();
             headerDao.delete(header);
-            eventService.fireEvent(new Event<Header>(EventType.HEADER_DELETE, header));
+            eventService.fireEvent(new Event<>(EventType.HEADER_DELETE, header));
         } catch (IOException ex) {
             throw new CillaServiceException("Could not delete header media", ex);
         }
@@ -199,26 +197,18 @@ public class HeaderServiceImpl implements HeaderService {
     }
 
     @Override
-    public ResourceDataSource getHeaderImage(Header header, ImageProcessing process) throws CillaServiceException {
+    public ResourceDataSource getHeaderImage(Header header) throws CillaServiceException {
         try {
-            ResourceDataSource ds = storeDao.access(header.getHeaderImage());
-            if (process != null) {
-                ds = imageProcessor.processImage(ds, process);
-            }
-            return ds;
+            return storeDao.access(header.getHeaderImage());
         } catch (IOException ex) {
             throw new CillaServiceException(ex);
         }
     }
 
     @Override
-    public ResourceDataSource getFullImage(Header header, ImageProcessing process) throws CillaServiceException {
+    public ResourceDataSource getFullImage(Header header) throws CillaServiceException {
         try {
-            ResourceDataSource ds = storeDao.access(header.getFullImage());
-            if (process != null) {
-                ds = imageProcessor.processImage(ds, process);
-            }
-            return ds;
+            return storeDao.access(header.getFullImage());
         } catch (IOException ex) {
             throw new CillaServiceException(ex);
         }

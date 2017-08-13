@@ -31,7 +31,6 @@ import org.shredzone.cilla.core.model.Header;
 import org.shredzone.cilla.core.repository.HeaderDao;
 import org.shredzone.cilla.service.HeaderService;
 import org.shredzone.cilla.ws.AbstractWs;
-import org.shredzone.cilla.ws.ImageProcessing;
 import org.shredzone.cilla.ws.ListRange;
 import org.shredzone.cilla.ws.assembler.HeaderAssembler;
 import org.shredzone.cilla.ws.exception.CillaNotFoundException;
@@ -129,23 +128,23 @@ public class HeaderWsImpl extends AbstractWs implements HeaderWs {
     }
 
     @Override
-    public DataHandler getHeaderImage(long headerId, ImageProcessing process) throws CillaServiceException {
+    public DataHandler getHeaderImage(long headerId) throws CillaServiceException {
         Header hdr = headerDao.fetch(headerId);
         if (hdr == null) {
             throw new CillaNotFoundException("header", headerId);
         }
 
-        return new DataHandler(headerService.getHeaderImage(hdr, process));
+        return new DataHandler(headerService.getHeaderImage(hdr));
     }
 
     @Override
-    public DataHandler getFullImage(long headerId, ImageProcessing process) throws CillaServiceException {
+    public DataHandler getFullImage(long headerId) throws CillaServiceException {
         Header hdr = headerDao.fetch(headerId);
         if (hdr == null) {
             throw new CillaNotFoundException("header", headerId);
         }
 
-        return new DataHandler(headerService.getFullImage(hdr, process));
+        return new DataHandler(headerService.getFullImage(hdr));
     }
 
 }

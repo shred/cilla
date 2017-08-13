@@ -23,7 +23,7 @@ import javax.annotation.Resource;
 
 import org.primefaces.model.StreamedContent;
 import org.shredzone.cilla.admin.AbstractImageBean;
-import org.shredzone.cilla.ws.ImageProcessing;
+import org.shredzone.cilla.admin.processing.ImageProcessing;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.cilla.ws.header.HeaderWs;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -59,7 +59,7 @@ public class HeaderImageBean extends AbstractImageBean {
     public StreamedContent getThumbnail() throws CillaServiceException {
         Long renderId = getFacesRenderId();
         if (renderId != null) {
-            return createStreamedContent(headerWs.getHeaderImage(renderId, previewIp));
+            return createStreamedContent(headerWs.getHeaderImage(renderId), previewIp);
         } else {
             return createEmptyStreamedContent();
         }
@@ -72,7 +72,7 @@ public class HeaderImageBean extends AbstractImageBean {
         if (headerBean.getHeader().getUploadHeaderFile() != null) {
             return createStreamedContent(headerBean.getHeader().getUploadHeaderFile(), previewIp);
         } else if (headerBean.getHeader().isPersisted()) {
-            return createStreamedContent(headerWs.getHeaderImage(headerBean.getHeader().getId(), previewIp));
+            return createStreamedContent(headerWs.getHeaderImage(headerBean.getHeader().getId()), previewIp);
         } else {
             return createEmptyStreamedContent();
         }
@@ -85,7 +85,7 @@ public class HeaderImageBean extends AbstractImageBean {
         if (headerBean.getHeader().getUploadFullFile() != null) {
             return createStreamedContent(headerBean.getHeader().getUploadFullFile(), thumbIp);
         } else if (headerBean.getHeader().isPersisted()) {
-            return createStreamedContent(headerWs.getFullImage(headerBean.getHeader().getId(), thumbIp));
+            return createStreamedContent(headerWs.getFullImage(headerBean.getHeader().getId()), thumbIp);
         } else {
             return createEmptyStreamedContent();
         }

@@ -24,46 +24,17 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.activation.DataSource;
-import javax.annotation.Resource;
 import javax.imageio.ImageIO;
-
-import org.shredzone.cilla.core.datasource.ResourceDataSource;
-import org.shredzone.cilla.ws.ImageProcessing;
-import org.shredzone.cilla.ws.exception.CillaServiceException;
-import org.springframework.stereotype.Component;
 
 /**
  * Tool for handling images.
  *
  * @author Richard "Shred" Körber
  */
-@Component
-public class ImageTools {
+public final class ImageTools {
 
-    private @Resource ImageProcessor imageProcessor;
-
-    /**
-     * Processes an image.
-     *
-     * @param src
-     *            Original image
-     * @param process
-     *            {@link ImageProcessing} with processing data, or {@code null} to keep
-     *            the original
-     * @return Processed image
-     */
-    public ResourceDataSource processImage(ResourceDataSource src, ImageProcessing process)
-    throws CillaServiceException {
-        if (process == null) {
-            return src;
-        }
-
-        try {
-            ImageProcessorResult result = imageProcessor.process(src, src.getId(), process);
-            return new ByteArrayResourceDataSource(src, process.toString(), result.getContentType(), result.getData());
-        } catch (IOException ex) {
-            throw new CillaServiceException(ex);
-        }
+    private ImageTools() {
+        // utility class without constructor
     }
 
     /**
@@ -73,12 +44,8 @@ public class ImageTools {
      *            {@link DataSource} to analyze
      * @return {@link ExifAnalyzer}
      */
-    public ExifAnalyzer createExifAnalyzer(DataSource src) throws CillaServiceException {
-        try {
-            return ExifAnalyzer.create(src.getInputStream());
-        } catch (IOException ex) {
-            throw new CillaServiceException(ex);
-        }
+    public static ExifAnalyzer createExifAnalyzer(DataSource src) throws IOException {
+        return ExifAnalyzer.create(src.getInputStream());
     }
 
     /**
@@ -88,13 +55,9 @@ public class ImageTools {
      *            {@link DataSource} to analyze
      * @return image dimensions
      */
-    public Dimension analyzeDimension(DataSource src) throws CillaServiceException {
-        try {
-            BufferedImage image = ImageIO.read(src.getInputStream());
-            return (image != null ? new Dimension(image.getWidth(), image.getHeight()) : null);
-        } catch (IOException ex) {
-            throw new CillaServiceException(ex);
-        }
+    public static Dimension analyzeDimension(DataSource src) throws IOException {
+        BufferedImage image = ImageIO.read(src.getInputStream());
+        return (image != null ? new Dimension(image.getWidth(), image.getHeight()) : null);
     }
 
 }

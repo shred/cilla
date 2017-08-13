@@ -24,7 +24,7 @@ import javax.annotation.Resource;
 
 import org.primefaces.model.StreamedContent;
 import org.shredzone.cilla.admin.AbstractImageBean;
-import org.shredzone.cilla.ws.ImageProcessing;
+import org.shredzone.cilla.admin.processing.ImageProcessing;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.cilla.ws.page.MediumDto;
 import org.shredzone.cilla.ws.page.PageWs;
@@ -66,7 +66,7 @@ public class MediaImageBean extends AbstractImageBean {
         if (dh != null) {
             return createStreamedContent(dh, thumbIp);
         } else if (dto.isPersisted()) {
-            return createStreamedContent(pageWs.getMediumImage(dto.getId(), thumbIp));
+            return createStreamedContent(pageWs.getMediumImage(dto.getId()), thumbIp);
         } else {
             return createEmptyStreamedContent();
         }

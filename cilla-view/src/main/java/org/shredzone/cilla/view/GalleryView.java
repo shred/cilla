@@ -33,9 +33,9 @@ import org.shredzone.cilla.service.PictureService;
 import org.shredzone.cilla.view.annotation.Framed;
 import org.shredzone.cilla.view.model.PictureInfoModel;
 import org.shredzone.cilla.web.comment.CommentFormHandler;
+import org.shredzone.cilla.web.image.ImageProvider;
+import org.shredzone.cilla.web.image.ImageOrigin;
 import org.shredzone.cilla.web.page.ResourceLockManager;
-import org.shredzone.cilla.web.plugin.manager.ImageProcessingManager;
-import org.shredzone.cilla.ws.ImageProcessing;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.commons.view.annotation.Optional;
 import org.shredzone.commons.view.annotation.PathPart;
@@ -58,8 +58,8 @@ public class GalleryView extends AbstractView {
 
     private @Resource PageService pageService;
     private @Resource PictureService pictureService;
-    private @Resource ResourceLockManager unlockService;
-    private @Resource ImageProcessingManager imageProcessingManager;
+    private @Resource ResourceLockManager resourceLockManager;
+    private @Resource ImageProvider imageProvider;
     private @Resource CommentFormHandler commentFormHandler;
 
     /**
@@ -145,22 +145,15 @@ public class GalleryView extends AbstractView {
             @Optional @PathPart("#type") String type,
             HttpServletRequest req, HttpServletResponse resp)
     throws ViewException, CillaServiceException {
-        // Take measures against deep linking of the pictures. No need to check page
-        // permissions, as the picture is not unlocked if the visitor had no access
-        // to the page.
-        if (!unlockService.isUnlocked(req.getSession(), picture)) {
+        if (!pageService.isVisible(picture.getGallery().getPage())) {
             throw new ErrorResponseException(HttpServletResponse.SC_FORBIDDEN);
         }
 
-        ImageProcessing ip = null;
-        if (type != null) {
-            ip = imageProcessingManager.createImageProcessing(type);
-            if (ip == null) {
-                throw new ErrorResponseException(HttpServletResponse.SC_NOT_FOUND);
-            }
+        if (!resourceLockManager.isUnlocked(req.getSession(), picture)) {
+            throw new ErrorResponseException(HttpServletResponse.SC_FORBIDDEN);
         }
 
-        ResourceDataSource ds = pictureService.getImage(picture, ip);
+        ResourceDataSource ds = imageProvider.provide(picture.getImage(), ImageOrigin.PICTURE, type);
         streamDataSource(ds, req, resp);
     }
 

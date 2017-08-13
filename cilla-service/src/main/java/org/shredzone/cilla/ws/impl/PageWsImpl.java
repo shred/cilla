@@ -48,7 +48,6 @@ import org.shredzone.cilla.service.PageService;
 import org.shredzone.cilla.service.PictureService;
 import org.shredzone.cilla.service.link.LinkService;
 import org.shredzone.cilla.ws.AbstractWs;
-import org.shredzone.cilla.ws.ImageProcessing;
 import org.shredzone.cilla.ws.ListRange;
 import org.shredzone.cilla.ws.SectionFacade;
 import org.shredzone.cilla.ws.assembler.CategoryAssembler;
@@ -201,23 +200,23 @@ public class PageWsImpl extends AbstractWs implements PageWs {
     }
 
     @Override
-    public DataHandler getMediumImage(long mediumId, ImageProcessing process) throws CillaServiceException {
+    public DataHandler getMediumImage(long mediumId) throws CillaServiceException {
         Medium medium = mediumDao.fetch(mediumId);
         if (medium == null) {
             throw new CillaNotFoundException("medium", mediumId);
         }
 
-        return new DataHandler(pageService.getMediumImage(medium, process));
+        return new DataHandler(pageService.getMediumImage(medium));
     }
 
     @Override
-    public DataHandler getGalleryImage(long pictureId, ImageProcessing process) throws CillaServiceException {
+    public DataHandler getGalleryImage(long pictureId) throws CillaServiceException {
         Picture pic = pictureDao.fetch(pictureId);
         if (pic == null) {
             throw new CillaNotFoundException("picture", pictureId);
         }
 
-        return new DataHandler(pictureService.getImage(pic, process));
+        return new DataHandler(pictureService.getImage(pic));
     }
 
     @Override

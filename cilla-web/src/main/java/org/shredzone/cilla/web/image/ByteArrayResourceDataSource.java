@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.shredzone.cilla.service.resource;
+package org.shredzone.cilla.web.image;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -46,20 +46,27 @@ public class ByteArrayResourceDataSource implements ResourceDataSource {
      *
      * @param origin
      *            {@link ResourceDataSource} that is referenced by this instance
+     * @param source
+     *            {@link ImageOrigin} of the image data
      * @param type
-     *            A type string describing the kind of data (e.g. "thumbnail")
+     *            A type string describing the kind of data (e.g. "thumbnail"), may
+     *            be {@code null}.
      * @param contentType
      *            Content type of the data
      * @param data
      *            data
      */
-    public ByteArrayResourceDataSource(ResourceDataSource origin, String type,
-            String contentType, byte[] data) {
+    public ByteArrayResourceDataSource(ResourceDataSource origin, ImageOrigin source,
+            String type, String contentType, byte[] data) {
         this.origin = origin;
         this.contentType = contentType;
         this.data = data;
 
-        this.etag = String.format("%s-%08X", origin.getEtag(), type.hashCode());
+        if (type != null) {
+            this.etag = String.format("%s-%02X-%08X", origin.getEtag(), source.hashCode() % 0x100, type.hashCode());
+        } else {
+            this.etag = String.format("%s-%02X", origin.getEtag(), source.hashCode() % 0x100);
+        }
     }
 
     /**

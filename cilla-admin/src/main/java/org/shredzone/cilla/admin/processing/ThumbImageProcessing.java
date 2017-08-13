@@ -21,8 +21,6 @@ package org.shredzone.cilla.admin.processing;
 
 import javax.annotation.PostConstruct;
 
-import org.shredzone.cilla.ws.ImageProcessing;
-import org.shredzone.cilla.ws.ImageType;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

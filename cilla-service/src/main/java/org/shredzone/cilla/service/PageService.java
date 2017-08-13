@@ -24,7 +24,6 @@ import javax.activation.DataSource;
 import org.shredzone.cilla.core.datasource.ResourceDataSource;
 import org.shredzone.cilla.core.model.Medium;
 import org.shredzone.cilla.core.model.Page;
-import org.shredzone.cilla.ws.ImageProcessing;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 
 /**
@@ -132,11 +131,9 @@ public interface PageService {
      *
      * @param medium
      *            {@link Medium} to stream
-     * @param process
-     *            {@link ImageProcessing} for processing images, {@code null} for original
      * @return {@link ResourceDataSource} of that picture
      */
-    ResourceDataSource getMediumImage(Medium medium, ImageProcessing process) throws CillaServiceException;
+    ResourceDataSource getMediumImage(Medium medium) throws CillaServiceException;
 
     /**
      * Updates the published state of all pages, triggering the appropriate events where
