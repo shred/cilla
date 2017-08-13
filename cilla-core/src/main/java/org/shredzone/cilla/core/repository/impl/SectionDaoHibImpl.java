@@ -41,7 +41,6 @@ public class SectionDaoHibImpl extends BaseDaoHibImpl<Section> implements Sectio
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    @Transactional(readOnly = true)
     @Override
     public Section fetch(long id) {
         return getCurrentSession().get(Section.class, id);
@@ -55,7 +54,6 @@ public class SectionDaoHibImpl extends BaseDaoHibImpl<Section> implements Sectio
         return q.uniqueResult().longValue();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Section> fetchAll() {
         return getCurrentSession()
@@ -69,7 +67,6 @@ public class SectionDaoHibImpl extends BaseDaoHibImpl<Section> implements Sectio
         return getCurrentSession().createCriteria(Section.class);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Criteria criteria(Class<? extends Section> type) {
         return getCurrentSession().createCriteria(type);

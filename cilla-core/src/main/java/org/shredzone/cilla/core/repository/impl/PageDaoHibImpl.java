@@ -50,7 +50,6 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
 
     private @Value("${page.order}") PageOrder pageOrder;
 
-    @Transactional(readOnly = true)
     @Override
     public Page fetch(long id) {
         return getCurrentSession().get(Page.class, id);
@@ -70,7 +69,6 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
         return getCurrentSession().createCriteria(Page.class);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Page fetchByName(String name) {
         return (Page) getCurrentSession()
@@ -79,13 +77,11 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
                 .uniqueResult();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Page> fetchAll() {
         return getCurrentSession().createQuery("FROM Page", Page.class).list();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Page> fetchAllPublic() {
         return getCurrentSession().createQuery("FROM Page" +
@@ -204,7 +200,6 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
                 .uniqueResult();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Page> fetchSameSubject(Page page) {
         if (page.getSubject() == null) {
@@ -244,7 +239,6 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
                 .list();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Page> fetchBadPublishState() {
         return getCurrentSession()

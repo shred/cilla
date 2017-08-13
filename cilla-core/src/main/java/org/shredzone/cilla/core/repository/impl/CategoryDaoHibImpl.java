@@ -42,13 +42,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class CategoryDaoHibImpl extends BaseDaoHibImpl<Category> implements CategoryDao {
 
-    @Transactional(readOnly = true)
     @Override
     public Category fetch(long id) {
         return getCurrentSession().get(Category.class, id);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Category> fetchAll() {
         return getCurrentSession().createQuery("FROM Category ORDER BY name", Category.class).list();
@@ -77,13 +75,11 @@ public class CategoryDaoHibImpl extends BaseDaoHibImpl<Category> implements Cate
         return result;
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Category> fetchRootCategories() {
         return getCurrentSession().createQuery("FROM Category WHERE parent_id IS NULL ORDER BY sequence", Category.class).list();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Collection<Category> fetchRootCategoriesOfPage(Page page) {
         return page.getCategories().stream()
@@ -91,7 +87,6 @@ public class CategoryDaoHibImpl extends BaseDaoHibImpl<Category> implements Cate
                 .collect(Collectors.toSet());
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Collection<Category> fetchCategoryTree(Category root) {
         Set<Category> result = new HashSet<>();

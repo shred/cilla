@@ -37,7 +37,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class TagDaoHibImpl extends BaseDaoHibImpl<Tag> implements TagDao {
 
-    @Transactional(readOnly = true)
     @Override
     public Tag fetch(long id) {
         return getCurrentSession().get(Tag.class, id);
@@ -57,14 +56,12 @@ public class TagDaoHibImpl extends BaseDaoHibImpl<Tag> implements TagDao {
         return getCurrentSession().createCriteria(Tag.class);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Tag> fetchAll() {
         return getCurrentSession().createQuery("FROM Tag ORDER BY name", Tag.class)
                 .list();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Tag fetchByName(String name) {
         return getCurrentSession()

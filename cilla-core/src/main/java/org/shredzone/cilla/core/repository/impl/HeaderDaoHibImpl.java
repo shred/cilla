@@ -43,7 +43,6 @@ public class HeaderDaoHibImpl extends BaseDaoHibImpl<Header> implements HeaderDa
 
     private final Random rnd = new Random();  // no secure random generator required
 
-    @Transactional(readOnly = true)
     @Override
     public Header fetch(long id) {
         return getCurrentSession().get(Header.class, id);
@@ -63,7 +62,6 @@ public class HeaderDaoHibImpl extends BaseDaoHibImpl<Header> implements HeaderDa
         return getCurrentSession().createCriteria(Header.class);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Header> fetchAll() {
         return getCurrentSession()
@@ -71,7 +69,6 @@ public class HeaderDaoHibImpl extends BaseDaoHibImpl<Header> implements HeaderDa
                 .list();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Header> fetchEnabled() {
         return getCurrentSession()
@@ -80,7 +77,6 @@ public class HeaderDaoHibImpl extends BaseDaoHibImpl<Header> implements HeaderDa
                 .list();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Header fetchByName(String name) {
         return (Header) getCurrentSession()
@@ -89,7 +85,6 @@ public class HeaderDaoHibImpl extends BaseDaoHibImpl<Header> implements HeaderDa
                 .uniqueResult();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Header fetchRandomHeader() {
         Criterion restriction = Restrictions.eq("enabled", Boolean.TRUE);

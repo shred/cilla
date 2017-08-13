@@ -44,7 +44,6 @@ public class StoreDaoHibImpl extends BaseDaoHibImpl<Store> implements StoreDao {
 
     private @Value("${resource.path}") String basePath;
 
-    @Transactional(readOnly = true)
     @Override
     public Store fetch(long id) {
         return getCurrentSession().get(Store.class, id);
@@ -58,7 +57,6 @@ public class StoreDaoHibImpl extends BaseDaoHibImpl<Store> implements StoreDao {
         return q.uniqueResult().longValue();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Store> fetchAll() {
         return getCurrentSession()

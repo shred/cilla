@@ -37,7 +37,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class PictureDaoHibImpl extends BaseDaoHibImpl<Picture> implements PictureDao {
 
-    @Transactional(readOnly = true)
     @Override
     public Picture fetch(long id) {
         return getCurrentSession().get(Picture.class, id);
@@ -51,7 +50,6 @@ public class PictureDaoHibImpl extends BaseDaoHibImpl<Picture> implements Pictur
         return q.uniqueResult().longValue();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Picture> fetchAll() {
         return getCurrentSession()

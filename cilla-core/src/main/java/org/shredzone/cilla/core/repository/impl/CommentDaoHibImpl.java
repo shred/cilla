@@ -45,7 +45,6 @@ public class CommentDaoHibImpl extends BaseDaoHibImpl<Comment> implements Commen
         super.persist(data);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Comment fetch(long id) {
         return getCurrentSession().get(Comment.class, id);
@@ -63,13 +62,11 @@ public class CommentDaoHibImpl extends BaseDaoHibImpl<Comment> implements Commen
         return q.uniqueResult().longValue();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Comment> fetchAll() {
         return getCurrentSession().createQuery("FROM Comment ORDER BY creation", Comment.class).list();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Comment> fetchReplies(Comment comment) {
         return getCurrentSession()

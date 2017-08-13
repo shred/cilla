@@ -39,7 +39,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class AuthorityDaoHibImpl extends BaseDaoHibImpl<Authority> implements AuthorityDao {
 
-    @Transactional(readOnly = true)
     @Override
     public Authority fetch(long id) {
         return getCurrentSession().get(Authority.class, id);
@@ -53,7 +52,6 @@ public class AuthorityDaoHibImpl extends BaseDaoHibImpl<Authority> implements Au
         return q.uniqueResult().longValue();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Authority> fetchAll() {
         return getCurrentSession().createNamedQuery("authority.all", Authority.class).list();

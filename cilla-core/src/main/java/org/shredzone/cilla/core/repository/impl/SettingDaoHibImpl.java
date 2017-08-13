@@ -37,7 +37,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class SettingDaoHibImpl extends BaseDaoHibImpl<Setting> implements SettingDao {
 
-    @Transactional(readOnly = true)
     @Override
     public Setting fetch(long id) {
         return getCurrentSession().get(Setting.class, id);
@@ -51,7 +50,6 @@ public class SettingDaoHibImpl extends BaseDaoHibImpl<Setting> implements Settin
         return q.uniqueResult().longValue();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Setting> fetchAll() {
         return getCurrentSession().createQuery("FROM Setting ORDER BY key", Setting.class).list();
@@ -63,7 +61,6 @@ public class SettingDaoHibImpl extends BaseDaoHibImpl<Setting> implements Settin
         return getCurrentSession().createCriteria(Setting.class);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Setting fetchByKey(String key) {
         return (Setting) getCurrentSession()
@@ -72,7 +69,6 @@ public class SettingDaoHibImpl extends BaseDaoHibImpl<Setting> implements Settin
                 .uniqueResult();
     }
 
-    @Transactional
     @Override
     public Setting createOrUpdate(String key, String value) {
         Setting setting = fetchByKey(key);

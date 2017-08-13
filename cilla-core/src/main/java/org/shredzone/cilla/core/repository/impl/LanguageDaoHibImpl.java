@@ -38,7 +38,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class LanguageDaoHibImpl extends BaseDaoHibImpl<Language> implements LanguageDao {
 
-    @Transactional(readOnly = true)
     @Override
     public Language fetch(long id) {
         return getCurrentSession().get(Language.class, id);
@@ -52,7 +51,6 @@ public class LanguageDaoHibImpl extends BaseDaoHibImpl<Language> implements Lang
         return q.uniqueResult().longValue();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Language> fetchAll() {
         return getCurrentSession().createQuery("FROM Language ORDER BY locale", Language.class).list();
@@ -64,7 +62,6 @@ public class LanguageDaoHibImpl extends BaseDaoHibImpl<Language> implements Lang
         return getCurrentSession().createCriteria(Language.class);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Language fetchForLocale(Locale locale) {
         return (Language) getCurrentSession()

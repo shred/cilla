@@ -38,7 +38,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class MediumDaoHibImpl extends BaseDaoHibImpl<Medium> implements MediumDao {
 
-    @Transactional(readOnly = true)
     @Override
     public Medium fetch(long id) {
         return getCurrentSession().get(Medium.class, id);
@@ -52,7 +51,6 @@ public class MediumDaoHibImpl extends BaseDaoHibImpl<Medium> implements MediumDa
         return q.uniqueResult().longValue();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Medium> fetchAll() {
         return getCurrentSession()
@@ -75,7 +73,6 @@ public class MediumDaoHibImpl extends BaseDaoHibImpl<Medium> implements MediumDa
         return q.uniqueResult().longValue();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Medium> fetchAll(Page page) {
         return getCurrentSession()
@@ -84,7 +81,6 @@ public class MediumDaoHibImpl extends BaseDaoHibImpl<Medium> implements MediumDa
                 .list();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Medium fetchByName(Page page, String name) {
         Query<Medium> q = getCurrentSession()

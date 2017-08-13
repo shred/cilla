@@ -39,7 +39,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserDaoHibImpl extends BaseDaoHibImpl<User> implements UserDao {
 
-    @Transactional(readOnly = true)
     @Override
     public User fetch(long id) {
         return getCurrentSession().get(User.class, id);
@@ -59,7 +58,6 @@ public class UserDaoHibImpl extends BaseDaoHibImpl<User> implements UserDao {
         return getCurrentSession().createCriteria(User.class);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<User> fetchAll() {
         return getCurrentSession()
@@ -67,7 +65,6 @@ public class UserDaoHibImpl extends BaseDaoHibImpl<User> implements UserDao {
                 .list();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public User fetchByLogin(String login) {
         return getCurrentSession()

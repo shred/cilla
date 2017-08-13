@@ -37,7 +37,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class RoleDaoHibImpl extends BaseDaoHibImpl<Role> implements RoleDao {
 
-    @Transactional(readOnly = true)
     @Override
     public Role fetch(long id) {
         return getCurrentSession().get(Role.class, id);
@@ -57,7 +56,6 @@ public class RoleDaoHibImpl extends BaseDaoHibImpl<Role> implements RoleDao {
         return getCurrentSession().createCriteria(Role.class);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Role> fetchAll() {
         return getCurrentSession().createQuery("FROM Role ORDER BY name", Role.class).list();
