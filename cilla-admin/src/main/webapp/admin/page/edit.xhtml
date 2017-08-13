@@ -56,7 +56,7 @@
 
               <h:outputLabel for="pageTeaser" value="#{msg['page.edit.teaser']}:" />
               <h:panelGroup>
-                <h:inputTextarea id="pageTeaser" value="#{pageBean.page.teaser}" rows="20" cols="80" required="true" requiredMessage="#{msg['validator.required']}" />
+                <h:inputTextarea style="font-size:120%;font-family:monospace" id="pageTeaser" value="#{pageBean.page.teaser}" rows="20" cols="80" required="true" requiredMessage="#{msg['validator.required']}" />
                 <p:message for="pageTeaser" />
               </h:panelGroup>
             </h:panelGrid>

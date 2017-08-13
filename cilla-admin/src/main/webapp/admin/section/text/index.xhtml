@@ -37,7 +37,7 @@
 
         <h:outputLabel for="sectionText" value="#{msg['section.text.text']}:" />
         <h:panelGroup>
-          <h:inputTextarea id="sectionText" value="#{section.text}" rows="20" cols="80" required="true" requiredMessage="#{msg['validator.required']}" />
+          <h:inputTextarea style="font-size:120%;font-family:monospace" id="sectionText" value="#{section.text}" rows="20" cols="80" required="true" requiredMessage="#{msg['validator.required']}" />
           <h:message for="sectionText" errorClass="error" />
         </h:panelGroup>
       </h:panelGrid>
