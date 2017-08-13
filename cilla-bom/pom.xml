@@ -29,10 +29,10 @@
         <hibernate.search.version>5.7.0.Final</hibernate.search.version>
         <hibernate.validator.version>5.4.1.Final</hibernate.validator.version>
         <javax.activation.version>1.1.1</javax.activation.version>
-        <javax.el.version>2.2</javax.el.version>
-        <javax.jsp.version>2.1.2</javax.jsp.version>
-        <javax.jstl.version>1.2</javax.jstl.version>
-        <javax.servlet.version>2.5</javax.servlet.version>
+        <javax.el.version>3.0.0</javax.el.version>
+        <javax.jsp.version>2.3.1</javax.jsp.version>
+        <javax.jstl.version>1.2.1</javax.jstl.version>
+        <javax.servlet.version>3.1.0</javax.servlet.version>
         <javax.validation.version>1.1.0.Final</javax.validation.version>
         <jboss.el.version>2.0.2.CR1</jboss.el.version>
         <jgroups.version>4.0.1.Final</jgroups.version>
@@ -182,6 +182,10 @@
                     <exclusion>
                         <groupId>javax.mail</groupId>
                         <artifactId>mail</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.servlet</groupId>
+                        <artifactId>javax.servlet-api</artifactId>
                     </exclusion>
                     <exclusion>
                         <groupId>org.codehaus.woodstox</groupId>
@@ -408,22 +412,22 @@
             </dependency>
             <dependency>
                 <groupId>javax.el</groupId>
-                <artifactId>el-api</artifactId>
+                <artifactId>javax.el-api</artifactId>
                 <version>${javax.el.version}</version>
             </dependency>
             <dependency>
                 <groupId>javax.servlet</groupId>
-                <artifactId>servlet-api</artifactId>
+                <artifactId>javax.servlet-api</artifactId>
                 <version>${javax.servlet.version}</version>
             </dependency>
             <dependency>
                 <groupId>javax.servlet.jsp</groupId>
-                <artifactId>jsp-api</artifactId>
+                <artifactId>javax.servlet.jsp-api</artifactId>
                 <version>${javax.jsp.version}</version>
             </dependency>
             <dependency>
                 <groupId>javax.servlet.jsp.jstl</groupId>
-                <artifactId>jstl-api</artifactId>
+                <artifactId>javax.servlet.jsp.jstl-api</artifactId>
                 <version>${javax.jstl.version}</version>
             </dependency>
             <dependency>

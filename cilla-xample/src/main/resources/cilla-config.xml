@@ -28,13 +28,41 @@
             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
             http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
 
-    <jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/CillaDS"/>
-    <jee:jndi-lookup id="dataSourceProperties" jndi-name="java:comp/env/hibernate/CillaDS"/>
-    <jee:jndi-lookup id="cillaProperties" jndi-name="java:comp/env/cilla/Properties"/>
-    <jee:jndi-lookup id="cillaMailProperties" jndi-name="java:comp/env/cilla/MailProperties"/>
-
-    <context:property-placeholder properties-ref="cillaProperties" order="1" ignore-unresolvable="true"/>
+    <context:property-placeholder location="file:///opt/cilla/conf/cilla.properties" order="1" ignore-unresolvable="true" ignore-resource-not-found="true"/>
     <context:property-placeholder location="classpath:/cilla-config.properties" order="100"/>
+
+    <bean id="cillaMailProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+              <value>classpath:cilla-mail.properties</value>
+              <value>file:///opt/cilla/conf/cilla.properties</value>
+            </list>
+        </property>
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+
+    <bean id="dataSourceProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+              <value>classpath:cilla-datasource.properties</value>
+              <value>file:///opt/cilla/conf/cilla.properties</value>
+            </list>
+        </property>
+        <property name="ignoreResourceNotFound" value="true"/>
+    </bean>
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="org.postgresql.Driver"/>
+        <property name="jdbcUrl" value="jdbc:postgresql://${db.host}/${db.dbname}"/>
+        <property name="user" value="${db.user}"/>
+        <property name="password" value="${db.password}"/>
+        <property name="acquireIncrement" value="5" />
+        <property name="initialPoolSize" value="5" />
+        <property name="minPoolSize" value="5" />
+        <property name="maxPoolSize" value="15" />
+        <property name="testConnectionOnCheckout" value="true" />
+        <property name="preferredTestQuery" value="SELECT 1" />
+    </bean>
 
     <bean id="freemarkerConfiguration" class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean">
         <property name="templateLoaderPath" value="classpath:notification/"/>

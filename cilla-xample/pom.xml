@@ -35,36 +35,39 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>9.2.2.v20140723</version>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <port>8090</port>
+                    <path>/</path>
+                </configuration>
                 <dependencies>
                     <dependency>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-jndi</artifactId>
-                        <version>9.2.2.v20140723</version>
+                        <groupId>com.mchange</groupId>
+                        <artifactId>c3p0</artifactId>
+                        <version>0.9.5.2</version>
                         <scope>runtime</scope>
                     </dependency>
                     <dependency>
-                        <groupId>commons-dbcp</groupId>
-                        <artifactId>commons-dbcp</artifactId>
-                        <version>1.4</version>
-                        <scope>runtime</scope>
-                    </dependency>
-                    <dependency>
-                        <groupId>postgresql</groupId>
+                        <groupId>org.postgresql</groupId>
                         <artifactId>postgresql</artifactId>
-                        <version>9.1-901.jdbc4</version>
+                        <version>42.1.1</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>javax.mail</groupId>
+                        <artifactId>mail</artifactId>
+                        <version>1.4.5</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                    <dependency>
+                        <groupId>javax.servlet</groupId>
+                        <artifactId>jstl</artifactId>
+                        <version>1.2</version>
                         <scope>runtime</scope>
                     </dependency>
                 </dependencies>
-                <configuration>
-                    <httpConnector>
-                        <port>8090</port>
-                    </httpConnector>
-                    <reload>manual</reload>
-                    <jettyXml>${basedir}/src/etc/jetty.xml</jettyXml>
-                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -112,7 +115,7 @@
 
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
-            <artifactId>jsp-api</artifactId>
+            <artifactId>javax.servlet.jsp-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>

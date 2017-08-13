@@ -32,7 +32,7 @@
     <c:forEach var="cat" items="${rootCategories}">
       <li><cilla:link category="${cat}"><c:out value="${cat.name}"/></cilla:link></li>
     </c:forEach>
-    <li><cilla:link><cilla:param name="#pagename" value="contact"/><fmt:message key="sidebar.menu.contact"/></cilla:link></li>
+    <li><cilla:link><cilla:param name="#pagename" value="${'contact'}"/><fmt:message key="sidebar.menu.contact"/></cilla:link></li>
   </ul>
 </div>
 </div>

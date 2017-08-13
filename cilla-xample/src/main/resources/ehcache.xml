@@ -27,7 +27,7 @@
          updateCheck="true" monitoring="autodetect"
          dynamicConfig="true">
 
-    <diskStore path="/var/local/cilla/ehcache"/>
+    <diskStore path="/opt/cilla/ehcache"/>
 
     <defaultCache
         maxElementsInMemory="10000"
