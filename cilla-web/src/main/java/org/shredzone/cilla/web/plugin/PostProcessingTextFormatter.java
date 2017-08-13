@@ -52,7 +52,9 @@ public interface PostProcessingTextFormatter {
      *            {@link StringBuilder} instance, its contents <em>may</em> have changed
      *            after invocation, and this instance should not be used any more.
      * @param referenceResolver
-     *            A {@link ReferenceResolver} for resolving references to links and images
+     *            A {@link ReferenceResolver} for resolving references to links and
+     *            images. May be {@code null} if the text format does not permit reference
+     *            resolving.
      * @return {@link CharSequence} with the filtered text.
      */
     CharSequence apply(CharSequence t, ReferenceResolver referenceResolver);

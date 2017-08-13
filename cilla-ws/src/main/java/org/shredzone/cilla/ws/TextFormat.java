@@ -65,7 +65,7 @@ public enum TextFormat {
     TEXTILE(false),
 
     /**
-     * Markdown formatting.
+     * Markdown formatting. Potentially harmful, because it accepts plain HTML!
      */
     MARKDOWN(true);
 

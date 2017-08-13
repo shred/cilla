@@ -114,16 +114,16 @@ public class TextFormatterImpl implements TextFormatter {
             case PLAIN:
                 return HTML_ESCAPE_FILTER
                         .andThen(PARAGRAPH_FILTER)
-                        .andThen(curryFormatters(linkBuilderSupplier));
+                        .andThen(curryFormatters(null));
 
             case SIMPLIFIED:
                 return HTML_SIMPLIFY_FILTER
                         .andThen(PARAGRAPH_FILTER)
-                        .andThen(curryFormatters(linkBuilderSupplier));
+                        .andThen(curryFormatters(null));
 
             case PARAGRAPHED:
                 return PARAGRAPH_FILTER
-                        .andThen(curryFormatters(linkBuilderSupplier));
+                        .andThen(curryFormatters(null));
 
             case PREFORMATTED:
                 return HTML_ESCAPE_FILTER
@@ -136,7 +136,7 @@ public class TextFormatterImpl implements TextFormatter {
                 TextileFilter tf = new TextileFilter();
                 tf.setAnalyzer(rr);
 
-                return tf.andThen(curryFormatters(linkBuilderSupplier));
+                return tf.andThen(curryFormatters(rr));
 
             case MARKDOWN:
                 ReferenceResolver rrmd = applicationContext.getBean(ReferenceResolver.class);
@@ -145,7 +145,7 @@ public class TextFormatterImpl implements TextFormatter {
                 MarkdownFilter mf = new MarkdownFilter();
                 mf.setAnalyzer(rrmd);
 
-                return mf.andThen(curryFormatters(linkBuilderSupplier));
+                return mf.andThen(curryFormatters(rrmd));
 
             default:
                 throw new IllegalArgumentException("Cannot handle format " + format);
@@ -155,16 +155,14 @@ public class TextFormatterImpl implements TextFormatter {
     /**
      * Curries the postProcessingTextFormatters to use the {@link LinkBuilder}.
      *
-     * @param linkBuilderSupplier
-     *            {@link LinkBuilder} to be used, may be {@code null}
+     * @param referenceResolver
+     *            {@link ReferenceResolver} to be used. May be {@code null} if the
+     *            text format used does not allow reference resolving.
      * @return A filter that applies all postProcessingTextFormatters using the given
      *         linkBuilderSupplier
      */
-    private Function<CharSequence, CharSequence> curryFormatters(Supplier<LinkBuilder> linkBuilderSupplier) {
-        ReferenceResolver rr = applicationContext.getBean(ReferenceResolver.class);
-        rr.setLinkBuilderSupplier(linkBuilderSupplier);
-
-        return t -> postProcessingTextFormatters.apply(t, rr);
+    private Function<CharSequence, CharSequence> curryFormatters(ReferenceResolver referenceResolver) {
+        return t -> postProcessingTextFormatters.apply(t, referenceResolver);
     }
 
 }
