@@ -54,7 +54,7 @@ public class ImageProcessorServiceImpl implements ImageProcessorService {
             return null;
         } catch (IOException ex) {
             throw new ViewException("Could not process image, " + origin.name() + " "
-                + image.getId() + ", type=" + type);
+                + image.getId() + ", type=" + type, ex);
         }
     }
 
