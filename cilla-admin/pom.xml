@@ -41,6 +41,7 @@
                 <configuration>
                     <port>8091</port>
                     <path>/</path>
+                    <uriEncoding>utf-8</uriEncoding>
                 </configuration>
             </plugin>
         </plugins>
