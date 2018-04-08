@@ -28,8 +28,6 @@ import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.Query;
 import org.hibernate.Criteria;
-import org.hibernate.ScrollMode;
-import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.internal.CriteriaImpl;
@@ -73,19 +71,13 @@ public class SearchDaoHibImpl implements SearchDao {
     public int count(Query query, Criteria crit) {
         assertCriteriaEntity(crit);
 
-        int count = 0;
-
         FullTextSession fullTextSession = getFullTextSession();
         FullTextQuery fq = fullTextSession.createFullTextQuery(query, Page.class);
         fq.setCriteriaQuery(crit != null ? crit : pageDao.criteria());
 
-        ScrollableResults sr = fq.scroll(ScrollMode.FORWARD_ONLY);
-        if (sr.last()) {
-            count = sr.getRowNumber();
-        }
-        sr.close();
-
-        return count;
+        // This is the only way to reliable get a result counter if restricting
+        // criteria apply.
+        return fq.list().size();
     }
 
     @SuppressWarnings("unchecked")
