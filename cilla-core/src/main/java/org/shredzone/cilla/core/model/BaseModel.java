@@ -29,6 +29,7 @@ import javax.persistence.Version;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.id.enhanced.SequenceStyleGenerator;
+import org.hibernate.search.annotations.DocumentId;
 
 /**
  * Represents the superclass of all other entities. It contains the primary key and a
@@ -47,6 +48,7 @@ public abstract class BaseModel implements Serializable {
      * Primary key.
      */
     @Id
+    @DocumentId
     @GeneratedValue(generator = "per-entity-sequence")
     @GenericGenerator(name = "per-entity-sequence",
         strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",

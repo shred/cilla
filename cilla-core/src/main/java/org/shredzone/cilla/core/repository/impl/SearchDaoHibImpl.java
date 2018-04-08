@@ -60,7 +60,7 @@ public class SearchDaoHibImpl implements SearchDao {
 
         MultiFieldQueryParser parser = new MultiFieldQueryParser(
                         new String[] {"text", "title"},
-                        fullTextSession.getSearchFactory().getAnalyzer("content"));
+                        fullTextSession.getSearchFactory().getAnalyzer(Page.ANALYZER));
 
         if (locale != null) {
             parser.setLocale(locale);

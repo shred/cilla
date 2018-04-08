@@ -48,11 +48,23 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.apache.lucene.analysis.core.LowerCaseFilterFactory;
+import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilterFactory;
+import org.apache.lucene.analysis.standard.StandardTokenizerFactory;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.SortNatural;
+import org.hibernate.search.annotations.Analyzer;
+import org.hibernate.search.annotations.AnalyzerDef;
+import org.hibernate.search.annotations.ClassBridge;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Store;
+import org.hibernate.search.annotations.TokenFilterDef;
+import org.hibernate.search.annotations.TokenizerDef;
 import org.shredzone.cilla.core.model.embed.FormattedText;
 import org.shredzone.cilla.core.model.is.Commentable;
+import org.shredzone.cilla.core.search.PageBridge;
 import org.shredzone.cilla.core.util.DateUtils;
 
 /**
@@ -64,8 +76,23 @@ import org.shredzone.cilla.core.util.DateUtils;
  */
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Indexed
+@AnalyzerDef(name = Page.ANALYZER,
+    tokenizer = @TokenizerDef(factory = StandardTokenizerFactory.class),
+    filters = {
+        @TokenFilterDef(factory = LowerCaseFilterFactory.class),
+        @TokenFilterDef(factory = ASCIIFoldingFilterFactory.class),
+    }
+)
+@ClassBridge(name = "text",
+    impl = PageBridge.class,
+    store = Store.YES,
+    analyzer = @Analyzer(definition = Page.ANALYZER)
+)
 public class Page extends BaseModel implements Commentable {
     private static final long serialVersionUID = 1887769955448340721L;
+
+    public static final String ANALYZER = "pageAnalyzer";
 
     private Set<Category> categories = new HashSet<>();
     private SortedSet<Tag> tags = new TreeSet<>();
@@ -156,6 +183,7 @@ public class Page extends BaseModel implements Commentable {
      * Page title.
      */
     @Column(nullable = false)
+    @Field(store = Store.YES, analyzer = @Analyzer(definition = Page.ANALYZER))
     public String getTitle()                    { return title; }
     public void setTitle(String title)          { this.title = title; }
 

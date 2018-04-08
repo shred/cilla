@@ -25,8 +25,8 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.core.SimpleAnalyzer;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.highlight.Formatter;
@@ -34,6 +34,8 @@ import org.apache.lucene.search.highlight.Fragmenter;
 import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.QueryScorer;
 import org.hibernate.Criteria;
+import org.hibernate.SessionFactory;
+import org.hibernate.search.Search;
 import org.shredzone.cilla.core.model.Page;
 import org.shredzone.cilla.core.repository.SearchDao;
 import org.shredzone.cilla.core.search.PageBridge;
@@ -58,6 +60,7 @@ public class LuceneSearchStrategy extends AbstractSearchStrategy {
 
     private @Resource SearchDao searchDao;
     private @Resource SearchResultRenderer searchResultRenderer;
+    private @Resource SessionFactory sessionFactory;
 
     @Override
     public void count(SearchResultImpl result) throws CillaServiceException {
@@ -112,9 +115,13 @@ public class LuceneSearchStrategy extends AbstractSearchStrategy {
 
         PageBridge bridge = new PageBridge();
 
+        Analyzer pageAnalyzer = Search.getFullTextSession(sessionFactory.getCurrentSession())
+                        .getSearchFactory()
+                        .getAnalyzer(Page.ANALYZER);
+
         return result.stream()
                 .map(bridge::objectToString)
-                .map(plain -> highlight(plain, hilighter))
+                .map(plain -> highlight(plain, hilighter, pageAnalyzer))
                 .collect(Collectors.toList());
     }
 
@@ -125,11 +132,13 @@ public class LuceneSearchStrategy extends AbstractSearchStrategy {
      *            Plain text content to highlight
      * @param hilighter
      *            {@link Highlighter} to use
-     * @return Highlighted content
+     * @param pageAnalyzer
+     *            This session's {@link Page} {@link Analyzer}.
+     * @return Highlighted content, or original content if there was nothing to highlight
      */
-    private String highlight(String content, Highlighter hilighter) {
-        try (SimpleAnalyzer analyzer = new SimpleAnalyzer()) {
-            TokenStream tokenStream = analyzer.tokenStream("text", new StringReader(content));
+    private String highlight(String content, Highlighter hilighter, Analyzer pageAnalyzer) {
+        try {
+            TokenStream tokenStream = pageAnalyzer.tokenStream("text", new StringReader(content));
 
             StringBuilder sb = new StringBuilder();
             sb.append(searchResultRenderer.getHeader());
@@ -140,6 +149,12 @@ public class LuceneSearchStrategy extends AbstractSearchStrategy {
                             searchResultRenderer.getSeparator()
             ));
             sb.append(searchResultRenderer.getFooter());
+
+            if (sb.length() == 0) {
+                // Nothing to highlight? Just return the content.
+                return content;
+            }
+
             return sb.toString();
         } catch (Exception ex) {
             // Just ignore the error and return the unhighlighted text
