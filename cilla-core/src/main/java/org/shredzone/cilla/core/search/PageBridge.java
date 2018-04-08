@@ -53,7 +53,7 @@ public class PageBridge implements StringBridge {
 
         sb.append(PlainTextFormatter.format(page.getTeaser()));
         sb.append(' ');
-        sb.append(page.getSections().stream().parallel()
+        sb.append(page.getSections().stream()
                 .map(this::formatSection)
                 .collect(joining(" ")));
 
@@ -66,7 +66,7 @@ public class PageBridge implements StringBridge {
 
         } else if (section instanceof GallerySection) {
             GallerySection gs = (GallerySection) section;
-            return gs.getPictures().stream().parallel()
+            return gs.getPictures().stream()
                     .map(pic -> PlainTextFormatter.format(pic.getCaption()))
                     .collect(joining(" "));
 

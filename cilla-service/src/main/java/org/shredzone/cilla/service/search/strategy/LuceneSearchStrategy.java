@@ -112,7 +112,7 @@ public class LuceneSearchStrategy extends AbstractSearchStrategy {
 
         PageBridge bridge = new PageBridge();
 
-        return result.stream().parallel()
+        return result.stream()
                 .map(bridge::objectToString)
                 .map(plain -> highlight(plain, hilighter))
                 .collect(Collectors.toList());
