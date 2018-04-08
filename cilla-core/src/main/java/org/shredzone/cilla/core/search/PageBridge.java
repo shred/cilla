@@ -21,6 +21,8 @@ package org.shredzone.cilla.core.search;
 
 import static java.util.stream.Collectors.joining;
 
+import java.util.Objects;
+
 import org.hibernate.search.bridge.StringBridge;
 import org.shredzone.cilla.core.model.GallerySection;
 import org.shredzone.cilla.core.model.Page;
@@ -68,6 +70,7 @@ public class PageBridge implements StringBridge {
             GallerySection gs = (GallerySection) section;
             return gs.getPictures().stream()
                     .map(pic -> PlainTextFormatter.format(pic.getCaption()))
+                    .filter(Objects::nonNull)
                     .collect(joining(" "));
 
         } else {
