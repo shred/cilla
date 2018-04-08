@@ -14,7 +14,7 @@
     <properties>
         <szo.commons.captcha.version>1.0</szo.commons.captcha.version>
         <szo.commons.taglib.version>2.1</szo.commons.taglib.version>
-        <szo.commons.text.version>2.1</szo.commons.text.version>
+        <szo.commons.text.version>2.2</szo.commons.text.version>
         <szo.commons.view.version>1.2</szo.commons.view.version>
 
         <aspectj.version>1.8.10</aspectj.version>
@@ -38,7 +38,7 @@
         <jgroups.version>4.0.1.Final</jgroups.version>
         <jsf.version>2.1.20-15</jsf.version>
         <junit.version>[4,)</junit.version>
-        <lucene.version>5.5.4</lucene.version>
+        <lucene.version>5.5.5</lucene.version>
         <metadataextractor.version>2.10.1</metadataextractor.version>
         <mockito.version>2.7.21</mockito.version>
         <primefaces.version>3.5</primefaces.version>
