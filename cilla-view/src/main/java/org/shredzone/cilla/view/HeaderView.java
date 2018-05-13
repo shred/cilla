@@ -28,14 +28,13 @@ import org.shredzone.cilla.core.model.Header;
 import org.shredzone.cilla.service.HeaderService;
 import org.shredzone.cilla.view.annotation.Framed;
 import org.shredzone.cilla.web.comment.CommentFormHandler;
-import org.shredzone.cilla.web.image.ImageProvider;
 import org.shredzone.cilla.web.image.ImageOrigin;
+import org.shredzone.cilla.web.image.ImageProvider;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.commons.view.annotation.Optional;
 import org.shredzone.commons.view.annotation.PathPart;
 import org.shredzone.commons.view.annotation.View;
 import org.shredzone.commons.view.annotation.ViewHandler;
-import org.shredzone.commons.view.exception.ErrorResponseException;
 import org.shredzone.commons.view.exception.ViewException;
 import org.springframework.stereotype.Component;
 
@@ -63,7 +62,7 @@ public class HeaderView extends AbstractView {
             HttpServletRequest req, HttpServletResponse resp)
     throws ViewException {
         if (!headerService.isVisible(header)) {
-            throw new ErrorResponseException(HttpServletResponse.SC_FORBIDDEN);
+            requirePreviewRole();
         }
 
         commentFormHandler.handleComment(header, req);
@@ -83,7 +82,7 @@ public class HeaderView extends AbstractView {
             HttpServletRequest req)
     throws ViewException {
         if (!headerService.isVisible(header)) {
-            throw new ErrorResponseException(HttpServletResponse.SC_FORBIDDEN);
+            requirePreviewRole();
         }
 
         req.setAttribute("headerImage", header);
@@ -113,7 +112,7 @@ public class HeaderView extends AbstractView {
             HttpServletRequest req, HttpServletResponse resp)
     throws ViewException, CillaServiceException {
         if (!headerService.isVisible(header)) {
-            throw new ErrorResponseException(HttpServletResponse.SC_FORBIDDEN);
+            requirePreviewRole();
         }
 
         ResourceDataSource ds = imageProvider.provide(header.getHeaderImage(), ImageOrigin.HEADER, type);
@@ -131,7 +130,7 @@ public class HeaderView extends AbstractView {
             HttpServletRequest req, HttpServletResponse resp)
     throws ViewException, CillaServiceException {
         if (!headerService.isVisible(header)) {
-            throw new ErrorResponseException(HttpServletResponse.SC_FORBIDDEN);
+            requirePreviewRole();
         }
 
         ResourceDataSource ds = imageProvider.provide(header.getFullImage(), ImageOrigin.HEADER_FULL, type);

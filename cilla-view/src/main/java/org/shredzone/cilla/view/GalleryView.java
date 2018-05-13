@@ -42,7 +42,6 @@ import org.shredzone.commons.view.annotation.PathPart;
 import org.shredzone.commons.view.annotation.Qualifier;
 import org.shredzone.commons.view.annotation.View;
 import org.shredzone.commons.view.annotation.ViewHandler;
-import org.shredzone.commons.view.exception.ErrorResponseException;
 import org.shredzone.commons.view.exception.PageNotFoundException;
 import org.shredzone.commons.view.exception.ViewException;
 import org.springframework.beans.factory.annotation.Value;
@@ -78,7 +77,7 @@ public class GalleryView extends AbstractView {
             HttpServletRequest req, HttpServletResponse resp)
     throws ViewException {
         if (!pageService.isVisible(section.getPage())) {
-            throw new ErrorResponseException(HttpServletResponse.SC_FORBIDDEN);
+            requirePreviewRole();
         }
 
         commentFormHandler.handleComment(picture, req, section.isCommentable());
@@ -119,7 +118,7 @@ public class GalleryView extends AbstractView {
             HttpServletRequest req, HttpServletResponse resp)
     throws ViewException {
         if (!pageService.isVisible(section.getPage())) {
-            throw new ErrorResponseException(HttpServletResponse.SC_FORBIDDEN);
+            requirePreviewRole();
         }
 
         if (!section.getPictures().contains(picture)) {
@@ -149,11 +148,11 @@ public class GalleryView extends AbstractView {
             HttpServletRequest req, HttpServletResponse resp)
     throws ViewException, CillaServiceException {
         if (!pageService.isVisible(picture.getGallery().getPage())) {
-            throw new ErrorResponseException(HttpServletResponse.SC_FORBIDDEN);
+            requirePreviewRole();
         }
 
         if (deepLinkingProtection && !resourceLockManager.isUnlocked(req.getSession(), picture)) {
-            throw new ErrorResponseException(HttpServletResponse.SC_FORBIDDEN);
+            requirePreviewRole();
         }
 
         ResourceDataSource ds = imageProvider.provide(picture.getImage(), ImageOrigin.PICTURE, type);

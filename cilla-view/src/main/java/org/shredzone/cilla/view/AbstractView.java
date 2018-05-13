@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.shredzone.cilla.core.datasource.ResourceDataSource;
 import org.shredzone.cilla.core.model.Page;
 import org.shredzone.cilla.service.PageService;
+import org.shredzone.cilla.service.SecurityService;
 import org.shredzone.cilla.service.link.LinkService;
 import org.shredzone.cilla.web.page.ResourceLockManager;
 import org.shredzone.commons.view.exception.ErrorResponseException;
@@ -51,10 +52,26 @@ public abstract class AbstractView {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private @Value("${resource.expires}") long cacheExpirySeconds;
+    private @Value("${resource.loginIfInvisible}") boolean loginIfInvisible;
 
     private @Resource PageService pageService;
     private @Resource ResourceLockManager unlockService;
     private @Resource LinkService linkService;
+    private @Resource SecurityService securityService;
+
+    /**
+     * Makes sure the current user has {@code ROLE_PREVIEW}.
+     * <p>
+     * However, if {@code loginIfInvisible} is set to {@code false}, a 404 Not Found is
+     * always rendered instead.
+     */
+    protected void requirePreviewRole() throws ErrorResponseException {
+        if (loginIfInvisible) {
+            securityService.requireRole("ROLE_PREVIEW");
+        } else if (!securityService.hasRole("ROLE_PREVIEW")) {
+            throw new ErrorResponseException(HttpServletResponse.SC_NOT_FOUND);
+        }
+    }
 
     /**
      * Handles page restrictions.

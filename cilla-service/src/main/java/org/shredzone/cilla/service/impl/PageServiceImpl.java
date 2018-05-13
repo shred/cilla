@@ -135,10 +135,7 @@ public class PageServiceImpl implements PageService {
 
     @Override
     public boolean isVisible(Page page) {
-        if (!page.isPublished()) {
-            securityService.requireRole("ROLE_PREVIEW");
-        }
-        return true;
+        return page.isPublished();
     }
 
     @Override

@@ -42,7 +42,6 @@ import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.commons.view.annotation.PathPart;
 import org.shredzone.commons.view.annotation.View;
 import org.shredzone.commons.view.annotation.ViewHandler;
-import org.shredzone.commons.view.exception.ErrorResponseException;
 import org.shredzone.commons.view.exception.ViewException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -101,7 +100,7 @@ public class PageView extends AbstractView {
     private String renderPage(Page page, HttpServletRequest req, HttpServletResponse resp)
     throws ViewException, CillaServiceException {
         if (!pageService.isVisible(page)) {
-            throw new ErrorResponseException(HttpServletResponse.SC_FORBIDDEN);
+            requirePreviewRole();
         }
 
         if (handleRestricted(page, req)) {

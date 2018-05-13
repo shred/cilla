@@ -32,15 +32,14 @@ import org.shredzone.cilla.core.repository.MediumDao;
 import org.shredzone.cilla.service.PageService;
 import org.shredzone.cilla.service.link.LinkBuilder;
 import org.shredzone.cilla.view.annotation.Framed;
-import org.shredzone.cilla.web.image.ImageProvider;
 import org.shredzone.cilla.web.image.ImageOrigin;
+import org.shredzone.cilla.web.image.ImageProvider;
 import org.shredzone.cilla.web.plugin.LocalLinkResolver;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.commons.view.annotation.Optional;
 import org.shredzone.commons.view.annotation.PathPart;
 import org.shredzone.commons.view.annotation.View;
 import org.shredzone.commons.view.annotation.ViewHandler;
-import org.shredzone.commons.view.exception.ErrorResponseException;
 import org.shredzone.commons.view.exception.PageNotFoundException;
 import org.shredzone.commons.view.exception.ViewException;
 import org.springframework.stereotype.Component;
@@ -70,7 +69,7 @@ public class MediaView extends AbstractView implements LocalLinkResolver {
             HttpServletRequest req, HttpServletResponse resp)
     throws ViewException, CillaServiceException {
         if (!pageService.isVisible(page)) {
-            throw new ErrorResponseException(HttpServletResponse.SC_FORBIDDEN);
+            requirePreviewRole();
         }
 
         Medium media = mediaDao.fetchByName(page, name);
@@ -93,7 +92,7 @@ public class MediaView extends AbstractView implements LocalLinkResolver {
             HttpServletRequest req, HttpServletResponse resp)
     throws ViewException {
         if (!pageService.isVisible(page)) {
-            throw new ErrorResponseException(HttpServletResponse.SC_FORBIDDEN);
+            requirePreviewRole();
         }
 
         Medium media = mediaDao.fetchByName(page, name);
