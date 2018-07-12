@@ -81,7 +81,7 @@ public class PaginatorStrategyImpl extends AbstractPaginatorRendererStrategy {
     }
 
     @Override
-    public void pageLink(Appendable out, String url, int current, int selected) throws IOException {
+    public void pageLink(Appendable out, String url, int current, int selected, int last) throws IOException {
         if (needsSeparator) {
             out.append("&middot;&middot;&middot;");
             needsSeparator = false;

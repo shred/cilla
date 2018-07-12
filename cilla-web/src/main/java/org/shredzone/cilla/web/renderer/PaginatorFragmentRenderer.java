@@ -78,7 +78,7 @@ public class PaginatorFragmentRenderer {
         // page links
         int current = 0, last;
         do {
-            strategy.pageLink(out, getUrl(resp, filter, current, qualifier), current, selected);
+            strategy.pageLink(out, getUrl(resp, filter, current, qualifier), current, selected, model.getPageCount() - 1);
             last = current;
             current = strategy.computeNextPage(model, current);
         } while (current >= 0 && current != last);

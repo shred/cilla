@@ -99,7 +99,9 @@ public interface PaginatorRendererStrategy {
      *            Current page number (starting from 0)
      * @param selected
      *            Selected page number (starting from 0)
+     * @param last
+     *            Last page number (starting from 0)
      */
-    void pageLink(Appendable out, String url, int current, int selected) throws IOException;
+    void pageLink(Appendable out, String url, int current, int selected, int last) throws IOException;
 
 }
