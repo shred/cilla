@@ -34,7 +34,7 @@ public class EmbedSection extends Section {
 
     private String embedUrl;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1024)
     public String getEmbedUrl()                 { return embedUrl; }
     public void setEmbedUrl(String embedUrl)    { this.embedUrl = embedUrl; }
 
