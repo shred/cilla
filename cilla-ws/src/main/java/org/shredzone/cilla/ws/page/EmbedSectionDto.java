@@ -1,7 +1,7 @@
 /*
  * cilla - Blog Management System
  *
- * Copyright (C) 2012 Richard "Shred" Körber
+ * Copyright (C) 2018 Richard "Shred" Körber
  *   http://cilla.shredzone.org
  *
  * This program is free software: you can redistribute it and/or modify
@@ -19,22 +19,35 @@
  */
 package org.shredzone.cilla.ws.page;
 
-import javax.xml.bind.annotation.XmlSeeAlso;
-
-import org.shredzone.cilla.ws.BaseDto;
+import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * A DTO representing a Section.
+ * An Embed Section.
  *
  * @author Richard "Shred" Körber
  */
-@XmlSeeAlso({TextSectionDto.class, GallerySectionDto.class, EmbedSectionDto.class})
-public abstract class SectionDto extends BaseDto {
-    private static final long serialVersionUID = -3748015437581707563L;
+@XmlRootElement
+public class EmbedSectionDto extends SectionDto {
+    private static final long serialVersionUID = 6845763957616970677L;
 
-    /**
-     * Type of this section.
-     */
-    public abstract String getType();
+    private String embedUrl;
+
+    @Override
+    public String getType()                     { return "embed"; }
+
+    @NotNull
+    public String getEmbedUrl()                 { return embedUrl; }
+    public void setEmbedUrl(String embedUrl)    { this.embedUrl = embedUrl; }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null && obj instanceof EmbedSectionDto && super.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode() ^ super.hashCode();
+    }
 
 }
