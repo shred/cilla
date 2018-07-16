@@ -28,7 +28,8 @@ import org.shredzone.cilla.ws.BaseDto;
  *
  * @author Richard "Shred" Körber
  */
-@XmlSeeAlso({TextSectionDto.class, GallerySectionDto.class, EmbedSectionDto.class})
+@XmlSeeAlso({TextSectionDto.class, GallerySectionDto.class, EmbedSectionDto.class,
+    VideoSectionDto.class})
 public abstract class SectionDto extends BaseDto {
     private static final long serialVersionUID = -3748015437581707563L;
 
