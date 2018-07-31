@@ -57,6 +57,7 @@ public class PictureDto extends BaseDto implements Geolocated {
     private DataHandler uploadFile;
     private List<String> tags = new ArrayList<>();
     private boolean commentable;
+    private String hashId;
 
     public Date getCreateDate()                 { return createDate; }
     public void setCreateDate(Date createDate)  { this.createDate = createDate; }
@@ -99,6 +100,10 @@ public class PictureDto extends BaseDto implements Geolocated {
     @XmlMimeType("application/octet-stream")
     public DataHandler getUploadFile()          { return uploadFile; }
     public void setUploadFile(DataHandler uploadFile) { this.uploadFile = uploadFile; }
+
+    @NotNull
+    public String getHashId()                   { return hashId; }
+    public void setHashId(String hashId)        { this.hashId = hashId; }
 
     @Override
     public boolean equals(Object obj) {

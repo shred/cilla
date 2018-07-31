@@ -39,7 +39,6 @@ import org.shredzone.cilla.web.page.ResourceLockManager;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.commons.view.annotation.Optional;
 import org.shredzone.commons.view.annotation.PathPart;
-import org.shredzone.commons.view.annotation.Qualifier;
 import org.shredzone.commons.view.annotation.View;
 import org.shredzone.commons.view.annotation.ViewHandler;
 import org.shredzone.commons.view.exception.PageNotFoundException;
@@ -68,12 +67,10 @@ public class GalleryView extends AbstractView {
      * Shows a single picture of a gallery.
      */
     @Framed
-    @View(pattern = "/show/gallery/${section.id}/picture/${picture.id}.html", signature = {"section", "picture"})
-    @View(pattern = "/ajax/gallery/${section.id}/picture/${picture.id}.html", signature = {"section", "picture"}, qualifier = "ajax")
+    @View(pattern = "/show/gallery/${section.id}/picture/${picture.hashId}.html", signature = {"section", "picture"})
     public String galleryPictureView(
             @PathPart("section.id") GallerySection section,
-            @PathPart("picture.id") Picture picture,
-            @Qualifier String qualifier,
+            @PathPart("picture.hashId") Picture picture,
             HttpServletRequest req, HttpServletResponse resp)
     throws ViewException {
         if (!pageService.isVisible(section.getPage())) {
@@ -100,21 +97,17 @@ public class GalleryView extends AbstractView {
         req.setAttribute("picture", picture);
         req.setAttribute("info", new PictureInfoModel(pictureList, current));
 
-        if ("ajax".equals(qualifier)) {
-            return "section/gallery/picture-ajax.jsp";
-        } else {
-            return "section/gallery/picture.jsp";
-        }
+        return "section/gallery/picture.jsp";
     }
 
     /**
      * Shows a map of the location the picture was taken.
      */
     @Framed
-    @View(pattern = "/show/gallery/${section.id}/map/${picture.id}.html", name="gallery.map")
+    @View(pattern = "/show/gallery/${section.id}/map/${picture.hashId}.html", name="gallery.map")
     public String galleryMapView(
             @PathPart("section.id") GallerySection section,
-            @PathPart("picture.id") Picture picture,
+            @PathPart("picture.hashId") Picture picture,
             HttpServletRequest req, HttpServletResponse resp)
     throws ViewException {
         if (!pageService.isVisible(section.getPage())) {
@@ -140,10 +133,10 @@ public class GalleryView extends AbstractView {
     /**
      * Streams the picture of a gallery.
      */
-    @View(pattern = "/picture/${picture.id}-${#type}.${#suffix(picture.image.contentType)}", signature = {"picture", "#type"})
-    @View(pattern = "/picture/${picture.id}.${#suffix(picture.image.contentType)}", signature = {"picture"})
+    @View(pattern = "/picture/${picture.hashId}-${#type}.${#suffix(picture.image.contentType)}", signature = {"picture", "#type"})
+    @View(pattern = "/picture/${picture.hashId}.${#suffix(picture.image.contentType)}", signature = {"picture"})
     public void pictureView(
-            @PathPart("picture.id") Picture picture,
+            @PathPart("picture.hashId") Picture picture,
             @Optional @PathPart("#type") String type,
             HttpServletRequest req, HttpServletResponse resp)
     throws ViewException, CillaServiceException {

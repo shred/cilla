@@ -63,4 +63,12 @@ public class PictureDaoHibImpl extends BaseDaoHibImpl<Picture> implements Pictur
         return getCurrentSession().createCriteria(Picture.class);
     }
 
+    @Override
+    public Picture fetchByHashId(String hashId) {
+        return getCurrentSession()
+                .createQuery("FROM Picture WHERE hashId=:hashId", Picture.class)
+                .setParameter("hashId", hashId)
+                .uniqueResult();
+    }
+
 }

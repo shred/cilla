@@ -21,7 +21,11 @@ package org.shredzone.cilla.service.impl;
 
 import java.awt.Dimension;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.Random;
 import java.util.TimeZone;
 
 import javax.activation.DataSource;
@@ -65,10 +69,13 @@ public class PictureServiceImpl implements PictureService {
     private @Resource CommentService commentService;
     private @Resource MimeTypeAnalyzer mimeTypeAnalyzer;
 
+    private long hashCounter = new Random().nextInt(); // int, to avoid number overflow
+
     @Override
     public Picture createNew() {
         Picture picture = new Picture();
         picture.getThread().setCommentable(true);
+        picture.setHashId(generatePictureHash());
         return picture;
     }
 
@@ -209,6 +216,26 @@ public class PictureServiceImpl implements PictureService {
         int cnt = 0;
         for (Picture picture : gallery.getPictures()) {
             picture.setSequence(cnt++);
+        }
+    }
+
+    /**
+     * Generates a (hopefully) unique picture hash ID for a new picture.
+     *
+     * @return Hash ID
+     */
+    private String generatePictureHash() {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            digest.update(String.valueOf(System.nanoTime()).getBytes(StandardCharsets.UTF_8));
+            digest.update(String.valueOf(hashCounter++).getBytes(StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest.digest()) {
+                sb.append(String.format("%02x", b & 0xFF));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException ex) {
+            throw new InternalError("Standard digest algorithm is missing in this VM", ex);
         }
     }
 

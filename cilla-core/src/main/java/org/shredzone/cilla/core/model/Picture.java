@@ -72,6 +72,7 @@ public class Picture extends BaseModel implements Commentable {
     private Store image = new Store();
     private SortedSet<Tag> tags = new TreeSet<>();
     private CommentThread thread = new CommentThread();
+    private String hashId;
 
     /**
      * {@link GallerySection} this picture belongs to.
@@ -171,6 +172,13 @@ public class Picture extends BaseModel implements Commentable {
     @OneToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     public CommentThread getThread()            { return thread; }
     public void setThread(CommentThread thread) { this.thread = thread; }
+
+    /**
+     * A random hash id, so the picture ID cannot be guessed.
+     */
+    @Column(unique = true, nullable = false)
+    public String getHashId()                   { return hashId; }
+    public void setHashId(String hashId)        { this.hashId = hashId; }
 
     @Override
     public boolean equals(Object obj) {

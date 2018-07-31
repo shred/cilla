@@ -36,11 +36,7 @@ public class StringToPicture implements Converter<String, Picture> {
 
     @Override
     public Picture convert(String string) {
-        try {
-            return pictureDao.fetch(Long.parseLong(string));
-        } catch (NumberFormatException ex) {
-            return null;
-        }
+        return pictureDao.fetchByHashId(string);
     }
 
 }

@@ -99,7 +99,7 @@ public class GallerySectionAssembler extends AbstractSectionAssembler<GallerySec
             if (picDto.isPersisted()) {
                 picture = pictureDao.fetch(picDto.getId());
                 pictureAssembler.merge(picDto, picture);
-                picture.setSequence(sequence++);
+                picture.setSequence(sequence);
                 removables.remove(picture);
                 pictureService.updatePicture(
                     picture,
@@ -113,7 +113,7 @@ public class GallerySectionAssembler extends AbstractSectionAssembler<GallerySec
                 }
 
                 picture = new Picture();
-                picture.setSequence(sequence++);
+                picture.setSequence(sequence);
                 pictureAssembler.merge(picDto, picture);
                 pictureService.addPicture(
                     entity,
@@ -122,6 +122,8 @@ public class GallerySectionAssembler extends AbstractSectionAssembler<GallerySec
                 );
                 picDto.setId(picture.getId());
             }
+
+            sequence++;
         }
 
         for (Picture picture : removables) {

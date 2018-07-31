@@ -50,6 +50,7 @@ public class PictureAssembler extends AbstractAssembler<Picture, PictureDto> {
     public PictureDto assemble(Picture entity) throws CillaServiceException {
         PictureDto dto = new PictureDto();
         dto.setId(entity.getId());
+        dto.setHashId(entity.getHashId());
         dto.setCreateDate(entity.getCreateDate());
         dto.setCreateTimeZone(entity.getCreateTimeZone());
         dto.setCreateTimeDefinition(entity.getCreateTimeDefinition());
@@ -78,6 +79,7 @@ public class PictureAssembler extends AbstractAssembler<Picture, PictureDto> {
     public void merge(PictureDto dto, Picture entity) throws CillaServiceException {
         super.merge(dto, entity);
         entity.setCreateDate(dto.getCreateDate());
+        entity.setHashId(dto.getHashId());
 
         entity.setCreateTimeZone(dto.getCreateTimeZone());
         entity.setCreateTimeDefinition(dto.getCreateTimeDefinition());

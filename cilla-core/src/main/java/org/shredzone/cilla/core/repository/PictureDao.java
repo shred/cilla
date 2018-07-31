@@ -28,4 +28,14 @@ import org.shredzone.cilla.core.model.Picture;
  */
 public interface PictureDao extends BaseDao<Picture> {
 
+    /**
+     * Fetches a {@link Picture} by its hash ID. If the picture was not found,
+     * {@code null} is returned.
+     *
+     * @param hashId
+     *            Picture hash ID
+     * @return Picture or {@code null}
+     */
+    Picture fetchByHashId(String hashId);
+
 }
