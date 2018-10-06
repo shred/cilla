@@ -25,6 +25,8 @@ These parameters are optional:
 
 * `anchor`: An anchor to append to the generated URL
 * `id`: `id` attribute of the generated `<a>` tag
+* `target`: `target` attribute of the generated `<a>` tag
+* `rel`: `rel` attribute of the generated `<a>` tag
 * `title`: `title` attribute of the generated `<a>` tag
 * `styleClass`: `class` attribute of the generated `<a>` tag
 * `style`: `style` attribute of the generated `<a>` tag

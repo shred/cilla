@@ -73,6 +73,8 @@ public class LinkTag extends BodyTagSupport implements Parameterizable {
     private String styleClass;
     private String style;
     private String title;
+    private String rel;
+    private String target;
 
     private String view;
     private String qualifier;
@@ -110,6 +112,12 @@ public class LinkTag extends BodyTagSupport implements Parameterizable {
 
     @TagParameter
     public void setTitle(String title)          { this.title = title; }
+
+    @TagParameter
+    public void setRel(String rel)              { this.rel = rel; }
+
+    @TagParameter
+    public void setTarget(String target)        { this.target = target; }
 
     @TagParameter
     public void setView(String view)            { this.view = view; }
@@ -212,6 +220,14 @@ public class LinkTag extends BodyTagSupport implements Parameterizable {
 
         if (id != null) {
             linktag.append(" id=\"").append(HtmlUtils.htmlEscape(id)).append('"');
+        }
+
+        if (target != null) {
+            linktag.append(" target=\"").append(HtmlUtils.htmlEscape(target)).append('"');
+        }
+
+        if (rel != null) {
+            linktag.append(" rel=\"").append(HtmlUtils.htmlEscape(rel)).append('"');
         }
 
         if (onclick != null) {
