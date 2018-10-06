@@ -20,6 +20,7 @@
 package org.shredzone.cilla.web.converter;
 
 import org.shredzone.cilla.service.search.DateRange;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;
 
 /**
@@ -31,7 +32,12 @@ public class StringToDateRange implements Converter<String, DateRange> {
 
     @Override
     public DateRange convert(String string) {
-        return DateRange.parse(string);
+        try {
+            return DateRange.parse(string);
+        } catch (IllegalArgumentException ex) {
+            LoggerFactory.getLogger(getClass()).debug("no valid date range '{}'", string, ex);
+            return null;
+        }
     }
 
 }
