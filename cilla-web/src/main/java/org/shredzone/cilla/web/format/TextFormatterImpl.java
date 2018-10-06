@@ -144,6 +144,7 @@ public class TextFormatterImpl implements TextFormatter {
 
                 MarkdownFilter mf = new MarkdownFilter();
                 mf.setAnalyzer(rrmd);
+                mf.setPreClass("prettyprint");
 
                 return mf.andThen(curryFormatters(rrmd));
 
