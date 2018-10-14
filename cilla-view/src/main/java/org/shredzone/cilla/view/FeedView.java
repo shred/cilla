@@ -264,7 +264,7 @@ public class FeedView extends AbstractView {
         entry.setUpdatedDate(page.getModification());
 
         // Add a donation link if set
-        if (page.getDonateUrl() != null) {
+        if (page.isDonatable() && page.getDonateUrl() != null) {
             SyndLink link = new SyndLinkImpl();
             link.setRel("payment");
             link.setHref(page.getDonateUrl());
