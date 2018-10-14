@@ -19,17 +19,19 @@
  */
 package org.shredzone.cilla.view;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -44,8 +46,10 @@ import org.shredzone.cilla.service.search.FilterModel;
 import org.shredzone.cilla.service.search.PaginatorModel;
 import org.shredzone.cilla.service.search.SearchResult;
 import org.shredzone.cilla.service.search.SearchService;
+import org.shredzone.cilla.view.interceptor.FeedViewInterceptor;
 import org.shredzone.cilla.web.FeedType;
 import org.shredzone.cilla.web.format.TextFormatter;
+import org.shredzone.cilla.web.plugin.manager.PriorityComparator;
 import org.shredzone.cilla.ws.exception.CillaServiceException;
 import org.shredzone.commons.view.ViewContext;
 import org.shredzone.commons.view.annotation.PathPart;
@@ -55,6 +59,7 @@ import org.shredzone.commons.view.exception.ErrorResponseException;
 import org.shredzone.commons.view.exception.PageNotFoundException;
 import org.shredzone.commons.view.exception.ViewException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.rometools.rome.feed.synd.SyndCategory;
@@ -89,6 +94,19 @@ public class FeedView extends AbstractView {
     private @Resource PageDao pageDao;
     private @Resource TextFormatter textFormatter;
     private @Resource LinkService linkService;
+    private @Resource ApplicationContext applicationContext;
+
+    private List<FeedViewInterceptor> interceptors;
+
+    /**
+     * Initializes the list of feed view interceptors.
+     */
+    @PostConstruct
+    protected void setup() {
+        interceptors = applicationContext.getBeansOfType(FeedViewInterceptor.class).values().stream()
+                .sorted(new PriorityComparator<>(FeedViewInterceptor.class))
+                .collect(collectingAndThen(toList(), Collections::unmodifiableList));
+    }
 
     /**
      * A feed for all pages.
@@ -224,6 +242,7 @@ public class FeedView extends AbstractView {
         feed.getLinks().add(selfLink);
         feed.getEntries().addAll(result.getPages().stream()
                 .filter(page -> !page.isRestricted()) // do not show restricted pages
+                .filter(page -> interceptors.stream().noneMatch(it -> it.isIgnored(page)))
                 .map(page -> createEntry(page, uriPrefix))
                 .collect(Collectors.toList()));
 
@@ -255,6 +274,10 @@ public class FeedView extends AbstractView {
                 page.getTeaser(),
                 () -> linkService.linkTo().page(page)
         ).toString();
+
+        for (FeedViewInterceptor it : interceptors) {
+            body = it.filterDescription(page, body);
+        }
 
         SyndEntry entry = new SyndEntryImpl();
         entry.setTitle(page.getTitle());
@@ -301,6 +324,8 @@ public class FeedView extends AbstractView {
         author.setUri(buildTaxonomyUri(uriPrefix, "author", creator.getId()));
         authorList.add(author);
         entry.setAuthors(authorList);
+
+        interceptors.forEach(it -> it.postProcessEntry(page, entry));
 
         return entry;
     }
