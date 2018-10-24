@@ -56,7 +56,7 @@
 
     <context-param>
         <param-name>com.sun.faces.expressionFactory</param-name>
-        <param-value>org.jboss.el.ExpressionFactoryImpl</param-value>
+        <param-value>com.sun.el.ExpressionFactoryImpl</param-value>
     </context-param>
 
     <context-param>

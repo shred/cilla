@@ -34,7 +34,7 @@
         <javax.jstl.version>1.2.2</javax.jstl.version>
         <javax.servlet.version>3.1.0</javax.servlet.version>
         <javax.validation.version>2.0.1.Final</javax.validation.version>
-        <jboss.el.version>2.0.2.CR1</jboss.el.version>
+        <el.version>2.2</el.version>
         <jgroups.version>4.0.15.Final</jgroups.version>
         <jsf.version>2.1.29-11</jsf.version>
         <junit.version>[4,)</junit.version>
@@ -263,9 +263,9 @@
                 <version>${hibernate.jpa.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.jboss.el</groupId>
-                <artifactId>jboss-el</artifactId>
-                <version>${jboss.el.version}</version>
+                <groupId>org.glassfish.web</groupId>
+                <artifactId>el-impl</artifactId>
+                <version>${el.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.jgroups</groupId>

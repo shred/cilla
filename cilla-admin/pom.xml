@@ -186,8 +186,8 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>org.jboss.el</groupId>
-            <artifactId>jboss-el</artifactId>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>el-impl</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>

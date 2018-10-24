@@ -149,10 +149,6 @@
             <id>primefaces</id>
             <url>https://repository.primefaces.org</url>
         </repository>
-        <repository>
-            <id>jboss</id>
-            <url>https://repository.jboss.org/nexus/content/groups/public-jboss</url>
-        </repository>
     </repositories>
     <reporting>
         <plugins>
