@@ -15,42 +15,42 @@
         <szo.commons.captcha.version>1.0</szo.commons.captcha.version>
         <szo.commons.taglib.version>2.1</szo.commons.taglib.version>
         <szo.commons.text.version>2.4</szo.commons.text.version>
-        <szo.commons.view.version>1.2</szo.commons.view.version>
+        <szo.commons.view.version>1.3</szo.commons.view.version>
 
-        <aspectj.version>1.8.10</aspectj.version>
-        <commons.fileupload.version>1.3.2</commons.fileupload.version>
-        <commons.io.version>2.5</commons.io.version>
-        <cxf.version>3.1.10</cxf.version>
+        <aspectj.version>1.9.1</aspectj.version>
+        <commons.fileupload.version>1.3.3</commons.fileupload.version>
+        <commons.io.version>2.6</commons.io.version>
+        <cxf.version>3.2.6</cxf.version>
         <ehcache.version>2.6.11</ehcache.version>
-        <freemarker.version>2.3.23</freemarker.version>
+        <freemarker.version>2.3.28</freemarker.version>
         <hamcrest.version>1.3</hamcrest.version>
-        <hibernate.version>5.2.9.Final</hibernate.version>
+        <hibernate.version>5.3.7.Final</hibernate.version>
         <hibernate.jpa.version>1.0.0.Final</hibernate.jpa.version>
-        <hibernate.search.version>5.7.0.Final</hibernate.search.version>
-        <hibernate.validator.version>5.4.1.Final</hibernate.validator.version>
+        <hibernate.search.version>5.10.4.Final</hibernate.search.version>
+        <hibernate.validator.version>5.4.2.Final</hibernate.validator.version>
         <javax.activation.version>1.1.1</javax.activation.version>
         <javax.el.version>3.0.0</javax.el.version>
-        <javax.jsp.version>2.3.1</javax.jsp.version>
-        <javax.jstl.version>1.2.1</javax.jstl.version>
+        <javax.jsp.version>2.3.3</javax.jsp.version>
+        <javax.jstl.version>1.2.2</javax.jstl.version>
         <javax.servlet.version>3.1.0</javax.servlet.version>
-        <javax.validation.version>1.1.0.Final</javax.validation.version>
+        <javax.validation.version>2.0.1.Final</javax.validation.version>
         <jboss.el.version>2.0.2.CR1</jboss.el.version>
-        <jgroups.version>4.0.1.Final</jgroups.version>
-        <jsf.version>2.1.20-15</jsf.version>
+        <jgroups.version>4.0.15.Final</jgroups.version>
+        <jsf.version>2.1.29-11</jsf.version>
         <junit.version>[4,)</junit.version>
-        <lucene.version>5.5.5</lucene.version>
-        <metadataextractor.version>2.10.1</metadataextractor.version>
-        <mockito.version>2.7.21</mockito.version>
+        <lucene.version>5.5.5</lucene.version><!-- Cannot update because of Hibernate -->
+        <metadataextractor.version>2.11.0</metadataextractor.version>
+        <mockito.version>2.23.0</mockito.version>
         <primefaces.version>3.5</primefaces.version>
         <primefaces.themes.version>1.0.10</primefaces.themes.version>
-        <rome.version>1.11.0</rome.version>
-        <simplemagic.version>1.11</simplemagic.version>
+        <rome.version>1.11.1</rome.version>
+        <simplemagic.version>1.14</simplemagic.version>
         <slf4j.version>1.7.25</slf4j.version>
         <spring.version>4.3.20.RELEASE</spring.version>
         <springsecurity.version>4.2.9.RELEASE</springsecurity.version>
         <stax.version>1.0.1</stax.version>
         <thumbnailator.version>0.4.8</thumbnailator.version>
-        <wss4j.version>2.1.9</wss4j.version>
+        <wss4j.version>2.2.2</wss4j.version>
 
         <maven.site.skip>true</maven.site.skip>
     </properties>
@@ -81,13 +81,6 @@
                 <groupId>com.drewnoakes</groupId>
                 <artifactId>metadata-extractor</artifactId>
                 <version>${metadataextractor.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <!-- is provided since jdk1.4 -->
-                        <groupId>xml-apis</groupId>
-                        <artifactId>xml-apis</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>com.j256.simplemagic</groupId>
