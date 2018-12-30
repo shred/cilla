@@ -30,7 +30,7 @@
         <h:outputLabel for="sectionFormat" value="#{msg['section.text.textformat']}:" />
         <h:panelGroup>
           <h:selectOneMenu id="sectionFormat" value="#{section.textFormat}">
-            <f:selectItems value="#{listBean.createTextFormatList(facesContext)}" />
+            <f:selectItems value="#{listBean.createTextFormatList()}" />
           </h:selectOneMenu>
           <h:message for="sectionFormat" errorClass="error" />
         </h:panelGroup>
