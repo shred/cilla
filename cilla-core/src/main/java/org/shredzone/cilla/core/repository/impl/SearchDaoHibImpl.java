@@ -19,6 +19,9 @@
  */
 package org.shredzone.cilla.core.repository.impl;
 
+import static java.util.stream.Collectors.toList;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -69,20 +72,35 @@ public class SearchDaoHibImpl implements SearchDao {
 
     @Override
     public int count(Query query, Criteria crit) {
-        assertCriteriaEntity(crit);
-
-        FullTextSession fullTextSession = getFullTextSession();
-        FullTextQuery fq = fullTextSession.createFullTextQuery(query, Page.class);
-        fq.setCriteriaQuery(crit != null ? crit : pageDao.criteria());
-
         // This is the only way to reliable get a result counter if restricting
         // criteria apply.
-        return fq.list().size();
+        return (int) search(query, crit).stream()
+                .filter(SearchDaoHibImpl::isValidResult)
+                .count();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<Page> fetch(Query query, Criteria crit) {
+        return Collections.unmodifiableList(search(query, crit).stream()
+                .filter(SearchDaoHibImpl::isValidResult)
+                .collect(toList()));
+    }
+
+    /**
+     * Performs the search.
+     * <p>
+     * Due to a bug in Hibernate Search, the resulting list may contain unpublished pages
+     * if only one hit was found. It is recommended to check the resulting list and filter
+     * all unpublished pages, and other pages that are not supposed to be found.
+     *
+     * @param query
+     *            {@link Query} to perform
+     * @param crit
+     *            {@link Criteria} containing search parameters
+     * @return {@link List} of {@link Page} found
+     */
+    @SuppressWarnings("unchecked")
+    private List<Page> search(Query query, Criteria crit) {
         assertCriteriaEntity(crit);
 
         FullTextSession fullTextSession = getFullTextSession();
@@ -90,6 +108,17 @@ public class SearchDaoHibImpl implements SearchDao {
         fq.setCriteriaQuery(crit != null ? crit : pageDao.criteria());
 
         return fq.list();
+    }
+
+    /**
+     * Checks if the given {@link Page} is allowed to be seen in a search result.
+     *
+     * @param page
+     *            {@link Page} to check
+     * @return {@code true}: valid search result, {@code false}: do not show as result
+     */
+    private static boolean isValidResult(Page page) {
+        return page.isPublished() && !page.isRestricted();
     }
 
     /**
