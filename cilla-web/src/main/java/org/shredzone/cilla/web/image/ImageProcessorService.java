@@ -34,7 +34,7 @@ public interface ImageProcessorService {
     /**
      * Processes a stored image.
      *
-     * @param store
+     * @param image
      *            {@link ResourceDataSource} containing the image to be rendered
      * @param origin
      *            {@link ImageOrigin} of the stored image
