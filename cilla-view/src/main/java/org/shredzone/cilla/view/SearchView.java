@@ -19,11 +19,15 @@
  */
 package org.shredzone.cilla.view;
 
+import java.io.IOException;
 import java.util.Locale;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.shredzone.cilla.core.model.Page;
+import org.shredzone.cilla.service.link.LinkBuilder;
 import org.shredzone.cilla.service.search.DateRange;
 import org.shredzone.cilla.service.search.FilterModel;
 import org.shredzone.cilla.service.search.PaginatorModel;
@@ -57,13 +61,15 @@ public class SearchView extends AbstractView {
 
     private @Resource SearchService searchService;
 
+    private @Resource LinkBuilder linkBuilder;
+
     /**
      * Shows the view result page.
      */
     @Framed
     @View(pattern = "/search", name="search")
     @View(pattern = "/search/${date}", name="search")
-    public String searchView(HttpServletRequest req,
+    public String searchView(HttpServletRequest req, HttpServletResponse resp,
             @Optional @PathPart("date") DateRange date,
             @Optional @Parameter("p") PaginatorModel paginator,
             @Optional @Parameter("q") String query)
@@ -94,10 +100,16 @@ public class SearchView extends AbstractView {
 
         try {
             SearchResult result = searchService.search(filter);
+            if (result.getCount() == 1) {
+                Page resultPage = result.getPages().get(0);
+                resp.sendRedirect(linkBuilder.page(resultPage).toString());
+                return null;
+            }
+
             usePaginator.setCount(result.getCount());
             result.setPaginator(usePaginator);
             req.setAttribute("result", result);
-        } catch (CillaServiceException ex) {
+        } catch (CillaServiceException | IOException ex) {
             log.debug("search for '{}' failed", query, ex);
             req.setAttribute("message", "search.msg.failed");
             req.setAttribute("details", ex.getCause().getLocalizedMessage());
