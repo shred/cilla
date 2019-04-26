@@ -17,33 +17,37 @@
         <szo.commons.text.version>2.4</szo.commons.text.version>
         <szo.commons.view.version>1.3</szo.commons.view.version>
 
-        <aspectj.version>1.9.1</aspectj.version>
-        <commons.fileupload.version>1.3.3</commons.fileupload.version>
+        <aspectj.version>1.9.2</aspectj.version>
+        <commons.fileupload.version>1.4</commons.fileupload.version>
         <commons.io.version>2.6</commons.io.version>
-        <cxf.version>3.2.6</cxf.version>
+        <cxf.version>3.2.7</cxf.version>
         <ehcache.version>2.6.11</ehcache.version>
         <freemarker.version>2.3.28</freemarker.version>
-        <hamcrest.version>1.3</hamcrest.version>
+        <hamcrest.version>2.1</hamcrest.version>
         <hibernate.version>5.3.7.Final</hibernate.version>
         <hibernate.jpa.version>1.0.0.Final</hibernate.jpa.version>
         <hibernate.search.version>5.10.4.Final</hibernate.search.version>
         <hibernate.validator.version>5.4.2.Final</hibernate.validator.version>
         <javax.activation.version>1.1.1</javax.activation.version>
+        <javax.annotation.version>1.3.2</javax.annotation.version>
         <javax.el.version>3.0.0</javax.el.version>
+        <javax.jaxb.version>2.3.1</javax.jaxb.version>
+        <javax.jaxws.version>2.3.1</javax.jaxws.version>
         <javax.jsp.version>2.3.3</javax.jsp.version>
         <javax.jstl.version>1.2.2</javax.jstl.version>
-        <javax.servlet.version>3.1.0</javax.servlet.version>
+        <javax.jws.version>1.1</javax.jws.version>
+        <javax.servlet.version>4.0.1</javax.servlet.version>
         <javax.validation.version>2.0.1.Final</javax.validation.version>
         <el.version>2.2</el.version>
-        <jgroups.version>4.0.15.Final</jgroups.version>
+        <jgroups.version>4.0.16.Final</jgroups.version>
         <jsf.version>2.1.29-11</jsf.version>
-        <junit.version>[4,)</junit.version>
+        <junit.version>4.12</junit.version>
         <lucene.version>5.5.5</lucene.version><!-- Cannot update because of Hibernate -->
         <metadataextractor.version>2.11.0</metadataextractor.version>
-        <mockito.version>2.23.0</mockito.version>
+        <mockito.version>2.23.4</mockito.version>
         <primefaces.version>3.5</primefaces.version>
         <primefaces.themes.version>1.0.10</primefaces.themes.version>
-        <rome.version>1.11.1</rome.version>
+        <rome.version>1.12.0</rome.version>
         <simplemagic.version>1.14</simplemagic.version>
         <slf4j.version>1.7.25</slf4j.version>
         <spring.version>4.3.20.RELEASE</spring.version>
@@ -192,6 +196,10 @@
                         <groupId>org.slf4j</groupId>
                         <artifactId>jcl-over-slf4j</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>jdk.tools</groupId>
+                        <artifactId>jdk.tools</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
@@ -222,7 +230,7 @@
             </dependency>
             <dependency>
                 <groupId>org.hamcrest</groupId>
-                <artifactId>hamcrest-library</artifactId>
+                <artifactId>hamcrest</artifactId>
                 <version>${hamcrest.version}</version>
             </dependency>
             <dependency>
@@ -404,9 +412,19 @@
                 <version>${javax.activation.version}</version>
             </dependency>
             <dependency>
+                <groupId>javax.annotation</groupId>
+                <artifactId>javax.annotation-api</artifactId>
+                <version>${javax.annotation.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>javax.el</groupId>
                 <artifactId>javax.el-api</artifactId>
                 <version>${javax.el.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.jws</groupId>
+                <artifactId>javax.jws-api</artifactId>
+                <version>${javax.jws.version}</version>
             </dependency>
             <dependency>
                 <groupId>javax.servlet</groupId>
@@ -427,6 +445,16 @@
                 <groupId>javax.validation</groupId>
                 <artifactId>validation-api</artifactId>
                 <version>${javax.validation.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>${javax.jaxb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.xml.ws</groupId>
+                <artifactId>jaxws-api</artifactId>
+                <version>${javax.jaxws.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
