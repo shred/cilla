@@ -85,10 +85,14 @@ public abstract class AbstractView {
      */
     protected boolean handleRestricted(Page page, HttpServletRequest req) {
         // Is the page restricted anyways?
-        if (!page.isRestricted()) return false;
+        if (!page.isRestricted()) {
+            return false;
+        }
 
         // Is the page restricted, but already unlocked?
-        if (unlockService.isUnlocked(req.getSession(), page)) return false;
+        if (unlockService.isUnlocked(req.getSession(), page)) {
+            return false;
+        }
 
         // Is there an answer parameter?
         String response = req.getParameter("restrictionresponse");
@@ -238,38 +242,36 @@ public abstract class AbstractView {
      *            {@link HttpServletResponse}
      */
     protected void streamDataSource(ResourceDataSource ds, HttpServletRequest req, HttpServletResponse resp)
-    throws ViewException {
-        try {
-            if (isNotModifiedSince(req, ds.getLastModified())) {
-                throw new ErrorResponseException(HttpServletResponse.SC_NOT_MODIFIED);
-            }
+            throws ViewException {
+        if (isNotModifiedSince(req, ds.getLastModified())) {
+            throw new ErrorResponseException(HttpServletResponse.SC_NOT_MODIFIED);
+        }
 
-            String etag = ds.getEtag();
-            if (isEtagMatching(req, etag)) {
-                throw new ErrorResponseException(HttpServletResponse.SC_NOT_MODIFIED);
-            }
+        String etag = ds.getEtag();
+        if (isEtagMatching(req, etag)) {
+            throw new ErrorResponseException(HttpServletResponse.SC_NOT_MODIFIED);
+        }
 
-            Long length = ds.getLength();
-            if (length != null && length <= Integer.MAX_VALUE) {
-                // Converting long to int is safe here...
-                resp.setContentLength(length.intValue());
-            }
+        Long length = ds.getLength();
+        if (length != null && length <= Integer.MAX_VALUE) {
+            // Converting long to int is safe here...
+            resp.setContentLength(length.intValue());
+        }
 
-            resp.setContentType(ds.getContentType());
+        resp.setContentType(ds.getContentType());
 
-            if (etag != null && !etag.isEmpty()) {
-                setEtagHeader(resp, etag);
-            } else {
-                setLastModifiedHeader(resp, ds.getLastModified());
-            }
+        if (etag != null && !etag.isEmpty()) {
+            setEtagHeader(resp, etag);
+        } else {
+            setLastModifiedHeader(resp, ds.getLastModified());
+        }
 
-            setExpiresHeader(resp);
+        setExpiresHeader(resp);
 
-            try (InputStream in = ds.getInputStream()) {
-                FileCopyUtils.copy(in, resp.getOutputStream());
-            }
+        try (InputStream in = ds.getInputStream()) {
+            FileCopyUtils.copy(in, resp.getOutputStream());
         } catch (IOException ex) {
-            throw new ViewException(ex);
+            log.warn("failed to stream resource {}: {}", ds.getId(), ex.getMessage());
         }
     }
 
