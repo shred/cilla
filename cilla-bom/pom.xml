@@ -42,7 +42,7 @@
         <jgroups.version>4.0.16.Final</jgroups.version>
         <jsf.version>2.1.29-11</jsf.version>
         <junit.version>4.12</junit.version>
-        <lucene.version>5.5.5</lucene.version><!-- Cannot update because of Hibernate -->
+        <lucene.version>8.4.1</lucene.version><!-- Cannot update because of Hibernate -->
         <metadataextractor.version>2.11.0</metadataextractor.version>
         <mockito.version>2.23.4</mockito.version>
         <primefaces.version>3.5</primefaces.version>
