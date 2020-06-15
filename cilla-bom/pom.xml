@@ -51,7 +51,7 @@
         <simplemagic.version>1.14</simplemagic.version>
         <slf4j.version>1.7.25</slf4j.version>
         <spring.version>4.3.20.RELEASE</spring.version>
-        <springsecurity.version>4.2.9.RELEASE</springsecurity.version>
+        <springsecurity.version>5.3.3.RELEASE</springsecurity.version>
         <stax.version>1.0.1</stax.version>
         <thumbnailator.version>0.4.8</thumbnailator.version>
         <wss4j.version>2.2.2</wss4j.version>
