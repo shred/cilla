@@ -37,7 +37,7 @@
       </c:when>
       <c:when test="${not empty comment.name and not empty comment.url}">
         <%-- Commentor left a name and a link --%>
-        <a href="<c:out value="${comment.url}"/>" rel="nofollow" target="_blank" class="ext"><c:out value="${comment.name}"/></a>
+        <a href="<c:out value="${comment.url}"/>" rel="nofollow noopener" target="_blank" class="ext"><c:out value="${comment.name}"/></a>
       </c:when>
       <c:when test="${not empty comment.name}">
         <%-- Commentor left only a name --%>
