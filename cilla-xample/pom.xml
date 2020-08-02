@@ -137,13 +137,13 @@
                     <dependency>
                         <groupId>com.mchange</groupId>
                         <artifactId>c3p0</artifactId>
-                        <version>0.9.5.2</version>
+                        <version>0.9.5.5</version>
                         <scope>runtime</scope>
                     </dependency>
                     <dependency>
                         <groupId>org.postgresql</groupId>
                         <artifactId>postgresql</artifactId>
-                        <version>42.1.1</version>
+                        <version>42.2.14</version>
                         <scope>runtime</scope>
                     </dependency>
                     <dependency>
@@ -163,7 +163,7 @@
         </plugins>
     </build>
     <properties>
-        <tomcat.version>7.0.91</tomcat.version>
+        <tomcat.version>7.0.105</tomcat.version>
     </properties>
     <dependencyManagement>
         <dependencies>
