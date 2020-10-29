@@ -26,12 +26,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.TimeZone;
-
-import org.shredzone.cilla.core.model.embed.ExifData;
-import org.shredzone.cilla.core.model.embed.Geolocation;
-import org.slf4j.LoggerFactory;
 
 import com.drew.imaging.PhotographicConversions;
 import com.drew.imaging.jpeg.JpegMetadataReader;
@@ -45,6 +42,9 @@ import com.drew.metadata.exif.GpsDirectory;
 import com.drew.metadata.exif.makernotes.CanonMakernoteDirectory;
 import com.drew.metadata.exif.makernotes.CasioType2MakernoteDirectory;
 import com.drew.metadata.exif.makernotes.PentaxMakernoteDirectory;
+import org.shredzone.cilla.core.model.embed.ExifData;
+import org.shredzone.cilla.core.model.embed.Geolocation;
+import org.slf4j.LoggerFactory;
 
 /**
  * Analyzes the EXIF and GPS information of a JPEG image. It's a wrapper around the
@@ -324,7 +324,9 @@ public class ExifAnalyzer {
         code = readInteger(ExifSubIFDDirectory.class, ExifSubIFDDirectory.TAG_FLASH);
         if (code.isPresent()) {
             int value = code.get();
-            if (value == 0) return "no flash";
+            if (value == 0) {
+                return "no flash";
+            }
 
             StringBuilder sb = new StringBuilder();
             switch (value & 0x18) {
@@ -587,6 +589,7 @@ public class ExifAnalyzer {
         return metadata.getDirectoriesOfType(directory).stream()
                 .filter(dir -> dir.containsTag(tag))
                 .map(dir -> dir.getString(tag))
+                .filter(Objects::nonNull)
                 .findFirst();
     }
 
@@ -603,6 +606,7 @@ public class ExifAnalyzer {
         return metadata.getDirectoriesOfType(directory).stream()
                 .filter(dir -> dir.containsTag(tag))
                 .map(dir -> dir.getRational(tag))
+                .filter(Objects::nonNull)
                 .findFirst();
     }
 
@@ -619,6 +623,7 @@ public class ExifAnalyzer {
         return metadata.getDirectoriesOfType(directory).stream()
                         .filter(dir -> dir.containsTag(tag))
                         .map(dir -> dir.getInteger(tag))
+                        .filter(Objects::nonNull)
                         .findFirst();
     }
 
@@ -637,6 +642,7 @@ public class ExifAnalyzer {
         return metadata.getDirectoriesOfType(directory).stream()
                 .filter(dir -> dir.containsTag(tag))
                 .map(dir -> dir.getDate(tag, tz))
+                .filter(Objects::nonNull)
                 .findFirst();
     }
 
@@ -655,6 +661,9 @@ public class ExifAnalyzer {
                 .filter(dir -> dir.containsTag(tag))
                 .map(dir -> {
                     Rational[] data = dir.getRationalArray(tag);
+                    if (data == null) {
+                        return null;
+                    }
 
                     double result = 0d;
                     for (int ix = data.length - 1; ix >= 0; ix--) {
@@ -663,6 +672,7 @@ public class ExifAnalyzer {
 
                     return BigDecimal.valueOf(result).setScale(6, RoundingMode.HALF_DOWN);
                 })
+                .filter(Objects::nonNull)
                 .findFirst();
     }
 
