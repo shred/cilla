@@ -57,11 +57,12 @@ public class LinkBuilder {
 
     private @Resource ViewService viewService;
 
+    private final CillaPathContext data = new CillaPathContext();
+
     private String view;
     private StringBuilder searchpart;
     private String anchor;
     private String baseUrl;
-    private CillaPathContext data = new CillaPathContext();
     private PathType type = PathType.RELATIVE;
 
     /**
@@ -239,6 +240,13 @@ public class LinkBuilder {
     public LinkBuilder absolute() {
         this.type = PathType.ABSOLUTE;
         return this;
+    }
+
+    /**
+     * Returns the {@link CillaPathContext} that is used by this builder.
+     */
+    public CillaPathContext getContext() {
+        return data;
     }
 
     /**
