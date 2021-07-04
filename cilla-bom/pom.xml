@@ -14,7 +14,7 @@
     <properties>
         <szo.commons.captcha.version>1.0</szo.commons.captcha.version>
         <szo.commons.taglib.version>2.2</szo.commons.taglib.version>
-        <szo.commons.text.version>2.7</szo.commons.text.version>
+        <szo.commons.text.version>2.8</szo.commons.text.version>
         <szo.commons.view.version>1.4</szo.commons.view.version>
 
         <aspectj.version>1.9.6</aspectj.version>

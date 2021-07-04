@@ -31,9 +31,9 @@ import org.shredzone.cilla.service.link.LinkBuilder;
 import org.shredzone.cilla.web.plugin.PostProcessingTextFormatter;
 import org.shredzone.cilla.web.plugin.manager.PriorityComparator;
 import org.shredzone.cilla.ws.TextFormat;
+import org.shredzone.commons.text.filter.GithubFlavoredMarkdownFilter;
 import org.shredzone.commons.text.filter.HtmlEscapeFilter;
 import org.shredzone.commons.text.filter.KeepFilter;
-import org.shredzone.commons.text.filter.MarkdownFilter;
 import org.shredzone.commons.text.filter.ParagraphFilter;
 import org.shredzone.commons.text.filter.SimplifyHtmlFilter;
 import org.shredzone.commons.text.filter.StripHtmlFilter;
@@ -142,7 +142,7 @@ public class TextFormatterImpl implements TextFormatter {
                 ReferenceResolver rrmd = applicationContext.getBean(ReferenceResolver.class);
                 rrmd.setLinkBuilderSupplier(linkBuilderSupplier);
 
-                MarkdownFilter mf = new MarkdownFilter();
+                GithubFlavoredMarkdownFilter mf = new GithubFlavoredMarkdownFilter();
                 mf.setAnalyzer(rrmd);
                 mf.setPreClass("prettyprint");
 
