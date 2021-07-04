@@ -115,6 +115,11 @@
                     <localCheckout>true</localCheckout>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.1</version>
+            </plugin>
         </plugins>
     </build>
     <repositories>
@@ -122,20 +127,12 @@
             <id>primefaces</id>
             <url>https://repository.primefaces.org</url>
         </repository>
+        <repository>
+            <id>maven-restlet</id>
+            <name>Restlet repository</name>
+            <url>https://maven.restlet.talend.com</url>
+        </repository>
     </repositories>
-    <!-- Workaround for bug MJAVADOC-449, can be removed if maven-javadoc-plugin:3.1.0 is available -->
-    <pluginRepositories>
-        <pluginRepository>
-            <id>apache.snapshots</id>
-            <url>https://repository.apache.org/content/repositories/snapshots/</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
     <reporting>
         <plugins>
             <plugin>
@@ -164,7 +161,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.1.0-SNAPSHOT</version>
+                <version>3.3.0</version>
                 <configuration>
                     <doclint>syntax,reference</doclint>
                     <linksource>true</linksource>
