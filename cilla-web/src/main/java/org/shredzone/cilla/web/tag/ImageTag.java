@@ -75,6 +75,9 @@ public class ImageTag extends BodyTagSupport {
     private Medium medium;
     private String type;
     private Boolean uncropped;
+    private Integer width;
+    private Integer height;
+    private Boolean nosize;
 
     @TagParameter
     public void setVar(String var)              { this.var = var; }
@@ -109,6 +112,15 @@ public class ImageTag extends BodyTagSupport {
     @TagParameter
     public void setUncropped(Boolean uncropped) { this.uncropped = uncropped; }
 
+    @TagParameter
+    public void setWidth(Integer width)         { this.width = width; }
+
+    @TagParameter
+    public void setHeight(Integer height)       { this.height = height; }
+
+    @TagParameter
+    public void setNosize(Boolean nosize)       { this.nosize = nosize; }
+
     @Override
     public int doStartTag() throws JspException {
         HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
@@ -125,7 +137,7 @@ public class ImageTag extends BodyTagSupport {
             }
             if (type != null) {
                 lb.param("type", type);
-            } else {
+            } else if (nosize == null || !nosize) {
                 outWidth = picture.getWidth();
                 outHeight = picture.getHeight();
             }
@@ -141,7 +153,7 @@ public class ImageTag extends BodyTagSupport {
                 lb.view("headerImage").header(header);
                 if (type != null) {
                     lb.param("type", type);
-                } else {
+                } else if (nosize == null || !nosize) {
                     outWidth = header.getWidth();
                     outHeight = header.getHeight();
                 }
@@ -154,6 +166,14 @@ public class ImageTag extends BodyTagSupport {
                 lb.param("type", type);
             }
             url = lb.toString();
+        }
+
+        if (width != null) {
+            outWidth = width;
+        }
+
+        if (height != null) {
+            outHeight = height;
         }
 
         if (url == null) {
