@@ -140,6 +140,12 @@
             </exclusions>
         </dependency>
         <dependency>
+            <!-- Required for solr-core, but too old for other dependencies -->
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
             <scope>runtime</scope>
