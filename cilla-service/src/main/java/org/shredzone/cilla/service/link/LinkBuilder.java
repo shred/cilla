@@ -114,6 +114,14 @@ public class LinkBuilder {
     }
 
     /**
+     * Target Story of the given {@link Page}.
+     */
+    public LinkBuilder story(Page story) {
+        data.setStory(story);
+        return this;
+    }
+
+    /**
      * Target {@link Picture}.
      */
     public LinkBuilder picture(Picture picture) {

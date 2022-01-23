@@ -21,10 +21,14 @@ package org.shredzone.cilla.view;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.shredzone.cilla.core.model.Category;
+import org.shredzone.cilla.core.model.Page;
 import org.shredzone.cilla.core.model.Tag;
 import org.shredzone.cilla.core.model.User;
+import org.shredzone.cilla.service.link.LinkService;
 import org.shredzone.cilla.service.search.DateRange;
 import org.shredzone.cilla.service.search.FilterModel;
 import org.shredzone.cilla.service.search.PaginatorModel;
@@ -37,6 +41,7 @@ import org.shredzone.commons.view.annotation.Parameter;
 import org.shredzone.commons.view.annotation.PathPart;
 import org.shredzone.commons.view.annotation.View;
 import org.shredzone.commons.view.annotation.ViewHandler;
+import org.shredzone.commons.view.exception.ErrorResponseException;
 import org.shredzone.commons.view.exception.ViewException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -54,6 +59,7 @@ public class PageListView extends AbstractView {
     private @Value("${pageList.maxEntries}") int maxEntries;
 
     private @Resource SearchService searchService;
+    private @Resource LinkService linkService;
 
     /**
      * Lists all blog entries.
@@ -122,6 +128,29 @@ public class PageListView extends AbstractView {
         FilterModel filter = new FilterModel();
         filter.setDate(date);
         filter.setCreator(user);
+        return fetchPages(filter, paginator, req);
+    }
+
+    /**
+     * Lists all blog entries by story.
+     */
+    @Framed
+    @View(pattern = "/story/${story.id}/${#simplify(story.subject)}.html", signature = {"story"})
+    public String storyView(
+            @PathPart("story.id") Page page,
+            @Optional @Parameter("p") PaginatorModel paginator,
+            HttpServletRequest req,
+            HttpServletResponse resp)
+            throws ViewException, CillaServiceException {
+        if (page.getSubject() == null) {
+            String target = linkService.linkTo().page(page).absolute().toString();
+            resp.setHeader("Location", target);
+            throw new ErrorResponseException(HttpServletResponse.SC_MOVED_PERMANENTLY);
+        }
+
+        FilterModel filter = new FilterModel();
+        filter.setStory(page);
+        filter.setAscending(true);
         return fetchPages(filter, paginator, req);
     }
 

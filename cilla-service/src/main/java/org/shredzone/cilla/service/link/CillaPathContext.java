@@ -51,6 +51,7 @@ public class CillaPathContext implements PathContext {
     private DateRange date;
     private Picture picture;
     private Header header;
+    private Page story;
     private Map<String, Object> param = new HashMap<>();
 
     /**
@@ -102,6 +103,12 @@ public class CillaPathContext implements PathContext {
     public void setHeader(Header header)    { this.header = header; }
 
     /**
+     * Story name.
+     */
+    public Page getStory()                  { return story; }
+    public void setStory(Page story)        { this.story = story; }
+
+    /**
      * Parameters
      */
     public Object getParam(String name)     { return param.get(name); }
@@ -116,20 +123,39 @@ public class CillaPathContext implements PathContext {
 
     @Override
     public Signature getSignature() {
-        Set<String> sigSet = new HashSet<String>();
+        Set<String> sigSet = new HashSet<>();
 
         for (String key : getVariables().keySet()) {
             sigSet.add('#' + key);
         }
 
-        if (getAuthor() != null) sigSet.add("author");
-        if (getDate() != null) sigSet.add("date");
-        if (getCategory() != null) sigSet.add("category");
-        if (getHeader() != null) sigSet.add("header");
-        if (getPage() != null) sigSet.add("page");
-        if (getPicture() != null) sigSet.add("picture");
-        if (getSection() != null) sigSet.add("section");
-        if (getTag() != null) sigSet.add("tag");
+        if (getAuthor() != null) {
+            sigSet.add("author");
+        }
+        if (getDate() != null) {
+            sigSet.add("date");
+        }
+        if (getCategory() != null) {
+            sigSet.add("category");
+        }
+        if (getHeader() != null) {
+            sigSet.add("header");
+        }
+        if (getPage() != null) {
+            sigSet.add("page");
+        }
+        if (getPicture() != null) {
+            sigSet.add("picture");
+        }
+        if (getSection() != null) {
+            sigSet.add("section");
+        }
+        if (getTag() != null) {
+            sigSet.add("tag");
+        }
+        if (getStory() != null) {
+            sigSet.add("story");
+        }
 
         return new Signature(sigSet);
    }

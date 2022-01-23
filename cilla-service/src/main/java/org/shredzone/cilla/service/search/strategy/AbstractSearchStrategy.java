@@ -155,6 +155,10 @@ public abstract class AbstractSearchStrategy implements SearchStrategy {
                 crit.add(Restrictions.idEq(filter.getPage().getId()));
             }
 
+            if (filter.getStory() != null) {
+                crit.add(Restrictions.eq("subject", filter.getStory().getSubject()));
+            }
+
             if (filter.getDate() != null) {
                 DateRange dr = filter.getDate();
                 PageOrder order = (filter.getOrder() != null ? filter.getOrder() : PageOrder.PUBLICATION);

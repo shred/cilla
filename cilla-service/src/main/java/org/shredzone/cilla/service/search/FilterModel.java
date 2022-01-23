@@ -50,6 +50,7 @@ public class FilterModel implements Linkable, Serializable {
     private Locale locale;
     private PageOrder order;
     private boolean ascending;
+    private Page story;
 
     public FilterModel() {
         // Default constructor
@@ -71,6 +72,7 @@ public class FilterModel implements Linkable, Serializable {
         this.locale = model.locale;
         this.order = model.order;
         this.ascending = model.ascending;
+        this.story = model.story;
     }
 
     /**
@@ -128,6 +130,12 @@ public class FilterModel implements Linkable, Serializable {
     public boolean isAscending()                { return ascending; }
     public void setAscending(boolean ascending) { this.ascending = ascending; }
 
+    /**
+     * Only find pages with the given story subject.
+     */
+    public Page getStory()                      { return story; }
+    public void setStory(Page story)            { this.story = story; }
+
     @Override
     public void transfer(LinkBuilder builder) {
         if (page != null) {
@@ -137,11 +145,24 @@ public class FilterModel implements Linkable, Serializable {
             return;
         }
 
-        if (category != null) builder.category(category);
-        if (creator != null) builder.author(creator);
-        if (tag != null) builder.tag(tag);
-        if (date != null) builder.date(date);
-        if (query != null) builder.view("search").query("q", query);
+        if (category != null) {
+            builder.category(category);
+        }
+        if (creator != null) {
+            builder.author(creator);
+        }
+        if (tag != null) {
+            builder.tag(tag);
+        }
+        if (date != null) {
+            builder.date(date);
+        }
+        if (story != null) {
+            builder.story(story);
+        }
+        if (query != null) {
+            builder.view("search").query("q", query);
+        }
     }
 
 }

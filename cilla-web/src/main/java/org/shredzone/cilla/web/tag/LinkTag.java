@@ -87,6 +87,7 @@ public class LinkTag extends BodyTagSupport implements Parameterizable {
     private Section section;
     private Picture picture;
     private Header header;
+    private Page story;
 
     @TagParameter
     public void setVar(String var)              { this.var = var; }
@@ -152,6 +153,9 @@ public class LinkTag extends BodyTagSupport implements Parameterizable {
     @TagParameter
     public void setHeader(Header header)        { this.header = header; }
 
+    @TagParameter
+    public void setStoryOfPage(Page story)      { this.story = story; }
+
     @Override
     public void addParam(String key, Object value) {
         parameters.put(key, value);
@@ -177,6 +181,7 @@ public class LinkTag extends BodyTagSupport implements Parameterizable {
         lb.ref(ref);
         lb.qualifier(qualifier);
         lb.commentable(commentable);
+        lb.story(story);
 
         String useTitle = null;
         if (title != null) {
