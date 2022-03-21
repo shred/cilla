@@ -33,6 +33,7 @@ These parameters are optional:
 * `onclick`: `onclick` attribute of the generated `<a>` tag
 * `var`: the name of the variable to store the generated URL into. No `<a>` tag is written.
 * `scope`: variable scope ("`page`", "`request`", "`session`", "`application`"), defaults to `page` scope if not given.
+* `absolute`: If `true`, an absolute URL is generated. By default all URLs are relative.
 
 ## Sub Tags
 

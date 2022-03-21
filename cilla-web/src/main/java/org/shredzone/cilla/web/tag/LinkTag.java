@@ -75,6 +75,7 @@ public class LinkTag extends BodyTagSupport implements Parameterizable {
     private String title;
     private String rel;
     private String target;
+    private boolean absolute;
 
     private String view;
     private String qualifier;
@@ -156,6 +157,9 @@ public class LinkTag extends BodyTagSupport implements Parameterizable {
     @TagParameter
     public void setStoryOfPage(Page story)      { this.story = story; }
 
+    @TagParameter
+    public void setAbsolute(boolean absolute)   { this.absolute = absolute; }
+
     @Override
     public void addParam(String key, Object value) {
         parameters.put(key, value);
@@ -182,6 +186,10 @@ public class LinkTag extends BodyTagSupport implements Parameterizable {
         lb.qualifier(qualifier);
         lb.commentable(commentable);
         lb.story(story);
+
+        if (absolute) {
+            lb.absolute();
+        }
 
         String useTitle = null;
         if (title != null) {
