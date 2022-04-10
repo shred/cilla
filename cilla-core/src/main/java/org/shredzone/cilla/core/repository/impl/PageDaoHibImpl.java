@@ -93,6 +93,19 @@ public class PageDaoHibImpl extends BaseDaoHibImpl<Page> implements PageDao {
                 .list();
     }
 
+    @Override
+    public List<Page> fetchAllPublicSince(Date since) {
+        return getCurrentSession().createQuery("FROM Page" +
+                        " WHERE (publication IS NOT NULL AND publication<=:now AND publication>=:since)" +
+                        " AND (expiration IS NULL OR expiration>:now)" +
+                        " AND challenge IS NULL AND responsePattern IS NULL" +
+                        " AND hidden=false" +
+                        " ORDER BY sticky DESC," + pageOrder.getColumn() + " DESC", Page.class)
+                .setParameter("now", new Date())
+                .setParameter("since", since)
+                .list();
+    }
+
     @Transactional(readOnly = true)
     @Override
     public Date[] fetchMinMaxModification() {

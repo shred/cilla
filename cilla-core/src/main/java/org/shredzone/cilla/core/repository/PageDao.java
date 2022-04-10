@@ -52,6 +52,17 @@ public interface PageDao extends BaseDao<Page> {
     List<Page> fetchAllPublic();
 
     /**
+     * Fetches all public {@link Page} that were published since the given date. Public
+     * pages are published and not expired. Hidden pages are NOT returned. Restricted
+     * pages are not returned. Ordered by date, descendingly.
+     *
+     * @param since
+     *         Earliest publication date
+     * @return List of all public {@link Page} published since that day
+     */
+    List<Page> fetchAllPublicSince(Date since);
+
+    /**
      * Fetches the minimum and maximum modification date of all published pages.
      *
      * @return Array having two entries. Index 0 contains the minimum, and index 1
