@@ -20,15 +20,20 @@
 package org.shredzone.cilla.core.model;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -62,6 +67,7 @@ public class Header extends BaseModel implements Commentable {
     private Store fullImage = new Store();
     private CommentThread thread = new CommentThread();
     private boolean enabled;
+    private Map<String, String> properties = new HashMap<>();
 
     /**
      * Header name
@@ -151,6 +157,16 @@ public class Header extends BaseModel implements Commentable {
     @OneToOne(optional = false, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     public CommentThread getThread()            { return thread; }
     public void setThread(CommentThread thread) { this.thread = thread; }
+
+    /**
+     * Common header properties.
+     */
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "Header_Properties")
+    @MapKeyColumn(name = "key")
+    @Column(name = "value", columnDefinition = "text")
+    public Map<String, String> getProperties()  { return properties; }
+    public void setProperties(Map<String, String> properties) { this.properties = properties; }
 
     @Override
     public boolean equals(Object obj) {
