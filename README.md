@@ -12,7 +12,7 @@ _Cilla_ is a weblog written in Java.
 * Full content search, using [Apache Lucene](http://lucene.apache.org/).
 * Comes with a separate administration web frontend and a SOAP WS interface.
 * Easy to customize. Uses JSP templates and a set of powerful JSP tags.
-* Easy to extend. A collection of [plugins](https://github.com/shred/cilla-plugin) is available. Plug in your own add-ons via Spring beans.
+* Easy to extend. A collection of [plugins](https://codeberg.org/shred/cilla-plugin) is available. Plug in your own add-ons via Spring beans.
 * Uses Java 8, Spring and Hibernate. Tested on PostgreSQL, but _should_ run on other DBMS as well.
 
 ## Documentation
@@ -31,8 +31,8 @@ Cilla is sufficient for me in its current state, so I am not going to put much m
 
 ## Contribute
 
-* Fork the [Source code at GitHub](https://github.com/shred/cilla). Feel free to send pull requests.
-* Found a bug? [File a bug report!](https://github.com/shred/cilla/issues)
+* Fork the [Source code at Codeberg](https://codeberg.org/shred/cilla). Feel free to send pull requests.
+* Found a bug? [File a bug report!](https://codeberg.org/shred/cilla/issues)
 
 ## License
 

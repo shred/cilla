@@ -102,5 +102,5 @@ Congratulations, you have successfully set up your first Cilla instance!
 * Have a look at all the files in `cilla-xample`, to get an idea of how Cilla works.
 * Read the documentation, to get acquainted with the [API](./apidocs/index.html) and Cilla's [JSP tag library](taglib/index.html).
 * Start customizing the template files. You will find them in `cilla-xample/src/main/webapp/WEB-INF/jsp/`.
-* Take a look at the [plugins](https://github.com/shred/cilla-plugin), and maybe write your own.
+* Take a look at the [plugins](https://codeberg.org/shred/cilla-plugin), and maybe write your own.
 * Generally, have fun exploring and extending this project.

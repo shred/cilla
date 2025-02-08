@@ -37,13 +37,13 @@
         </license>
     </licenses>
     <scm>
-        <url>https://github.com/shred/cilla/</url>
-        <connection>scm:git:git@github.com:shred/cilla.git</connection>
-        <developerConnection>scm:git:git@github.com:shred/cilla.git</developerConnection>
+        <url>https://codeberg.org/shred/cilla/</url>
+        <connection>scm:git:git@codeberg.org:shred/cilla.git</connection>
+        <developerConnection>scm:git:git@codeberg.org:shred/cilla.git</developerConnection>
     </scm>
     <issueManagement>
-        <system>GitHub</system>
-        <url>https://github.com/shred/cilla/issues</url>
+        <system>Codeberg</system>
+        <url>https://codeberg.org/shred/cilla/issues</url>
     </issueManagement>
     <developers>
         <developer>
